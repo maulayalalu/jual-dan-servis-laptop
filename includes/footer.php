@@ -2,6 +2,7 @@
 // includes/footer.php — Site-wide footer
 // Usage: <?php include '../includes/footer.php'; ?>
 global $basePath;
+/** @var string $basePath */
 if (empty($basePath)) {
     $basePath = '../';
 }
