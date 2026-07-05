@@ -12,6 +12,18 @@ $produk_unggulan = [
   ['id'=>2,'nama'=>'MacBook Air M3','harga'=>22000000,'gambar'=>'https://images.unsplash.com/photo-1541807084-5c52b6b3adef?w=600&q=80','deskripsi'=>'Chip Apple M3, 8GB RAM, 256GB SSD, Layar Retina'],
   ['id'=>3,'nama'=>'Lenovo ThinkPad X1','harga'=>16750000,'gambar'=>'https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=600&q=80','deskripsi'=>'Intel Core i7, RAM 16GB, SSD 512GB, Bisnis Premium'],
 ];
+
+$res_pengaturan = $koneksi->query("SELECT kunci, nilai FROM pengaturan");
+$pengaturan = [];
+if ($res_pengaturan) {
+    while ($row = $res_pengaturan->fetch_assoc()) {
+        $pengaturan[$row['kunci']] = $row['nilai'];
+    }
+}
+function getSetHome($key, $default) {
+    global $pengaturan;
+    return $pengaturan[$key] ?? $default;
+}
 ?>
 
 <?php
@@ -129,32 +141,32 @@ if ($res_slides) {
 <!-- ── Layanan Servis ── -->
 <section class="section" id="servis-info">
   <div class="container">
-    <h2 class="section__title">Layanan Servis Profesional</h2>
-    <p class="section__sub">Percayakan laptop kamu pada teknisi berpengalaman kami</p>
+    <h2 class="section__title"><?= htmlspecialchars(getSetHome('servis_judul', 'Layanan Servis Profesional')) ?></h2>
+    <p class="section__sub"><?= htmlspecialchars(getSetHome('servis_deskripsi', 'Percayakan laptop kamu pada teknisi berpengalaman kami')) ?></p>
     <div class="grid-3" style="text-align:center;gap:32px;">
 
       <div style="padding:24px 16px;">
         <div style="width:56px;height:56px;border-radius:50%;background:rgba(62,106,225,0.1);display:grid;place-items:center;margin:0 auto 16px;color:var(--color-blue);">
           <svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M11.42 15.17L17.25 21A2.652 2.652 0 0021 17.25l-5.877-5.877M11.42 15.17l2.496-3.03c.317-.384.74-.626 1.208-.766M11.42 15.17l-4.655 5.653a2.548 2.548 0 11-3.586-3.586l6.837-5.63m5.108-.233c.55-.164 1.163-.188 1.743-.14a4.5 4.5 0 004.486-6.336l-3.276 3.277a3.004 3.004 0 01-2.25-2.25l3.276-3.276a4.5 4.5 0 00-6.336 4.486c.091 1.076-.071 2.264-.904 2.95l-.102.085m-1.745 1.437L5.909 7.5H4.5L2.25 3.75l1.5-1.5L7.5 4.5v1.409l4.26 4.26m-1.745 1.437l1.745-1.437m6.615 8.206L15.75 15.75M4.867 19.125h.008v.008h-.008v-.008z"/></svg>
         </div>
-        <h3 style="font-size:17px;font-weight:500;color:var(--color-carbon);margin-bottom:8px;">Perbaikan Hardware</h3>
-        <p style="font-size:14px;color:var(--color-pewter);line-height:1.6;">Layar retak, keyboard rusak, baterai drop, motherboard bermasalah — semua kami tangani.</p>
+        <h3 style="font-size:17px;font-weight:500;color:var(--color-carbon);margin-bottom:8px;"><?= htmlspecialchars(getSetHome('servis_fitur1_judul', 'Perbaikan Hardware')) ?></h3>
+        <p style="font-size:14px;color:var(--color-pewter);line-height:1.6;"><?= htmlspecialchars(getSetHome('servis_fitur1_desc', 'Layar retak, keyboard rusak, baterai drop, motherboard bermasalah — semua kami tangani.')) ?></p>
       </div>
 
       <div style="padding:24px 16px;">
         <div style="width:56px;height:56px;border-radius:50%;background:rgba(62,106,225,0.1);display:grid;place-items:center;margin:0 auto 16px;color:var(--color-blue);">
           <svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M9 17.25v1.007a3 3 0 01-.879 2.122L7.5 21h9l-.621-.621A3 3 0 0115 18.257V17.25m6-12V15a2.25 2.25 0 01-2.25 2.25H5.25A2.25 2.25 0 013 15V5.25m18 0A2.25 2.25 0 0018.75 3H5.25A2.25 2.25 0 003 5.25m18 0H3"/></svg>
         </div>
-        <h3 style="font-size:17px;font-weight:500;color:var(--color-carbon);margin-bottom:8px;">Instal & Optimasi OS</h3>
-        <p style="font-size:14px;color:var(--color-pewter);line-height:1.6;">Instal ulang Windows/Linux, optimasi performa, hapus virus & malware secara tuntas.</p>
+        <h3 style="font-size:17px;font-weight:500;color:var(--color-carbon);margin-bottom:8px;"><?= htmlspecialchars(getSetHome('servis_fitur2_judul', 'Instal & Optimasi OS')) ?></h3>
+        <p style="font-size:14px;color:var(--color-pewter);line-height:1.6;"><?= htmlspecialchars(getSetHome('servis_fitur2_desc', 'Instal ulang Windows/Linux, optimasi performa, hapus virus & malware secara tuntas.')) ?></p>
       </div>
 
       <div style="padding:24px 16px;">
         <div style="width:56px;height:56px;border-radius:50%;background:rgba(62,106,225,0.1);display:grid;place-items:center;margin:0 auto 16px;color:var(--color-blue);">
           <svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z"/></svg>
         </div>
-        <h3 style="font-size:17px;font-weight:500;color:var(--color-carbon);margin-bottom:8px;">Garansi 30 Hari</h3>
-        <p style="font-size:14px;color:var(--color-pewter);line-height:1.6;">Setiap pengerjaan dilindungi garansi 30 hari. Jika ada masalah, kami perbaiki tanpa biaya tambahan.</p>
+        <h3 style="font-size:17px;font-weight:500;color:var(--color-carbon);margin-bottom:8px;"><?= htmlspecialchars(getSetHome('servis_fitur3_judul', 'Garansi 30 Hari')) ?></h3>
+        <p style="font-size:14px;color:var(--color-pewter);line-height:1.6;"><?= htmlspecialchars(getSetHome('servis_fitur3_desc', 'Setiap pengerjaan dilindungi garansi 30 hari. Jika ada masalah, kami perbaiki tanpa biaya tambahan.')) ?></p>
       </div>
     </div>
 
@@ -169,17 +181,24 @@ if ($res_slides) {
   <div class="container">
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center;">
       <div>
-        <h2 style="font-size:32px;font-weight:500;color:var(--color-carbon);margin-bottom:16px;">Mengapa Memilih A-LINKS?</h2>
+        <h2 style="font-size:32px;font-weight:500;color:var(--color-carbon);margin-bottom:16px;"><?= htmlspecialchars(getSetHome('tentang_judul', 'Mengapa Memilih A-LINKS?')) ?></h2>
         <p style="font-size:14px;color:var(--color-pewter);line-height:1.7;margin-bottom:24px;">
-          A-LINKS hadir sebagai solusi lengkap untuk kebutuhan laptop Anda. Dari pembelian laptop baru dengan harga terbaik, hingga servis profesional yang cepat dan terpercaya — kami siap melayani.
+          <?= nl2br(htmlspecialchars(getSetHome('tentang_deskripsi', 'A-LINKS hadir sebagai solusi lengkap untuk kebutuhan laptop Anda.'))) ?>
         </p>
         <div style="display:flex;flex-direction:column;gap:12px;">
-          <?php foreach (['500+ Produk Tersedia','Teknisi Bersertifikat','Pengiriman ke Seluruh Indonesia','Layanan 7 Hari Seminggu'] as $item): ?>
+          <?php 
+          $poins = [
+              getSetHome('tentang_poin1', '500+ Produk Tersedia'),
+              getSetHome('tentang_poin2', 'Teknisi Bersertifikat'),
+              getSetHome('tentang_poin3', 'Pengiriman ke Seluruh Indonesia'),
+              getSetHome('tentang_poin4', 'Layanan 7 Hari Seminggu')
+          ];
+          foreach (array_filter($poins) as $item): ?>
           <div style="display:flex;align-items:center;gap:10px;">
             <div style="width:20px;height:20px;border-radius:50%;background:var(--color-blue);display:grid;place-items:center;flex-shrink:0;">
               <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 5l2 2 4-4" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
             </div>
-            <span style="font-size:14px;color:var(--color-graphite);"><?= $item ?></span>
+            <span style="font-size:14px;color:var(--color-graphite);"><?= htmlspecialchars($item) ?></span>
           </div>
           <?php endforeach; ?>
         </div>
@@ -188,7 +207,7 @@ if ($res_slides) {
         </div>
       </div>
       <div style="position:relative;">
-        <img src="https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=600&q=80" 
+        <img src="<?= htmlspecialchars(getSetHome('tentang_gambar', 'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=600&q=80')) ?>" 
              alt="Tim A-LINKS"
              style="width:100%;border-radius:12px;object-fit:cover;aspect-ratio:4/3;"
              onerror="this.style.background='var(--color-light-ash)'">
@@ -201,10 +220,17 @@ if ($res_slides) {
 <section class="section" id="kontak">
   <div class="container">
     <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:24px;text-align:center;margin-bottom:64px;">
-      <?php foreach ([['500+','Produk'],['1000+','Pelanggan'],['50+','Merk'],['30','Hari Garansi']] as [$val,$lbl]): ?>
+      <?php 
+      $stats = [
+          [getSetHome('stat1_nilai', '500+'), getSetHome('stat1_label', 'Produk')],
+          [getSetHome('stat2_nilai', '1000+'), getSetHome('stat2_label', 'Pelanggan')],
+          [getSetHome('stat3_nilai', '50+'), getSetHome('stat3_label', 'Merk')],
+          [getSetHome('stat4_nilai', '30'), getSetHome('stat4_label', 'Hari Garansi')]
+      ];
+      foreach ($stats as [$val,$lbl]): ?>
       <div>
-        <div style="font-size:36px;font-weight:600;color:var(--color-blue);margin-bottom:4px;"><?= $val ?></div>
-        <div style="font-size:14px;color:var(--color-pewter);"><?= $lbl ?></div>
+        <div style="font-size:36px;font-weight:600;color:var(--color-blue);margin-bottom:4px;"><?= htmlspecialchars($val) ?></div>
+        <div style="font-size:14px;color:var(--color-pewter);"><?= htmlspecialchars($lbl) ?></div>
       </div>
       <?php endforeach; ?>
     </div>
@@ -216,7 +242,7 @@ if ($res_slides) {
       <p style="font-size:15px;color:var(--color-carbon);max-width:600px;margin:0 auto;line-height:1.6;">
         <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="var(--color-blue)" stroke-width="2" style="vertical-align:middle;margin-right:6px;margin-top:-2px;"><path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z"/></svg>
         <strong>Alamat Toko Kami:</strong><br>
-        <span style="color:var(--color-pewter);">73RH+PG6, Jl. Yos Sudarso, Jemb. Kembar, Kec. Lembar, Kabupaten Lombok Barat, Nusa Tenggara Bar. 83364</span>
+        <span style="color:var(--color-pewter);"><?= nl2br(htmlspecialchars(getSetHome('alamat', '73RH+PG6, Jl. Yos Sudarso...'))) ?></span>
       </p>
     </div>
 
@@ -246,8 +272,9 @@ if ($res_slides) {
           return;
         }
         
-        const text = `Halo A-LINKS,\n\nNama: ${nama}\nEmail: ${email}\n\nPesan:\n${msg}`;
-        const url = `https://wa.me/6281216851726?text=${encodeURIComponent(text)}`;
+        const adminWA = "<?= preg_replace('/[^0-9]/', '', getSetHome('no_wa', '6281216851726')) ?>";
+        const text = `Halo <?= addslashes(htmlspecialchars(getSetHome('nama_toko', 'A-LINKS'))) ?>,\n\nNama: ${nama}\nEmail: ${email}\n\nPesan:\n${msg}`;
+        const url = `https://wa.me/${adminWA}?text=${encodeURIComponent(text)}`;
         window.open(url, '_blank');
       }
     </script>
