@@ -80,10 +80,10 @@ $queries = [
 
 foreach ($queries as $q) {
     if ($koneksi->query($q)) {
-        echo "✓ OK: " . substr($q, 0, 60) . "...\n";
+        echo "âœ“ OK: " . substr($q, 0, 60) . "...\n";
     } else {
-        echo "✗ Skip/Error: " . $koneksi->error . "\n";
+        echo "âœ— Skip/Error: " . $koneksi->error . "\n";
     }
 }
 
-echo "\n✅ Database schema update selesai!\n";
+echo "\nâœ… Database schema update selesai!\n";

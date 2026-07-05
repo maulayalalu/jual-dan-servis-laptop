@@ -2,7 +2,7 @@
 session_start();
 require_once 'config/koneksi.php';
 $basePath = '';
-$pageTitle = 'Lupa Password — A-LINKS';
+$pageTitle = 'Lupa Password â€” A-LINKS';
 
 if (isLoggedIn()) redirect('index.php');
 
@@ -40,7 +40,7 @@ include 'includes/header.php';
 
     <?php if ($sent): ?>
     <div class="card" style="padding:40px;text-align:center;">
-      <div style="font-size:48px;margin-bottom:16px;">📧</div>
+      <div style="font-size:48px;margin-bottom:16px;">ðŸ“§</div>
       <h1 style="font-size:22px;font-weight:600;margin-bottom:12px;">Email Dikirim!</h1>
       <p style="color:var(--color-pewter);font-size:14px;line-height:1.7;margin-bottom:24px;">
         Jika email tersebut terdaftar, kami telah mengirimkan link reset password.<br>

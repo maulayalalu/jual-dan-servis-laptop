@@ -1,5 +1,5 @@
 <?php
-// config/koneksi.php — Database connection (MySQLi + PDO)
+// config/koneksi.php â€” Database connection (MySQLi + PDO)
 // Gunakan $koneksi untuk MySQLi, $pdo untuk PDO
 
 define('DB_HOST', 'localhost');
@@ -8,12 +8,12 @@ define('DB_PASS', '');
 define('DB_NAME', 'alinks_db');
 define('DB_CHARSET', 'utf8mb4');
 
-/* ── MySQLi connection ── */
+/* â”€â”€ MySQLi connection â”€â”€ */
 $koneksi = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
 
 if ($koneksi->connect_error) {
     die('<div style="font-family:sans-serif;padding:40px;text-align:center;">
-        <h2 style="color:#d92b2b;">⚠ Koneksi Database Gagal</h2>
+        <h2 style="color:#d92b2b;">âš  Koneksi Database Gagal</h2>
         <p style="color:#555;">Pastikan XAMPP/MySQL aktif dan database <strong>' . DB_NAME . '</strong> sudah dibuat.</p>
         <code style="display:block;margin-top:12px;color:#888;">' . htmlspecialchars($koneksi->connect_error) . '</code>
     </div>');
@@ -21,7 +21,7 @@ if ($koneksi->connect_error) {
 
 $koneksi->set_charset(DB_CHARSET);
 
-/* ── PDO connection (opsional, untuk query lanjutan) ── */
+/* â”€â”€ PDO connection (opsional, untuk query lanjutan) â”€â”€ */
 try {
     $dsn = 'mysql:host=' . DB_HOST . ';dbname=' . DB_NAME . ';charset=' . DB_CHARSET;
     $pdo = new PDO($dsn, DB_USER, DB_PASS, [
@@ -34,7 +34,7 @@ try {
     $pdo = null;
 }
 
-/* ── Helper functions ── */
+/* â”€â”€ Helper functions â”€â”€ */
 
 /**
  * Sanitize input string
@@ -93,7 +93,7 @@ function isLoggedIn(): bool {
 }
 
 /**
- * Paksa login — redirect ke login jika belum
+ * Paksa login â€” redirect ke login jika belum
  */
 function requireLogin(string $redirect = '../login.php'): void {
     if (!isLoggedIn()) {
@@ -185,7 +185,7 @@ function csrf_token(): string {
 function verify_csrf(): void {
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if (!isset($_POST['csrf_token']) || !hash_equals($_SESSION['csrf_token'] ?? '', $_POST['csrf_token'])) {
-            die('<div style="font-family:sans-serif;padding:40px;text-align:center;"><h2 style="color:#d92b2b;">⚠ Invalid CSRF Token</h2><p>Akses ditolak demi keamanan. Form kadaluarsa atau tidak valid.</p><a href="javascript:history.back()">Kembali</a></div>');
+            die('<div style="font-family:sans-serif;padding:40px;text-align:center;"><h2 style="color:#d92b2b;">âš  Invalid CSRF Token</h2><p>Akses ditolak demi keamanan. Form kadaluarsa atau tidak valid.</p><a href="javascript:history.back()">Kembali</a></div>');
         }
     }
 }

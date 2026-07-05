@@ -4,9 +4,9 @@ require_once '../config/koneksi.php';
 requireStaff(); // admin, owner, kasir
 
 $basePath = '../';
-$pageTitle = 'Dashboard Admin — A-LINKS';
+$pageTitle = 'Dashboard Admin â€” A-LINKS';
 
-// ── Statistik ──
+// â”€â”€ Statistik â”€â”€
 $stats = [];
 
 // Total produk
@@ -27,7 +27,7 @@ $stats['servis_aktif'] = $r->fetch_assoc()['total'] ?? 0;
 $r = $koneksi->query("SELECT COUNT(*) AS total FROM users WHERE role='user'");
 $stats['users'] = $r->fetch_assoc()['total'] ?? 0;
 
-// ── Transaksi terbaru ──
+// â”€â”€ Transaksi terbaru â”€â”€
 $transaksi_terbaru = $koneksi->query("
     SELECT t.*, u.nama AS nama_user
     FROM transaksi t
@@ -36,7 +36,7 @@ $transaksi_terbaru = $koneksi->query("
     LIMIT 8
 ");
 
-// ── Servis terbaru ──
+// â”€â”€ Servis terbaru â”€â”€
 $servis_terbaru = $koneksi->query("
     SELECT s.*, u.nama AS nama_user
     FROM servis s
@@ -51,11 +51,11 @@ $servis_terbaru = $koneksi->query("
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title><?= $pageTitle ?></title>
-  <meta name="description" content="Dashboard admin A-LINKS — kelola produk, servis, dan transaksi."/>
+  <meta name="description" content="Dashboard admin A-LINKS â€” kelola produk, servis, dan transaksi."/>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
-  <link rel="stylesheet" href="../assets/css/style.css"/>
+  <link rel="stylesheet" href="../assets/css/style.css?v=<?= time() ?>"/>
 </head>
 <body>
 
@@ -113,7 +113,7 @@ $servis_terbaru = $koneksi->query("
       </a>
 
       <a href="kelola_user.php" class="stat-card" id="statUser" style="text-decoration:none;color:inherit;display:block;">
-        <div class="stat-card__icon stat-card__icon--red">
+        <div class="stat-card__icon stat-card__icon--taupe">
           <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
             <path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z"/>
           </svg>
@@ -131,7 +131,7 @@ $servis_terbaru = $koneksi->query("
       <div class="table-wrap" style="grid-column:1/-1;">
         <div class="table-toolbar">
           <div class="table-toolbar__title">Transaksi Terbaru</div>
-          <a href="kelola_transaksi.php" class="btn btn--secondary btn--sm" id="btnAllTransaksi">Lihat Semua</a>
+          <a href="kelola_transaksi.php" class="btn btn--ghost btn--sm" id="btnAllTransaksi">Lihat Semua â†’</a>
         </div>
         <table>
           <thead>
@@ -147,9 +147,9 @@ $servis_terbaru = $koneksi->query("
             <?php if ($transaksi_terbaru && $transaksi_terbaru->num_rows > 0):
               while ($t = $transaksi_terbaru->fetch_assoc()): ?>
             <tr>
-              <td><code style="font-size:12px;color:var(--color-pewter);"><?= htmlspecialchars($t['order_id'] ?? '-') ?></code></td>
-              <td style="font-weight:500;color:var(--color-carbon);"><?= htmlspecialchars($t['nama_user']) ?></td>
-              <td style="color:var(--color-blue);font-weight:500;"><?= formatRupiah($t['total_harga']) ?></td>
+              <td><code style="font-size:12px;color:var(--color-pewter);background:var(--color-cream);padding:2px 6px;border-radius:4px;"><?= htmlspecialchars($t['order_id'] ?? '-') ?></code></td>
+              <td style="font-weight:600;color:var(--color-carbon);"><?= htmlspecialchars($t['nama_user']) ?></td>
+              <td style="color:var(--color-navy);font-weight:600;"><?= formatRupiah($t['total_harga']) ?></td>
               <td>
                 <?php
                   $badgeMap = ['paid'=>'green','unpaid'=>'amber','failed'=>'red'];
@@ -173,7 +173,7 @@ $servis_terbaru = $koneksi->query("
     <div class="table-wrap">
       <div class="table-toolbar">
         <div class="table-toolbar__title">Servis Masuk Terbaru</div>
-        <a href="kelola_servis.php" class="btn btn--secondary btn--sm" id="btnAllServis">Kelola Servis</a>
+        <a href="kelola_servis.php" class="btn btn--ghost btn--sm" id="btnAllServis">Kelola Servis â†’</a>
       </div>
       <table>
         <thead>

@@ -2,7 +2,7 @@
 session_start();
 require_once '../config/koneksi.php';
 requireStaff('admin', 'owner'); // kasir tidak bisa akses halaman user
-$basePath = '../'; $pageTitle = 'Kelola User — A-LINKS';
+$basePath = '../'; $pageTitle = 'Kelola User â€” A-LINKS';
 $isAdmin = hasRole('admin');
 
 // Handle hapus/toggle role (hanya admin)
@@ -59,7 +59,7 @@ $totalPages = ceil($totalData / $limit);
 <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
 <title><?= $pageTitle ?></title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet"/>
-<link rel="stylesheet" href="../assets/css/style.css"/>
+<link rel="stylesheet" href="../assets/css/style.css?v=<?= time() ?>"/>
 </head><body>
 <div class="app-layout">
 <?php include '../includes/sidebar_admin.php'; ?>
@@ -98,25 +98,25 @@ $totalPages = ceil($totalData / $limit);
             <div style="display:flex;align-items:center;gap:10px;">
               <div style="width:32px;height:32px;border-radius:50%;background:<?php
                 echo match($u['role']) {
-                    'admin'  => 'var(--color-blue)',
-                    'owner'  => 'var(--color-blue-light)',
+                    'admin'  => 'var(--color-navy)',
+                    'owner'  => 'var(--color-taupe)',
                     'kasir'  => 'var(--color-taupe)',
-                    default  => 'var(--color-light-ash)',
+                    default  => 'var(--color-cream)',
                 };
               ?>;color:<?= in_array($u['role'],['admin','owner','kasir']) ? 'white' : 'var(--color-pewter)' ?>;display:grid;place-items:center;font-size:13px;font-weight:600;flex-shrink:0;"><?= strtoupper(substr($u['nama'],0,1)) ?></div>
               <div>
-                <div style="font-weight:500;color:var(--color-carbon);"><?= htmlspecialchars($u['nama']) ?><?= $isSelf ? ' <span class="badge badge--blue" style="font-size:10px;">Saya</span>' : '' ?></div>
+                <div style="font-weight:500;color:var(--color-carbon);"><?= htmlspecialchars($u['nama']) ?><?= $isSelf ? ' <span class="badge badge--navy" style="font-size:10px;">Saya</span>' : '' ?></div>
                 <?php if (!empty($u['alamat'])): ?><div style="font-size:11px;color:var(--color-silver-fog);max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;"><?= htmlspecialchars($u['alamat']) ?></div><?php endif; ?>
               </div>
             </div>
           </td>
           <td style="font-size:13px;"><?= htmlspecialchars($u['email']) ?></td>
-          <td style="font-size:13px;color:var(--color-pewter);"><?= htmlspecialchars($u['no_telp'] ?? '—') ?></td>
+          <td style="font-size:13px;color:var(--color-pewter);"><?= htmlspecialchars($u['no_telp'] ?? 'â€”') ?></td>
           <td><span class="badge <?php
             echo match($u['role']) {
                 'admin'  => 'badge--blue',
-                'owner'  => 'badge--purple',
-                'kasir'  => 'badge--amber',
+                'owner'  => 'badge--navy',
+                'kasir'  => 'badge--taupe',
                 default  => 'badge--gray',
             };
           ?>"
@@ -152,7 +152,7 @@ $totalPages = ceil($totalData / $limit);
               </form>
             </div>
           <?php elseif ($isSelf): ?><span style="font-size:12px;color:var(--color-silver-fog);">Akun aktif</span>
-          <?php else: ?><span style="font-size:12px;color:var(--color-silver-fog);">—</span>
+          <?php else: ?><span style="font-size:12px;color:var(--color-silver-fog);">â€”</span>
           <?php endif; ?>
           </td>
         </tr>

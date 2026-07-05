@@ -3,7 +3,7 @@ session_start();
 require_once '../config/koneksi.php';
 requireStaff('admin', 'owner'); // kasir tidak bisa akses laporan
 $basePath = '../';
-$pageTitle = 'Laporan Penjualan — A-LINKS';
+$pageTitle = 'Laporan Penjualan â€” A-LINKS';
 
 // Date filter
 $bulan = $_GET['bulan'] ?? date('m');
@@ -45,7 +45,7 @@ while($r = $rServis->fetch_assoc()) $servisStats[$r['status']] = $r['total'];
 <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
 <title><?= $pageTitle ?></title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet"/>
-<link rel="stylesheet" href="../assets/css/style.css"/>
+<link rel="stylesheet" href="../assets/css/style.css?v=<?= time() ?>"/>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 </head><body>
 <div class="app-layout">
@@ -70,7 +70,7 @@ while($r = $rServis->fetch_assoc()) $servisStats[$r['status']] = $r['total'];
   </div>
 
   <!-- Summary Cards -->
-  <div class="stats-grid" style="margin-bottom:28px;">
+  <div class="stat-grid" style="margin-bottom:28px;">
     <div class="stat-card">
       <div class="stat-card__label">Total Pendapatan (Bulan ini)</div>
       <div class="stat-card__value"><?= formatRupiah($summary['total_revenue']) ?></div>
@@ -107,7 +107,7 @@ while($r = $rServis->fetch_assoc()) $servisStats[$r['status']] = $r['total'];
   <!-- Top Products -->
   <div class="card">
     <div class="table-toolbar">
-      <div class="table-toolbar__title">Top 5 Produk Terlaris — <?= $namaBulan[(int)$bulan] ?> <?= $tahun ?></div>
+      <div class="table-toolbar__title">Top 5 Produk Terlaris â€” <?= $namaBulan[(int)$bulan] ?> <?= $tahun ?></div>
     </div>
     <div style="overflow-x: auto; width: 100%;">
       <table style="min-width: 600px;">
@@ -115,10 +115,10 @@ while($r = $rServis->fetch_assoc()) $servisStats[$r['status']] = $r['total'];
         <tbody>
         <?php $rank=1; while($p = $rTop->fetch_assoc()): ?>
         <tr>
-          <td><div style="width:28px;height:28px;border-radius:50%;background:<?= $rank===1?'var(--color-blue)':'var(--color-light-ash)' ?>;color:<?= $rank===1?'white':'var(--color-pewter)' ?>;display:grid;place-items:center;font-weight:600;font-size:13px;"><?= $rank++ ?></div></td>
+          <td><div style="width:28px;height:28px;border-radius:50%;background:<?= $rank===1?'var(--color-navy)':'var(--color-cream)' ?>;color:<?= $rank===1?'white':'var(--color-pewter)' ?>;display:grid;place-items:center;font-weight:700;font-size:13px;border:<?= $rank===1?'none':'1px solid var(--color-cream-border)' ?>;"><?= $rank++ ?></div></td>
           <td style="font-weight:500;color:var(--color-carbon);"><?= htmlspecialchars($p['nama_laptop']) ?></td>
           <td><span class="badge badge--blue"><?= $p['terjual'] ?> unit</span></td>
-          <td style="color:var(--color-blue);font-weight:600;"><?= formatRupiah($p['pendapatan']) ?></td>
+          <td style="color:var(--color-navy);font-weight:700;"><?= formatRupiah($p['pendapatan']) ?></td>
         </tr>
         <?php endwhile; ?>
         </tbody>

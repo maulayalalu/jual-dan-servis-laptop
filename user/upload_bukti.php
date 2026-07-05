@@ -3,7 +3,7 @@ session_start();
 require_once '../config/koneksi.php';
 requireUser();
 $basePath = '../';
-$pageTitle = 'Upload Bukti Pembayaran — A-LINKS';
+$pageTitle = 'Upload Bukti Pembayaran â€” A-LINKS';
 $id_user = (int)$_SESSION['id_user'];
 
 $id_transaksi = (int)($_GET['id'] ?? 0);
@@ -56,7 +56,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 include '../includes/header.php';
 ?>
 
-<div style="min-height:100vh;background:var(--color-light-ash);padding-top:72px;">
+<div style="min-height:100vh;background:var(--color-cream);padding-top:72px;">
   <div class="container" style="max-width:600px;padding-top:40px;padding-bottom:80px;">
     <?php renderFlash(); ?>
 
@@ -69,11 +69,11 @@ include '../includes/header.php';
 
     <div class="card" style="padding:32px;">
       <!-- Info Rekening -->
-      <div style="background:var(--color-light-ash);border-radius:10px;padding:20px;margin-bottom:28px;border-left:4px solid var(--color-blue);">
-        <div style="font-weight:600;font-size:15px;color:var(--color-carbon);margin-bottom:12px;">📋 Info Transfer</div>
+      <div style="background:var(--color-cream);border-radius:10px;padding:20px;margin-bottom:28px;border-left:4px solid var(--color-navy);">
+        <div style="font-weight:600;font-size:15px;color:var(--color-carbon);margin-bottom:12px;">ðŸ“‹ Info Transfer</div>
         <div style="display:flex;flex-direction:column;gap:8px;font-size:14px;">
-          <div style="display:flex;justify-content:space-between;"><span style="color:var(--color-pewter);">Total Bayar:</span><span style="font-weight:700;color:var(--color-blue);"><?= formatRupiah($transaksi['total_harga']) ?></span></div>
-          <div style="display:flex;justify-content:space-between;"><span style="color:var(--color-pewter);">Bank:</span><span style="font-weight:500;">BCA — 1234567890 a/n A-LINKS Store</span></div>
+          <div style="display:flex;justify-content:space-between;"><span style="color:var(--color-pewter);">Total Bayar:</span><span style="font-weight:700;color:var(--color-navy);"><?= formatRupiah($transaksi['total_harga']) ?></span></div>
+          <div style="display:flex;justify-content:space-between;"><span style="color:var(--color-pewter);">Bank:</span><span style="font-weight:600;">BCA â€” 1234567890 a/n A-LINKS Store</span></div>
           <div style="display:flex;justify-content:space-between;"><span style="color:var(--color-pewter);">Metode:</span><span><?= htmlspecialchars($transaksi['tipe_pembayaran'] ?? 'Bank Transfer') ?></span></div>
         </div>
       </div>
@@ -82,10 +82,10 @@ include '../includes/header.php';
         <input type="hidden" name="csrf_token" value="<?= csrf_token() ?>">
         <div class="form-group" style="margin-bottom:24px;">
           <label class="form-label">File Bukti Transfer <span style="color:#d92b2b;">*</span></label>
-          <div id="dropZone" style="border:2px dashed var(--color-cloud);border-radius:10px;padding:40px;text-align:center;cursor:pointer;transition:border-color 0.2s;" onclick="document.getElementById('buktiInput').click()">
-            <div style="font-size:40px;margin-bottom:8px;">📷</div>
-            <div style="font-weight:500;color:var(--color-carbon);">Klik untuk pilih file</div>
-            <div style="font-size:13px;color:var(--color-pewter);margin-top:4px;">JPG, PNG, WEBP — Maks 3MB</div>
+          <div id="dropZone" style="border:2px dashed var(--color-cream-border);border-radius:10px;padding:40px;text-align:center;cursor:pointer;transition:border-color 0.25s;background:var(--color-cream);" onclick="document.getElementById('buktiInput').click()">
+            <div style="font-size:40px;margin-bottom:8px;">ðŸ“·</div>
+            <div style="font-weight:600;color:var(--color-carbon);">Klik atau seret file ke sini</div>
+            <div style="font-size:13px;color:var(--color-pewter);margin-top:4px;">JPG, PNG, WEBP â€” Maks 3MB</div>
           </div>
           <input type="file" id="buktiInput" name="bukti" accept="image/*" style="display:none;" onchange="previewFile(this)">
           <img id="previewBukti" src="" alt="" style="display:none;margin-top:12px;max-width:100%;border-radius:8px;">
@@ -104,12 +104,12 @@ function previewFile(input) {
     const reader = new FileReader();
     reader.onload = e => { img.src = e.target.result; img.style.display = 'block'; };
     reader.readAsDataURL(input.files[0]);
-    document.getElementById('dropZone').style.borderColor = 'var(--color-blue)';
+    document.getElementById('dropZone').style.borderColor = 'var(--color-navy)';
   }
 }
 const dz = document.getElementById('dropZone');
-['dragover','dragenter'].forEach(e => dz.addEventListener(e, ev => { ev.preventDefault(); dz.style.borderColor='var(--color-blue)'; }));
-['dragleave','drop'].forEach(e => dz.addEventListener(e, ev => { ev.preventDefault(); dz.style.borderColor='var(--color-cloud)'; }));
+['dragover','dragenter'].forEach(e => dz.addEventListener(e, ev => { ev.preventDefault(); dz.style.borderColor='var(--color-navy)'; }));
+['dragleave','drop'].forEach(e => dz.addEventListener(e, ev => { ev.preventDefault(); dz.style.borderColor='var(--color-cream-border)'; }));
 dz.addEventListener('drop', ev => { ev.preventDefault(); const f=ev.dataTransfer.files[0]; const inp=document.getElementById('buktiInput'); const dt=new DataTransfer(); dt.items.add(f); inp.files=dt.files; previewFile(inp); });
 </script>
 

@@ -3,7 +3,7 @@ session_start();
 require_once '../config/koneksi.php';
 requireAdmin();
 $basePath = '../';
-$pageTitle = 'Visual Builder Hero — A-LINKS';
+$pageTitle = 'Visual Builder Hero â€” A-LINKS';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     verify_csrf();
@@ -131,7 +131,7 @@ if (preg_match('/(\d+)%\s+(\d+)%/', $posisi_val, $matches)) {
 <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
 <title><?= $pageTitle ?></title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet"/>
-<link rel="stylesheet" href="../assets/css/style.css"/>
+<link rel="stylesheet" href="../assets/css/style.css?v=<?= time() ?>"/>
 <style>
   .builder-container {
     display: grid;
@@ -341,7 +341,7 @@ if (preg_match('/(\d+)%\s+(\d+)%/', $posisi_val, $matches)) {
                 <svg width="32" height="32" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/></svg>
               </div>
               <div style="font-weight:600; font-size:14px; margin-bottom:4px; color:var(--color-carbon);">Seret gambar ke sini atau klik</div>
-              <div style="font-size:12px; color:var(--color-silver-fog);">JPG, PNG, WebP — maks 10MB</div>
+              <div style="font-size:12px; color:var(--color-silver-fog);">JPG, PNG, WebP â€” maks 10MB</div>
               <input type="file" name="gambar_baru" id="fileUpload" accept="image/*" style="display:none;" onchange="previewImage(this)">
             </div>
             <div style="margin-top:12px; text-align:center;">
@@ -358,12 +358,12 @@ if (preg_match('/(\d+)%\s+(\d+)%/', $posisi_val, $matches)) {
           <div style="padding:24px; background:var(--color-light-ash);">
             
             <div class="slider-group">
-              <label><span>Posisi Kiri ↔ Kanan (X)</span> <span id="valX"><?= $posX ?>%</span></label>
+              <label><span>Posisi Kiri â†” Kanan (X)</span> <span id="valX"><?= $posX ?>%</span></label>
               <input type="range" id="rangeX" min="0" max="100" value="<?= $posX ?>" oninput="updateVisuals()">
             </div>
             
             <div class="slider-group mt-3">
-              <label><span>Posisi Atas ↕ Bawah (Y)</span> <span id="valY"><?= $posY ?>%</span></label>
+              <label><span>Posisi Atas â†• Bawah (Y)</span> <span id="valY"><?= $posY ?>%</span></label>
               <input type="range" id="rangeY" min="0" max="100" value="<?= $posY ?>" oninput="updateVisuals()">
             </div>
 

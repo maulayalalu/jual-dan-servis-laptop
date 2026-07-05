@@ -2,7 +2,7 @@
 session_start();
 require_once '../config/koneksi.php';
 requireStaff(); // admin, owner, kasir
-$basePath = '../'; $pageTitle = 'Kelola Servis — A-LINKS';
+$basePath = '../'; $pageTitle = 'Kelola Servis â€” A-LINKS';
 
 // Handle update status & biaya
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -85,7 +85,7 @@ foreach (['pending','proses','selesai','diambil'] as $st) {
 <meta charset="UTF-8"/><meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title><?= $pageTitle ?></title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet"/>
-<link rel="stylesheet" href="../assets/css/style.css"/>
+<link rel="stylesheet" href="../assets/css/style.css?v=<?= time() ?>"/>
 </head><body>
 <div class="app-layout">
 <?php include '../includes/sidebar_admin.php'; ?>
@@ -167,9 +167,9 @@ foreach (['pending','proses','selesai','diambil'] as $st) {
         <td><?= htmlspecialchars($s['tipe_laptop']) ?></td>
         <td style="max-width:160px;"><div style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:13px;"><?= htmlspecialchars($s['keluhan']) ?></div></td>
         <td><?php $map=['pending'=>['gray','Pending'],'proses'=>['amber','Diproses'],'selesai'=>['green','Selesai'],'diambil'=>['blue','Diambil']]; [$c,$l]=$map[$s['status']]??['gray',$s['status']]; ?><span class="badge badge--<?= $c ?>"><?= $l ?></span></td>
-        <td style="color:var(--color-blue);font-weight:500;"><?= $s['biaya'] ? formatRupiah($s['biaya']) : '<span style="color:var(--color-silver-fog);">—</span>' ?></td>
+        <td style="color:var(--color-blue);font-weight:500;"><?= $s['biaya'] ? formatRupiah($s['biaya']) : '<span style="color:var(--color-silver-fog);">â€”</span>' ?></td>
         <td style="font-size:13px;color:var(--color-pewter);"><?= date('d M Y', strtotime($s['tgl_masuk'])) ?></td>
-        <td style="font-size:13px;color:var(--color-pewter);"><?= $s['tgl_selesai'] ? date('d M Y', strtotime($s['tgl_selesai'])) : '—' ?></td>
+        <td style="font-size:13px;color:var(--color-pewter);"><?= $s['tgl_selesai'] ? date('d M Y', strtotime($s['tgl_selesai'])) : 'â€”' ?></td>
         <td>
           <div style="display:flex;gap:4px;">
             <a href="kelola_servis.php?edit=<?= $s['id_servis'] ?>" class="btn btn--secondary btn--sm" id="btnEditSrv-<?= $s['id_servis'] ?>">Update</a>

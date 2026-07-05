@@ -3,9 +3,9 @@ session_start();
 require_once '../config/koneksi.php';
 requireStaff('admin', 'owner'); // kasir tidak bisa kelola produk
 $basePath  = '../';
-$pageTitle = 'Kelola Produk — A-LINKS';
+$pageTitle = 'Kelola Produk â€” A-LINKS';
 
-// ── Handle POST actions ──
+// â”€â”€ Handle POST actions â”€â”€
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     verify_csrf();
     $action = $_POST['action'] ?? '';
@@ -73,7 +73,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-// ── Edit mode: ambil data produk ──
+// â”€â”€ Edit mode: ambil data produk â”€â”€
 $editProduk = null;
 if (isset($_GET['edit'])) {
     $id   = (int) $_GET['edit'];
@@ -84,7 +84,7 @@ if (isset($_GET['edit'])) {
     $stmt->close();
 }
 
-// ── Search & list produk ──
+// â”€â”€ Search & list produk â”€â”€
 $page = (int)($_GET['page'] ?? 1);
 if ($page < 1) $page = 1;
 $limit = 10;
@@ -121,7 +121,7 @@ $totalPages = ceil($totalData / $limit);
   <title><?= $pageTitle ?></title>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
-  <link rel="stylesheet" href="../assets/css/style.css"/>
+  <link rel="stylesheet" href="../assets/css/style.css?v=<?= time() ?>"/>
 </head>
 <body>
 <div class="app-layout">
@@ -178,13 +178,13 @@ $totalPages = ceil($totalData / $limit);
             <td>
               <img src="<?= !empty($p['gambar']) ? '../'.$p['gambar'] : 'https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=100&q=60' ?>"
                    alt="<?= htmlspecialchars($p['nama_laptop']) ?>"
-                   style="width:56px;height:40px;object-fit:cover;border-radius:4px;background:var(--color-light-ash);">
+                   style="width:56px;height:40px;object-fit:cover;border-radius:4px;background:var(--color-cream);">
             </td>
             <td>
               <div style="font-weight:500;color:var(--color-carbon);"><?= htmlspecialchars($p['nama_laptop']) ?></div>
               <div style="font-size:12px;color:var(--color-pewter);max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;"><?= htmlspecialchars($p['deskripsi']) ?></div>
             </td>
-            <td style="color:var(--color-blue);font-weight:500;"><?= formatRupiah($p['harga']) ?></td>
+            <td style="color:var(--color-navy);font-weight:700;"><?= formatRupiah($p['harga']) ?></td>
             <td>
               <span class="badge <?= $p['stok'] > 5 ? 'badge--green' : ($p['stok'] > 0 ? 'badge--amber' : 'badge--red') ?>">
                 <?= $p['stok'] ?> unit
@@ -235,7 +235,7 @@ $totalPages = ceil($totalData / $limit);
   </main>
 </div>
 
-<!-- ── Modal Tambah/Edit Produk ── -->
+<!-- â”€â”€ Modal Tambah/Edit Produk â”€â”€ -->
 <div class="modal-backdrop" id="modalProduk">
   <div class="modal">
     <div class="modal__header">

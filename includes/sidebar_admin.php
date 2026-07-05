@@ -1,5 +1,5 @@
 <?php
-// includes/sidebar_admin.php — Admin sidebar navigation (multi-role: admin, owner, kasir)
+// includes/sidebar_admin.php â€” Admin sidebar navigation (multi-role: admin, owner, kasir)
 $currentFile = basename($_SERVER['PHP_SELF']);
 $basePath ??= '../';
 $_role = $_SESSION['role'] ?? 'admin';
@@ -9,6 +9,9 @@ function sidebarAllow(array $allowed): bool {
     global $_role;
     return in_array($_role, $allowed, true);
 }
+
+$dashboardUrl = $basePath . ($_role === 'admin' ? 'admin' : ($_role === 'owner' ? 'owner' : 'kasir')) . '/dashboard.php';
+
 ?>
 <aside class="sidebar" id="adminSidebar">
   <div class="sidebar__brand">
@@ -25,7 +28,7 @@ function sidebarAllow(array $allowed): bool {
 
   <div class="sidebar__group-label">Menu Utama</div>
 
-  <a href="<?= $basePath ?>admin/dashboard.php"
+  <a href="<?= $dashboardUrl ?>"
      class="sidebar__link <?= $currentFile === 'dashboard.php' ? 'active' : '' ?>" id="sidebarDashboard">
     <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
       <path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"/>

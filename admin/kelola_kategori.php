@@ -2,7 +2,7 @@
 session_start();
 require_once '../config/koneksi.php';
 requireAdmin();
-$basePath = '../'; $pageTitle = 'Kelola Kategori — A-LINKS';
+$basePath = '../'; $pageTitle = 'Kelola Kategori â€” A-LINKS';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     verify_csrf();
@@ -40,7 +40,7 @@ $list = $koneksi->query("SELECT k.*, (SELECT COUNT(*) FROM produk WHERE id_kateg
 <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
 <title><?= $pageTitle ?></title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet"/>
-<link rel="stylesheet" href="../assets/css/style.css"/>
+<link rel="stylesheet" href="../assets/css/style.css?v=<?= time() ?>"/>
 </head><body>
 <div class="app-layout">
 <?php include '../includes/sidebar_admin.php'; ?>
@@ -60,7 +60,7 @@ $list = $koneksi->query("SELECT k.*, (SELECT COUNT(*) FROM produk WHERE id_kateg
       <tr>
         <td style="color:var(--color-silver-fog);"><?= $no++ ?></td>
         <td style="font-weight:500;color:var(--color-carbon);"><?= htmlspecialchars($k['nama_kategori']) ?></td>
-        <td><code style="font-size:12px;background:var(--color-light-ash);padding:2px 6px;border-radius:4px;"><?= htmlspecialchars($k['slug']) ?></code></td>
+        <td><code style="font-size:12px;background:var(--color-cream);padding:2px 6px;border-radius:4px;border:1px solid var(--color-cream-border);"><?= htmlspecialchars($k['slug']) ?></code></td>
         <td><span class="badge badge--gray"><?= $k['total_produk'] ?> produk</span></td>
         <td>
           <div style="display:flex;gap:4px;">

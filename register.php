@@ -55,7 +55,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-$pageTitle = 'Daftar Akun — A-LINKS';
+$pageTitle = 'Daftar Akun â€” A-LINKS';
 ?>
 <!DOCTYPE html>
 <html lang="id">
@@ -67,7 +67,7 @@ $pageTitle = 'Daftar Akun — A-LINKS';
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
-  <link rel="stylesheet" href="assets/css/style.css"/>
+  <link rel="stylesheet" href="assets/css/style.css?v=<?= time() ?>"/>
 </head>
 <body>
 
@@ -84,10 +84,10 @@ $pageTitle = 'Daftar Akun — A-LINKS';
         <div class="auth-visual__subtitle">Ribuan produk laptop & servis terpercaya menanti</div>
         <div style="margin-top:32px;display:flex;flex-direction:column;gap:12px;">
           <?php foreach ([
-            ['icon'=>'🛒','text'=>'Belanja laptop dengan cicilan 0%'],
-            ['icon'=>'🔧','text'=>'Tracking status servis real-time'],
-            ['icon'=>'🎁','text'=>'Promo & diskon eksklusif member'],
-            ['icon'=>'📦','text'=>'Pengiriman gratis seluruh Indonesia'],
+            ['icon'=>'ðŸ›’','text'=>'Belanja laptop dengan cicilan 0%'],
+            ['icon'=>'ðŸ”§','text'=>'Tracking status servis real-time'],
+            ['icon'=>'ðŸŽ','text'=>'Promo & diskon eksklusif member'],
+            ['icon'=>'ðŸ“¦','text'=>'Pengiriman gratis seluruh Indonesia'],
           ] as $b): ?>
           <div style="display:flex;align-items:center;gap:10px;">
             <span style="font-size:18px;"><?= $b['icon'] ?></span>

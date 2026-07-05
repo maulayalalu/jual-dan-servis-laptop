@@ -2,7 +2,7 @@
 session_start();
 require_once '../config/koneksi.php';
 requireStaff(); // admin, owner, kasir
-$basePath = '../'; $pageTitle = 'Kelola Transaksi — A-LINKS';
+$basePath = '../'; $pageTitle = 'Kelola Transaksi â€” A-LINKS';
 
 $page = (int)($_GET['page'] ?? 1);
 if ($page < 1) $page = 1;
@@ -68,7 +68,7 @@ $totalPages = ceil($totalData / $limit);
 <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
 <title><?= $pageTitle ?></title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet"/>
-<link rel="stylesheet" href="../assets/css/style.css"/>
+<link rel="stylesheet" href="../assets/css/style.css?v=<?= time() ?>"/>
 </head><body>
 <div class="app-layout">
 <?php include '../includes/sidebar_admin.php'; ?>
@@ -105,7 +105,7 @@ $totalPages = ceil($totalData / $limit);
     
     <div style="margin-bottom:16px;">
         <table style="font-size:13px;">
-            <tr style="background:var(--color-light-ash);"><th>Produk</th><th>Qty</th><th>Subtotal</th></tr>
+            <tr style="background:var(--color-cream);"><th>Produk</th><th>Qty</th><th>Subtotal</th></tr>
             <?php while ($item = $detailItems->fetch_assoc()): ?>
             <tr>
                 <td><?= htmlspecialchars($item['nama_laptop']) ?></td>
@@ -116,7 +116,7 @@ $totalPages = ceil($totalData / $limit);
         </table>
     </div>
 
-    <form method="POST" style="display:flex;align-items:center;gap:12px;background:var(--color-light-ash);padding:12px;border-radius:6px;">
+    <form method="POST" style="display:flex;align-items:center;gap:12px;background:var(--color-cream);border:1px solid var(--color-cream-border);padding:12px;border-radius:6px;">
     <input type="hidden" name="csrf_token" value="<?= csrf_token() ?>">
         <input type="hidden" name="update_status" value="1">
         <input type="hidden" name="id_transaksi" value="<?= $detailData['id_transaksi'] ?>">
@@ -143,10 +143,10 @@ $totalPages = ceil($totalData / $limit);
         <tbody>
         <?php if ($list->num_rows > 0): while ($t = $list->fetch_assoc()): ?>
         <tr id="rowTrx-<?= $t['id_transaksi'] ?>">
-          <td><code style="font-size:11px;background:var(--color-light-ash);padding:2px 6px;border-radius:3px;"><?= htmlspecialchars($t['order_id'] ?? '-') ?></code></td>
+          <td><code style="font-size:11px;background:var(--color-cream);padding:2px 6px;border-radius:3px;border:1px solid var(--color-cream-border);"><?= htmlspecialchars($t['order_id'] ?? '-') ?></code></td>
           <td style="font-weight:500;color:var(--color-carbon);"><?= htmlspecialchars($t['nama_user']) ?></td>
-          <td style="color:var(--color-blue);font-weight:600;"><?= formatRupiah($t['total_harga']) ?></td>
-          <td style="font-size:13px;color:var(--color-pewter);"><?= htmlspecialchars($t['tipe_pembayaran'] ?? '—') ?></td>
+          <td style="color:var(--color-navy);font-weight:700;"><?= formatRupiah($t['total_harga']) ?></td>
+          <td style="font-size:13px;color:var(--color-pewter);"><?= htmlspecialchars($t['tipe_pembayaran'] ?? 'â€”') ?></td>
           <td><?php $m=['paid'=>['green','Lunas'],'unpaid'=>['amber','Menunggu'],'failed'=>['red','Gagal']]; [$c,$l]=$m[$t['status_pembayaran']]??['gray',$t['status_pembayaran']]; ?><span class="badge badge--<?= $c ?>"><?= $l ?></span></td>
           <td style="font-size:12px;color:var(--color-pewter);"><?= date('d M Y H:i', strtotime($t['waktu_transaksi'])) ?></td>
           <td><a href="?detail=<?= $t['id_transaksi'] ?>" class="btn btn--secondary btn--sm" id="btnDetailTrx-<?= $t['id_transaksi'] ?>">Lihat</a></td>

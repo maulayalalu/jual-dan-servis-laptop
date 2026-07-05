@@ -3,7 +3,7 @@ session_start();
 require_once '../config/koneksi.php';
 requireLogin();
 $basePath = '../';
-$pageTitle = 'Profil Saya — A-LINKS';
+$pageTitle = 'Profil Saya â€” A-LINKS';
 $id_user = (int)$_SESSION['id_user'];
 
 $rProf = $koneksi->prepare("SELECT * FROM users WHERE id_user=?");
@@ -67,153 +67,93 @@ $joinDate = $months[date('n', $createdAt) - 1] . ' ' . date('Y', $createdAt);
 ?>
 
 <style>
-/* Profil Specific CSS */
-body { background-color: var(--color-light-ash) !important; }
-.profil-wrapper {
-    background-color: var(--color-light-ash);
-    min-height: calc(100vh - 56px); /* subtract nav height */
-    padding: 100px 20px 60px;
-    font-family: 'Inter', sans-serif;
-}
-.profil-container {
-    max-width: 960px;
-    margin: 0 auto;
-}
-.profil-breadcrumb {
-    font-size: 14px;
-    color: var(--color-pewter);
-    margin-bottom: 24px;
-}
-.profil-breadcrumb a { color: var(--color-pewter); text-decoration: none; }
-.profil-breadcrumb span { color: var(--color-carbon); font-weight: 600; margin-left: 6px; }
+/* Profil Page â€” NEXOTECH */
+body { background-color: var(--color-cream) !important; }
+.profil-wrapper { background: var(--color-cream); min-height: calc(100vh - 64px); padding: 100px 20px 60px; }
+.profil-container { max-width: 960px; margin: 0 auto; }
+.profil-breadcrumb { font-size: 13px; color: var(--color-pewter); margin-bottom: 24px; display: flex; align-items: center; gap: 6px; }
+.profil-breadcrumb a { color: var(--color-navy); text-decoration: none; transition: color 0.2s; }
+.profil-breadcrumb a:hover { color: var(--color-navy-dark); }
+.profil-breadcrumb span { color: var(--color-carbon); font-weight: 600; }
 
-.profil-grid {
-    display: grid;
-    grid-template-columns: 280px 1fr;
-    gap: 24px;
-}
+.profil-grid { display: grid; grid-template-columns: 260px 1fr; gap: 24px; }
 
 .profil-card {
-    background: var(--color-white);
-    border-radius: 16px;
-    border: 1px solid var(--color-cloud);
-    box-shadow: 0 4px 20px rgba(43,65,88,0.06);
-    padding: 32px;
+  background: var(--color-white);
+  border-radius: var(--radius-card);
+  border: 1px solid var(--color-cream-border);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
 }
+.profil-card-inner { padding: 28px 28px 24px; }
 .profil-card-header {
-    border-bottom: 1px solid var(--color-cloud);
-    padding-bottom: 20px;
-    margin-bottom: 24px;
-    margin-top: -8px;
+  background: var(--color-cream);
+  padding: 16px 28px;
+  border-bottom: 1px solid var(--color-cream-border);
 }
-.profil-card-title {
-    font-size: 20px;
-    font-weight: 700;
-    color: var(--color-carbon);
-}
+.profil-card-title { font-size: 16px; font-weight: 700; color: var(--color-carbon); }
 
-/* Avatar Card */
-.profil-avatar-box {
-    text-align: center;
-}
+/* Avatar */
+.profil-avatar-box { text-align: center; padding: 32px 24px 24px; }
 .profil-avatar {
-    width: 96px;
-    height: 96px;
-    border-radius: 50%;
-    background-color: var(--color-blue);
-    color: white;
-    font-size: 36px;
-    font-weight: 700;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 0 auto 20px;
+  width: 88px; height: 88px; border-radius: 50%;
+  background: var(--color-taupe); color: white;
+  font-size: 32px; font-weight: 700;
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 16px;
+  border: 3px solid rgba(140,123,117,0.25);
+  box-shadow: 0 4px 16px rgba(140,123,117,0.30);
 }
-.profil-name { font-size: 20px; font-weight: 700; color: var(--color-carbon); margin-bottom: 4px; }
-.profil-uname { font-size: 15px; color: var(--color-pewter); margin-bottom: 8px; }
-.profil-join { font-size: 13px; color: var(--color-silver-fog); }
+.profil-name { font-size: 18px; font-weight: 700; color: var(--color-carbon); margin-bottom: 4px; }
+.profil-uname { font-size: 14px; color: var(--color-pewter); margin-bottom: 6px; }
+.profil-join { font-size: 12px; color: var(--color-taupe-light); }
 
 /* Stats Card */
-.profil-stats-card {
-    padding: 24px;
-    margin-top: 24px;
-}
-.profil-stat-title { font-size: 16px; font-weight: 600; color: var(--color-carbon); margin-bottom: 20px; }
-.profil-stat-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
-.profil-stat-label { font-size: 14px; color: var(--color-pewter); }
+.profil-stats-card { padding: 20px 24px; }
+.profil-stat-title { font-size: 14px; font-weight: 600; color: var(--color-carbon); margin-bottom: 16px; text-transform: uppercase; letter-spacing: 0.5px; }
+.profil-stat-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--color-cream); }
+.profil-stat-row:last-of-type { border-bottom: none; }
+.profil-stat-label { font-size: 13px; color: var(--color-pewter); }
 .profil-stat-val { font-size: 16px; font-weight: 700; color: var(--color-carbon); }
-.profil-stat-val.green { color: #2ea65a; }
-.profil-stat-link { font-size: 14px; font-weight: 600; color: var(--color-blue); text-decoration: none; margin-top: 16px; display: inline-block; transition: color 0.2s; }
-.profil-stat-link:hover { opacity: 0.8; }
+.profil-stat-val.green { color: var(--color-success); }
+.profil-stat-link { display: inline-flex; align-items: center; gap: 4px; font-size: 13px; font-weight: 600; color: var(--color-navy); text-decoration: none; margin-top: 14px; transition: color 0.2s; }
+.profil-stat-link:hover { color: var(--color-navy-dark); }
 
 /* Form Elements */
-.p-form-group { margin-bottom: 20px; }
-.p-form-label {
-    display: block;
-    font-size: 14px;
-    font-weight: 600;
-    color: var(--color-carbon);
-    margin-bottom: 8px;
-}
-.p-form-label span.req { color: #d92b2b; }
+.p-form-group { margin-bottom: 18px; }
+.p-form-label { display: block; font-size: 13px; font-weight: 600; color: var(--color-graphite); margin-bottom: 6px; letter-spacing: 0.1px; }
+.p-form-label span.req { color: var(--color-danger); }
 .p-form-control {
-    width: 100%;
-    background-color: var(--color-light-ash);
-    border: 1px solid var(--color-cloud);
-    border-radius: 12px;
-    padding: 12px 16px;
-    font-size: 15px;
-    color: var(--color-carbon);
-    transition: all 0.3s;
+  width: 100%; background: var(--color-white);
+  border: 1.5px solid var(--color-cream-border); border-radius: var(--radius-btn);
+  padding: 10px 14px; font-size: 14px; color: var(--color-carbon);
+  transition: border-color 0.25s, box-shadow 0.25s;
+  font-family: var(--font-text);
 }
-.p-form-control:focus { outline: none; border-color: var(--color-blue); background-color: var(--color-white); box-shadow: 0 0 0 3px rgba(62,92,118,0.15); }
-.p-form-control:read-only {
-    background-color: var(--color-light-ash);
-    color: var(--color-pewter);
-    cursor: not-allowed;
-}
-.p-form-hint { font-size: 13px; color: var(--color-silver-fog); margin-top: 6px; }
+.p-form-control:focus { outline: none; border-color: var(--color-navy); box-shadow: 0 0 0 3px rgba(62,92,118,0.15); }
+.p-form-control:read-only { background: var(--color-cream); color: var(--color-pewter); cursor: not-allowed; }
+.p-form-hint { font-size: 12px; color: var(--color-silver-fog); margin-top: 4px; }
 
 /* Buttons */
-.p-btn {
-    padding: 12px 24px;
-    border-radius: 24px;
-    font-size: 15px;
-    font-weight: 600;
-    cursor: pointer;
-    border: none;
-    transition: all 0.2s;
-}
-.p-btn-gold {
-    background-color: var(--color-blue);
-    color: #fff;
-}
-.p-btn-gold:hover { opacity: 0.9; }
-.p-btn-dark {
-    background-color: var(--color-carbon);
-    color: #fff;
-}
-.p-btn-dark:hover { opacity: 0.9; }
+.p-btn { padding: 10px 22px; border-radius: var(--radius-btn); font-size: 14px; font-weight: 600; cursor: pointer; border: 1.5px solid transparent; transition: all 0.25s; }
+.p-btn-gold { background: var(--color-navy); color: white; border-color: var(--color-navy); box-shadow: 0 2px 8px rgba(62,92,118,0.28); }
+.p-btn-gold:hover { background: var(--color-navy-dark); border-color: var(--color-navy-dark); }
+.p-btn-dark { background: var(--color-taupe); color: white; border-color: var(--color-taupe); }
+.p-btn-dark:hover { background: var(--color-taupe-dark); border-color: var(--color-taupe-dark); }
 
-.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+.p-grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
 
 .pwd-toggle-btn {
-    position: absolute;
-    right: 14px;
-    top: 50%;
-    transform: translateY(-50%);
-    background: none;
-    border: none;
-    cursor: pointer;
-    color: #a19688;
-    display: grid;
-    place-items: center;
+  position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
+  background: none; border: none; cursor: pointer;
+  color: var(--color-taupe-light); display: grid; place-items: center;
+  transition: color 0.2s;
 }
-.pwd-toggle-btn:hover { color: #5c5243; }
+.pwd-toggle-btn:hover { color: var(--color-taupe); }
 
 @media (max-width: 768px) {
-    .profil-grid { grid-template-columns: 1fr; }
-    .grid-2 { grid-template-columns: 1fr; }
+  .profil-grid { grid-template-columns: 1fr; }
+  .p-grid-2 { grid-template-columns: 1fr; }
 }
 </style>
 
@@ -226,29 +166,31 @@ body { background-color: var(--color-light-ash) !important; }
     <?php renderFlash(); ?>
 
     <div class="profil-grid">
-      <!-- Sidebar -->
-      <div>
-        <div class="profil-card profil-avatar-box">
-          <div class="profil-avatar">
-            <?= strtoupper(substr($profil['nama'], 0, 1)) ?>
+  <div>
+        <!-- Avatar Card -->
+        <div class="profil-card">
+          <div class="profil-avatar-box">
+            <div class="profil-avatar"><?= strtoupper(substr($profil['nama'], 0, 1)) ?></div>
+            <div class="profil-name"><?= htmlspecialchars($profil['nama']) ?></div>
+            <div class="profil-uname"><?= htmlspecialchars($profil['email']) ?></div>
+            <div class="profil-join">Bergabung <?= $joinDate ?></div>
           </div>
-          <div class="profil-name"><?= htmlspecialchars($profil['nama']) ?></div>
-          <div class="profil-uname">@<?= htmlspecialchars($profil['username'] ?? 'user') ?></div>
-          <div class="profil-join">Bergabung <?= $joinDate ?></div>
         </div>
 
-        <div class="profil-card profil-stats-card">
-          <div class="profil-stat-title">Statistik Anda</div>
-          <div class="profil-stat-row">
-            <span class="profil-stat-label">Total Pesanan</span>
-            <span class="profil-stat-val"><?= $stats['total_trx'] ?></span>
+        <!-- Stats Card -->
+        <div class="profil-card" style="margin-top:16px;">
+          <div class="profil-stats-card">
+            <div class="profil-stat-title">Statistik Anda</div>
+            <div class="profil-stat-row">
+              <span class="profil-stat-label">Total Pesanan</span>
+              <span class="profil-stat-val"><?= $stats['total_trx'] ?></span>
+            </div>
+            <div class="profil-stat-row">
+              <span class="profil-stat-label">Pesanan Lunas</span>
+              <span class="profil-stat-val green"><?= $stats['total_lunas'] ?></span>
+            </div>
+            <a href="riwayat.php" class="profil-stat-link">Lihat Riwayat &rarr;</a>
           </div>
-          <div class="profil-stat-row">
-            <span class="profil-stat-label">Perjalanan Lunas</span>
-            <span class="profil-stat-val green"><?= $stats['total_lunas'] ?></span>
-          </div>
-          <hr style="border:none; border-top:1px solid #efeae0; margin: 16px 0;">
-          <a href="riwayat.php" class="profil-stat-link">Lihat Riwayat &rarr;</a>
         </div>
       </div>
 
@@ -259,78 +201,65 @@ body { background-color: var(--color-light-ash) !important; }
           <div class="profil-card-header">
             <div class="profil-card-title">Informasi Pribadi</div>
           </div>
-          <form method="POST">
-            <input type="hidden" name="csrf_token" value="<?= csrf_token() ?>">
-            <input type="hidden" name="action" value="update_profil">
-            
-            <div class="grid-2">
-              <div class="p-form-group">
-                <label class="p-form-label">Nama Lengkap <span class="req">*</span></label>
-                <input type="text" class="p-form-control" name="nama" value="<?= htmlspecialchars($profil['nama']) ?>" required>
+          <div class="profil-card-inner">
+            <form method="POST">
+              <input type="hidden" name="csrf_token" value="<?= csrf_token() ?>">
+              <input type="hidden" name="action" value="update_profil">
+              <div class="p-grid-2">
+                <div class="p-form-group">
+                  <label class="p-form-label">Nama Lengkap <span class="req">*</span></label>
+                  <input type="text" class="p-form-control" name="nama" value="<?= htmlspecialchars($profil['nama']) ?>" required>
+                </div>
+                <div class="p-form-group">
+                  <label class="p-form-label">No. HP / WhatsApp</label>
+                  <input type="tel" class="p-form-control" name="no_telp" value="<?= htmlspecialchars($profil['no_telp'] ?? '') ?>">
+                </div>
               </div>
               <div class="p-form-group">
-                <label class="p-form-label">Username</label>
-                <input type="text" class="p-form-control" value="<?= htmlspecialchars($profil['username'] ?? '') ?>" readonly>
-                <div class="p-form-hint">Username tidak bisa diubah.</div>
+                <label class="p-form-label">Email</label>
+                <input type="email" class="p-form-control" value="<?= htmlspecialchars($profil['email']) ?>" readonly>
+                <div class="p-form-hint">Email tidak bisa diubah.</div>
               </div>
-            </div>
-
-            <div class="p-form-group">
-              <label class="p-form-label">Email <span class="req">*</span></label>
-              <input type="email" class="p-form-control" value="<?= htmlspecialchars($profil['email']) ?>" readonly>
-            </div>
-
-            <div class="p-form-group" style="margin-bottom: 32px;">
-              <label class="p-form-label">No. Handphone / WhatsApp</label>
-              <input type="tel" class="p-form-control" name="no_telp" value="<?= htmlspecialchars($profil['no_telp'] ?? '') ?>">
-            </div>
-
-            <button type="submit" class="p-btn p-btn-gold">Simpan Perubahan</button>
-          </form>
+              <button type="submit" class="p-btn p-btn-gold" id="btnSimpanProfil">Simpan Perubahan</button>
+            </form>
+          </div>
         </div>
 
         <!-- Ganti Password -->
-        <div class="profil-card">
+        <div class="profil-card" style="margin-top:0;">
           <div class="profil-card-header">
             <div class="profil-card-title">Ganti Password</div>
           </div>
-          <form method="POST">
-            <input type="hidden" name="csrf_token" value="<?= csrf_token() ?>">
-            <input type="hidden" name="action" value="ganti_password">
-            
-            <div class="p-form-group">
-              <label class="p-form-label">Password Lama</label>
-              <div style="position:relative;">
-                <input type="password" class="p-form-control" name="password_lama" id="pwd_lama" required style="padding-right:48px;">
-                <button type="button" class="pwd-toggle-btn" onclick="togglePwd('pwd_lama', this)">
-                  <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>
-                </button>
-              </div>
-            </div>
-
-            <div class="grid-2" style="margin-bottom: 32px;">
+          <div class="profil-card-inner">
+            <form method="POST">
+              <input type="hidden" name="csrf_token" value="<?= csrf_token() ?>">
+              <input type="hidden" name="action" value="ganti_password">
               <div class="p-form-group">
-                <label class="p-form-label">Password Baru <span style="font-weight:400;color:#a19688;">(min. 8 karakter)</span></label>
+                <label class="p-form-label">Password Lama</label>
                 <div style="position:relative;">
-                  <input type="password" class="p-form-control" name="password_baru" id="pwd_baru" required minlength="8" style="padding-right:48px;">
-                  <button type="button" class="pwd-toggle-btn" onclick="togglePwd('pwd_baru', this)">
-                    <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>
-                  </button>
+                  <input type="password" class="p-form-control" name="password_lama" id="pwd_lama" required style="padding-right:44px;">
+                  <button type="button" class="pwd-toggle-btn" onclick="togglePwd('pwd_lama', this)"><svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg></button>
                 </div>
               </div>
-              <div class="p-form-group">
-                <label class="p-form-label">Konfirmasi Password Baru</label>
-                <div style="position:relative;">
-                  <input type="password" class="p-form-control" name="password_konfirmasi" id="pwd_conf" required minlength="8" style="padding-right:48px;">
-                  <button type="button" class="pwd-toggle-btn" onclick="togglePwd('pwd_conf', this)">
-                    <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>
-                  </button>
+              <div class="p-grid-2" style="margin-bottom:24px;">
+                <div class="p-form-group">
+                  <label class="p-form-label">Password Baru <span style="font-weight:400;color:var(--color-taupe-light);">(min. 8 karakter)</span></label>
+                  <div style="position:relative;">
+                    <input type="password" class="p-form-control" name="password_baru" id="pwd_baru" required minlength="8" style="padding-right:44px;">
+                    <button type="button" class="pwd-toggle-btn" onclick="togglePwd('pwd_baru', this)"><svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg></button>
+                  </div>
+                </div>
+                <div class="p-form-group">
+                  <label class="p-form-label">Konfirmasi Password Baru</label>
+                  <div style="position:relative;">
+                    <input type="password" class="p-form-control" name="password_konfirmasi" id="pwd_conf" required minlength="8" style="padding-right:44px;">
+                    <button type="button" class="pwd-toggle-btn" onclick="togglePwd('pwd_conf', this)"><svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path stroke-linecap="round" stroke-linejoin="round" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg></button>
+                  </div>
                 </div>
               </div>
-            </div>
-
-            <button type="submit" class="p-btn p-btn-dark">Ganti Password</button>
-          </form>
+              <button type="submit" class="p-btn p-btn-dark" id="btnGantiPassword">Ganti Password</button>
+            </form>
+          </div>
         </div>
 
       </div>

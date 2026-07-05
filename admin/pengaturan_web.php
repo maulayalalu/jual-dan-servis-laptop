@@ -4,9 +4,9 @@ require_once '../config/koneksi.php';
 requireAdmin();
 
 $basePath = '../';
-$pageTitle = 'Pengaturan Web — A-LINKS';
+$pageTitle = 'Pengaturan Web â€” A-LINKS';
 
-// ── Handle Update ──
+// â”€â”€ Handle Update â”€â”€
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     verify_csrf();
     
@@ -44,7 +44,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     redirect('pengaturan_web.php');
 }
 
-// ── Ambil Data Saat Ini ──
+// â”€â”€ Ambil Data Saat Ini â”€â”€
 $res = $koneksi->query("SELECT kunci, nilai FROM pengaturan");
 $pengaturan = [];
 if ($res) {
@@ -69,28 +69,47 @@ function getSet($key, $default) {
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
-  <link rel="stylesheet" href="../assets/css/style.css"/>
+  <link rel="stylesheet" href="../assets/css/style.css?v=<?= time() ?>"/>
   <style>
     .settings-section {
       background: var(--color-white);
-      border: 1px solid var(--color-cloud);
-      border-radius: 8px;
-      padding: 24px;
-      margin-bottom: 24px;
+      border: 1px solid var(--color-cream-border);
+      border-radius: var(--radius-card);
+      overflow: hidden;
+      margin-bottom: var(--sp-3);
+      box-shadow: var(--shadow-sm);
+    }
+    .settings-section__header {
+      background: var(--color-cream);
+      padding: 14px 24px;
+      border-bottom: 1px solid var(--color-cream-border);
     }
     .settings-section__title {
-      font-size: 18px;
+      font-size: 15px;
       font-weight: 600;
       color: var(--color-carbon);
-      margin-bottom: 16px;
-      padding-bottom: 8px;
-      border-bottom: 1px solid var(--color-cloud);
+      margin: 0;
     }
+    .settings-section__body {
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    .settings-fitur-row {
+      background: var(--color-cream);
+      border: 1px solid var(--color-cream-border);
+      border-radius: var(--radius-md);
+      padding: 16px;
+      margin-bottom: 8px;
+    }
+    .settings-fitur-row:last-child { margin-bottom: 0; }
     .grid-2-col {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 16px;
     }
+    @media(max-width:768px){ .grid-2-col { grid-template-columns: 1fr; } }
   </style>
 </head>
 <body>
@@ -108,161 +127,182 @@ function getSet($key, $default) {
 
     <?php renderFlash(); ?>
 
-    <form action="pengaturan_web.php" method="POST" style="max-width: 900px;">
+    <form action="pengaturan_web.php" method="POST" style="max-width:900px;">
       <input type="hidden" name="csrf_token" value="<?= csrf_token() ?>">
-      
-      <!-- UMUM & FOOTER -->
+
+      <!-- 1. UMUM & FOOTER -->
       <div class="settings-section">
-        <h2 class="settings-section__title">1. Pengaturan Umum & Footer</h2>
-        
-        <div class="form-group">
-          <label class="form-label">Nama Toko</label>
-          <input type="text" class="form-input" name="nama_toko" value="<?= htmlspecialchars(getSet('nama_toko', 'A-LINKS')) ?>" required>
+        <div class="settings-section__header">
+          <h2 class="settings-section__title">1. Pengaturan Umum &amp; Footer</h2>
         </div>
-
-        <div class="form-group">
-          <label class="form-label">Tagline / Deskripsi Singkat</label>
-          <textarea class="form-input" name="tagline" rows="2" required><?= htmlspecialchars(getSet('tagline', 'Toko laptop terpercaya...')) ?></textarea>
-        </div>
-
-        <div class="form-group">
-          <label class="form-label">Alamat Lengkap</label>
-          <textarea class="form-input" name="alamat" rows="2" required><?= htmlspecialchars(getSet('alamat', '73RH+PG6...')) ?></textarea>
-        </div>
-
-        <div class="grid-2-col">
+        <div class="settings-section__body">
           <div class="form-group">
-            <label class="form-label">Nomor WhatsApp</label>
-            <input type="text" class="form-input" name="no_wa" value="<?= htmlspecialchars(getSet('no_wa', '6281216851726')) ?>" required>
-            <small style="color:var(--color-silver-fog); font-size:12px;">Format: 628...</small>
+            <label class="form-label">Nama Toko</label>
+            <input type="text" class="form-control" name="nama_toko" value="<?= htmlspecialchars(getSet('nama_toko', 'A-LINKS')) ?>" required>
           </div>
           <div class="form-group">
-            <label class="form-label">Pesan Template WA</label>
-            <input type="text" class="form-input" name="pesan_wa" value="<?= htmlspecialchars(getSet('pesan_wa', 'Halo A-LINKS...')) ?>" required>
-          </div>
-        </div>
-      </div>
-
-      <!-- TENTANG KAMI -->
-      <div class="settings-section">
-        <h2 class="settings-section__title">2. Bagian "Tentang Kami" (Beranda)</h2>
-        <div class="form-group">
-          <label class="form-label">Judul Tentang Kami</label>
-          <input type="text" class="form-input" name="tentang_judul" value="<?= htmlspecialchars(getSet('tentang_judul', 'Mengapa Memilih A-LINKS?')) ?>" required>
-        </div>
-        <div class="form-group">
-          <label class="form-label">Deskripsi Tentang Kami</label>
-          <textarea class="form-input" name="tentang_deskripsi" rows="3" required><?= htmlspecialchars(getSet('tentang_deskripsi', 'A-LINKS hadir sebagai solusi lengkap...')) ?></textarea>
-        </div>
-        <div class="form-group">
-          <label class="form-label">URL Gambar Tentang Kami</label>
-          <input type="text" class="form-input" name="tentang_gambar" value="<?= htmlspecialchars(getSet('tentang_gambar', '')) ?>" required>
-        </div>
-        <div class="grid-2-col">
-          <div class="form-group">
-            <label class="form-label">Poin Keunggulan 1</label>
-            <input type="text" class="form-input" name="tentang_poin1" value="<?= htmlspecialchars(getSet('tentang_poin1', '500+ Produk Tersedia')) ?>" required>
+            <label class="form-label">Tagline / Deskripsi Singkat</label>
+            <textarea class="form-control form-control--textarea" name="tagline" rows="2" required><?= htmlspecialchars(getSet('tagline', 'Toko laptop terpercaya...')) ?></textarea>
           </div>
           <div class="form-group">
-            <label class="form-label">Poin Keunggulan 2</label>
-            <input type="text" class="form-input" name="tentang_poin2" value="<?= htmlspecialchars(getSet('tentang_poin2', 'Teknisi Bersertifikat')) ?>" required>
+            <label class="form-label">Alamat Lengkap</label>
+            <textarea class="form-control form-control--textarea" name="alamat" rows="2" required><?= htmlspecialchars(getSet('alamat', '73RH+PG6...')) ?></textarea>
           </div>
-          <div class="form-group">
-            <label class="form-label">Poin Keunggulan 3</label>
-            <input type="text" class="form-input" name="tentang_poin3" value="<?= htmlspecialchars(getSet('tentang_poin3', 'Pengiriman ke Seluruh Indonesia')) ?>" required>
-          </div>
-          <div class="form-group">
-            <label class="form-label">Poin Keunggulan 4</label>
-            <input type="text" class="form-input" name="tentang_poin4" value="<?= htmlspecialchars(getSet('tentang_poin4', 'Layanan 7 Hari Seminggu')) ?>" required>
-          </div>
-        </div>
-      </div>
-
-      <!-- LAYANAN SERVIS -->
-      <div class="settings-section">
-        <h2 class="settings-section__title">3. Bagian "Layanan Servis" (Beranda)</h2>
-        <div class="grid-2-col">
+          <div class="grid-2-col">
             <div class="form-group">
-            <label class="form-label">Judul Layanan</label>
-            <input type="text" class="form-input" name="servis_judul" value="<?= htmlspecialchars(getSet('servis_judul', 'Layanan Servis Profesional')) ?>" required>
+              <label class="form-label">Nomor WhatsApp</label>
+              <input type="text" class="form-control" name="no_wa" value="<?= htmlspecialchars(getSet('no_wa', '6281216851726')) ?>" required>
+              <span class="form-hint">Format: 628xxxxxxxxx</span>
             </div>
             <div class="form-group">
-            <label class="form-label">Deskripsi Layanan</label>
-            <input type="text" class="form-input" name="servis_deskripsi" value="<?= htmlspecialchars(getSet('servis_deskripsi', 'Percayakan laptop kamu...')) ?>" required>
+              <label class="form-label">Pesan Template WA</label>
+              <input type="text" class="form-control" name="pesan_wa" value="<?= htmlspecialchars(getSet('pesan_wa', 'Halo A-LINKS...')) ?>" required>
             </div>
-        </div>
-        
-        <div class="grid-2-col" style="background:#fafafa; padding:12px; border-radius:6px; margin-bottom:12px;">
-          <div class="form-group">
-            <label class="form-label">Fitur 1: Judul</label>
-            <input type="text" class="form-input" name="servis_fitur1_judul" value="<?= htmlspecialchars(getSet('servis_fitur1_judul', 'Perbaikan Hardware')) ?>" required>
-          </div>
-          <div class="form-group">
-            <label class="form-label">Fitur 1: Deskripsi</label>
-            <input type="text" class="form-input" name="servis_fitur1_desc" value="<?= htmlspecialchars(getSet('servis_fitur1_desc', 'Layar retak, keyboard...')) ?>" required>
-          </div>
-        </div>
-
-        <div class="grid-2-col" style="background:#fafafa; padding:12px; border-radius:6px; margin-bottom:12px;">
-          <div class="form-group">
-            <label class="form-label">Fitur 2: Judul</label>
-            <input type="text" class="form-input" name="servis_fitur2_judul" value="<?= htmlspecialchars(getSet('servis_fitur2_judul', 'Instal & Optimasi OS')) ?>" required>
-          </div>
-          <div class="form-group">
-            <label class="form-label">Fitur 2: Deskripsi</label>
-            <input type="text" class="form-input" name="servis_fitur2_desc" value="<?= htmlspecialchars(getSet('servis_fitur2_desc', 'Instal ulang...')) ?>" required>
-          </div>
-        </div>
-
-        <div class="grid-2-col" style="background:#fafafa; padding:12px; border-radius:6px;">
-          <div class="form-group">
-            <label class="form-label">Fitur 3: Judul</label>
-            <input type="text" class="form-input" name="servis_fitur3_judul" value="<?= htmlspecialchars(getSet('servis_fitur3_judul', 'Garansi 30 Hari')) ?>" required>
-          </div>
-          <div class="form-group">
-            <label class="form-label">Fitur 3: Deskripsi</label>
-            <input type="text" class="form-input" name="servis_fitur3_desc" value="<?= htmlspecialchars(getSet('servis_fitur3_desc', 'Setiap pengerjaan...')) ?>" required>
           </div>
         </div>
       </div>
 
-      <!-- STATISTIK -->
+      <!-- 2. TENTANG KAMI -->
       <div class="settings-section">
-        <h2 class="settings-section__title">4. Bagian "Statistik" (Beranda)</h2>
-        <div class="grid-2-col">
+        <div class="settings-section__header">
+          <h2 class="settings-section__title">2. Bagian &quot;Tentang Kami&quot; (Beranda)</h2>
+        </div>
+        <div class="settings-section__body">
           <div class="form-group">
-            <label class="form-label">Statistik 1 (Nilai & Label)</label>
-            <div style="display:flex;gap:8px;">
-                <input type="text" class="form-input" name="stat1_nilai" value="<?= htmlspecialchars(getSet('stat1_nilai', '500+')) ?>" style="width:80px;" required>
-                <input type="text" class="form-input" name="stat1_label" value="<?= htmlspecialchars(getSet('stat1_label', 'Produk')) ?>" style="flex:1;" required>
-            </div>
+            <label class="form-label">Judul Tentang Kami</label>
+            <input type="text" class="form-control" name="tentang_judul" value="<?= htmlspecialchars(getSet('tentang_judul', 'Mengapa Memilih A-LINKS?')) ?>" required>
           </div>
           <div class="form-group">
-            <label class="form-label">Statistik 2 (Nilai & Label)</label>
-            <div style="display:flex;gap:8px;">
-                <input type="text" class="form-input" name="stat2_nilai" value="<?= htmlspecialchars(getSet('stat2_nilai', '1000+')) ?>" style="width:80px;" required>
-                <input type="text" class="form-input" name="stat2_label" value="<?= htmlspecialchars(getSet('stat2_label', 'Pelanggan')) ?>" style="flex:1;" required>
-            </div>
+            <label class="form-label">Deskripsi Tentang Kami</label>
+            <textarea class="form-control form-control--textarea" name="tentang_deskripsi" rows="3" required><?= htmlspecialchars(getSet('tentang_deskripsi', 'A-LINKS hadir sebagai solusi lengkap...')) ?></textarea>
           </div>
           <div class="form-group">
-            <label class="form-label">Statistik 3 (Nilai & Label)</label>
-            <div style="display:flex;gap:8px;">
-                <input type="text" class="form-input" name="stat3_nilai" value="<?= htmlspecialchars(getSet('stat3_nilai', '50+')) ?>" style="width:80px;" required>
-                <input type="text" class="form-input" name="stat3_label" value="<?= htmlspecialchars(getSet('stat3_label', 'Merk')) ?>" style="flex:1;" required>
-            </div>
+            <label class="form-label">URL Gambar Tentang Kami</label>
+            <input type="text" class="form-control" name="tentang_gambar" value="<?= htmlspecialchars(getSet('tentang_gambar', '')) ?>" placeholder="https://...">
           </div>
-          <div class="form-group">
-            <label class="form-label">Statistik 4 (Nilai & Label)</label>
-            <div style="display:flex;gap:8px;">
-                <input type="text" class="form-input" name="stat4_nilai" value="<?= htmlspecialchars(getSet('stat4_nilai', '30')) ?>" style="width:80px;" required>
-                <input type="text" class="form-input" name="stat4_label" value="<?= htmlspecialchars(getSet('stat4_label', 'Hari Garansi')) ?>" style="flex:1;" required>
+          <div class="grid-2-col">
+            <div class="form-group">
+              <label class="form-label">Poin Keunggulan 1</label>
+              <input type="text" class="form-control" name="tentang_poin1" value="<?= htmlspecialchars(getSet('tentang_poin1', '500+ Produk Tersedia')) ?>" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Poin Keunggulan 2</label>
+              <input type="text" class="form-control" name="tentang_poin2" value="<?= htmlspecialchars(getSet('tentang_poin2', 'Teknisi Bersertifikat')) ?>" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Poin Keunggulan 3</label>
+              <input type="text" class="form-control" name="tentang_poin3" value="<?= htmlspecialchars(getSet('tentang_poin3', 'Pengiriman ke Seluruh Indonesia')) ?>" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Poin Keunggulan 4</label>
+              <input type="text" class="form-control" name="tentang_poin4" value="<?= htmlspecialchars(getSet('tentang_poin4', 'Layanan 7 Hari Seminggu')) ?>" required>
             </div>
           </div>
         </div>
       </div>
 
-      <div style="margin-top:24px; margin-bottom:48px;">
-        <button type="submit" class="btn btn--primary btn--lg" style="width:100%;">Simpan Semua Perubahan</button>
+      <!-- 3. LAYANAN SERVIS -->
+      <div class="settings-section">
+        <div class="settings-section__header">
+          <h2 class="settings-section__title">3. Bagian &quot;Layanan Servis&quot; (Beranda)</h2>
+        </div>
+        <div class="settings-section__body">
+          <div class="grid-2-col">
+            <div class="form-group">
+              <label class="form-label">Judul Layanan</label>
+              <input type="text" class="form-control" name="servis_judul" value="<?= htmlspecialchars(getSet('servis_judul', 'Layanan Servis Profesional')) ?>" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Deskripsi Layanan</label>
+              <input type="text" class="form-control" name="servis_deskripsi" value="<?= htmlspecialchars(getSet('servis_deskripsi', 'Percayakan laptop kamu...')) ?>" required>
+            </div>
+          </div>
+
+          <div class="settings-fitur-row">
+            <div style="font-size:12px;font-weight:600;color:var(--color-taupe);text-transform:uppercase;letter-spacing:1px;margin-bottom:12px;">Fitur 1</div>
+            <div class="grid-2-col">
+              <div class="form-group">
+                <label class="form-label">Judul</label>
+                <input type="text" class="form-control" name="servis_fitur1_judul" value="<?= htmlspecialchars(getSet('servis_fitur1_judul', 'Perbaikan Hardware')) ?>" required>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Deskripsi</label>
+                <input type="text" class="form-control" name="servis_fitur1_desc" value="<?= htmlspecialchars(getSet('servis_fitur1_desc', 'Layar retak, keyboard...')) ?>" required>
+              </div>
+            </div>
+          </div>
+
+          <div class="settings-fitur-row">
+            <div style="font-size:12px;font-weight:600;color:var(--color-taupe);text-transform:uppercase;letter-spacing:1px;margin-bottom:12px;">Fitur 2</div>
+            <div class="grid-2-col">
+              <div class="form-group">
+                <label class="form-label">Judul</label>
+                <input type="text" class="form-control" name="servis_fitur2_judul" value="<?= htmlspecialchars(getSet('servis_fitur2_judul', 'Instal &amp; Optimasi OS')) ?>" required>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Deskripsi</label>
+                <input type="text" class="form-control" name="servis_fitur2_desc" value="<?= htmlspecialchars(getSet('servis_fitur2_desc', 'Instal ulang...')) ?>" required>
+              </div>
+            </div>
+          </div>
+
+          <div class="settings-fitur-row">
+            <div style="font-size:12px;font-weight:600;color:var(--color-taupe);text-transform:uppercase;letter-spacing:1px;margin-bottom:12px;">Fitur 3</div>
+            <div class="grid-2-col">
+              <div class="form-group">
+                <label class="form-label">Judul</label>
+                <input type="text" class="form-control" name="servis_fitur3_judul" value="<?= htmlspecialchars(getSet('servis_fitur3_judul', 'Garansi 30 Hari')) ?>" required>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Deskripsi</label>
+                <input type="text" class="form-control" name="servis_fitur3_desc" value="<?= htmlspecialchars(getSet('servis_fitur3_desc', 'Setiap pengerjaan...')) ?>" required>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4. STATISTIK -->
+      <div class="settings-section">
+        <div class="settings-section__header">
+          <h2 class="settings-section__title">4. Bagian &quot;Statistik&quot; (Beranda)</h2>
+        </div>
+        <div class="settings-section__body">
+          <div class="grid-2-col">
+            <div class="form-group">
+              <label class="form-label">Statistik 1 (Nilai &amp; Label)</label>
+              <div style="display:flex;gap:8px;">
+                <input type="text" class="form-control" name="stat1_nilai" value="<?= htmlspecialchars(getSet('stat1_nilai', '500+')) ?>" style="width:80px;flex-shrink:0;" required>
+                <input type="text" class="form-control" name="stat1_label" value="<?= htmlspecialchars(getSet('stat1_label', 'Produk')) ?>" style="flex:1;" required>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Statistik 2 (Nilai &amp; Label)</label>
+              <div style="display:flex;gap:8px;">
+                <input type="text" class="form-control" name="stat2_nilai" value="<?= htmlspecialchars(getSet('stat2_nilai', '1000+')) ?>" style="width:80px;flex-shrink:0;" required>
+                <input type="text" class="form-control" name="stat2_label" value="<?= htmlspecialchars(getSet('stat2_label', 'Pelanggan')) ?>" style="flex:1;" required>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Statistik 3 (Nilai &amp; Label)</label>
+              <div style="display:flex;gap:8px;">
+                <input type="text" class="form-control" name="stat3_nilai" value="<?= htmlspecialchars(getSet('stat3_nilai', '50+')) ?>" style="width:80px;flex-shrink:0;" required>
+                <input type="text" class="form-control" name="stat3_label" value="<?= htmlspecialchars(getSet('stat3_label', 'Merk')) ?>" style="flex:1;" required>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Statistik 4 (Nilai &amp; Label)</label>
+              <div style="display:flex;gap:8px;">
+                <input type="text" class="form-control" name="stat4_nilai" value="<?= htmlspecialchars(getSet('stat4_nilai', '30')) ?>" style="width:80px;flex-shrink:0;" required>
+                <input type="text" class="form-control" name="stat4_label" value="<?= htmlspecialchars(getSet('stat4_label', 'Hari Garansi')) ?>" style="flex:1;" required>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-top:24px;margin-bottom:48px;">
+        <button type="submit" class="btn btn--primary btn--lg btn--full" id="btnSimpanPengaturan">Simpan Semua Perubahan</button>
       </div>
     </form>
   </main>

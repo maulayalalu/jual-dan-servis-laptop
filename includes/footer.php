@@ -1,5 +1,5 @@
 <?php
-// includes/footer.php — Site-wide footer
+// includes/footer.php â€” Site-wide footer
 // Usage: include '../includes/footer.php';
 global $koneksi;
 global $basePath;
@@ -25,7 +25,7 @@ $ft_pesan_wa = $pengaturan['pesan_wa'] ?? 'Halo A-LINKS, saya ingin konsultasi m
 $ft_wa_link = "https://wa.me/" . preg_replace('/[^0-9]/', '', $ft_no_wa) . "?text=" . rawurlencode($ft_pesan_wa);
 ?>
 
-<!-- ── Footer ── -->
+<!-- â”€â”€ Footer â”€â”€ -->
 <footer class="footer">
   <div class="container">
     <div class="footer__grid">
@@ -58,7 +58,7 @@ $ft_wa_link = "https://wa.me/" . preg_replace('/[^0-9]/', '', $ft_no_wa) . "?tex
     </div>
     <div class="footer__bottom">
       <span>&copy; <?= date('Y') ?> <?= htmlspecialchars($ft_nama_toko) ?>. Semua hak dilindungi.</span>
-      <span style="color:rgba(255,255,255,0.3)">Dibuat dengan ❤ di Indonesia</span>
+      <span style="color:rgba(255,255,255,0.3)">Dibuat dengan â¤ di Indonesia</span>
     </div>
   </div>
 </footer>

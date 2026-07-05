@@ -2,7 +2,7 @@
 session_start();
 require_once 'config/koneksi.php';
 $basePath = '';
-$pageTitle = 'Halaman Tidak Ditemukan — A-LINKS';
+$pageTitle = 'Halaman Tidak Ditemukan â€” A-LINKS';
 http_response_code(404);
 include 'includes/header.php';
 ?>
@@ -15,7 +15,7 @@ include 'includes/header.php';
       Maaf, halaman yang Anda cari tidak ada, sudah dihapus, atau alamatnya salah.
     </p>
     <div style="display:flex;gap:12px;justify-content:center;flex-wrap:wrap;">
-      <a href="index.php" class="btn btn--primary">← Kembali ke Beranda</a>
+      <a href="index.php" class="btn btn--primary">â† Kembali ke Beranda</a>
       <a href="user/katalog.php" class="btn btn--secondary">Lihat Katalog</a>
     </div>
     <div style="margin-top:48px;display:flex;gap:24px;justify-content:center;">

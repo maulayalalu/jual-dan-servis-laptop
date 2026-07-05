@@ -1,8 +1,8 @@
 <?php
-// includes/header.php — Site-wide navigation header
+// includes/header.php â€” Site-wide navigation header
 // Usage: include '../includes/header.php';
 //        Set $pageTitle and $navActive before including.
-$pageTitle = $pageTitle ?? 'A-LINKS — Jual & Servis Laptop';
+$pageTitle = $pageTitle ?? 'A-LINKS â€” Jual & Servis Laptop';
 $navActive = $navActive ?? '';
 $isAdmin   = isset($_SESSION['role']) && $_SESSION['role'] === 'admin';
 $isUser    = isset($_SESSION['role']) && $_SESSION['role'] === 'user';
@@ -15,7 +15,7 @@ $basePath  = $basePath ?? '../'; // set to '' for root-level files
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title><?= htmlspecialchars($pageTitle) ?></title>
-  <meta name="description" content="A-LINKS — Toko laptop terpercaya & layanan servis profesional. Temukan laptop terbaik dengan harga kompetitif." />
+  <meta name="description" content="A-LINKS â€” Toko laptop terpercaya & layanan servis profesional. Temukan laptop terbaik dengan harga kompetitif." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />
@@ -23,7 +23,7 @@ $basePath  = $basePath ?? '../'; // set to '' for root-level files
 </head>
 <body>
 
-<!-- ── Navigation ── -->
+<!-- â”€â”€ Navigation â”€â”€ -->
 <nav id="mainNav" class="nav">
   <a href="<?= $basePath ?>index.php" class="nav__brand" style="display:flex;align-items:center;gap:12px;text-decoration:none;color:var(--color-white);">
     <div style="background:var(--color-taupe);color:white;width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 14px rgba(140,123,117,0.35);flex-shrink:0;">

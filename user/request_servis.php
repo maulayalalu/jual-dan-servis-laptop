@@ -3,7 +3,7 @@ session_start();
 require_once '../config/koneksi.php';
 requireUser();
 $basePath = '../';
-$pageTitle = 'Request Servis — A-LINKS';
+$pageTitle = 'Request Servis â€” A-LINKS';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     verify_csrf();
@@ -32,7 +32,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 include '../includes/header.php';
 ?>
 
-<div style="min-height:100vh;background:var(--color-light-ash);padding-top:72px;">
+<div style="min-height:100vh;background:var(--color-cream);padding-top:72px;">
   <div class="container" style="max-width:800px;padding-top:32px;padding-bottom:80px;">
     
     <div class="page-header" style="text-align:center;display:block;">
@@ -46,17 +46,17 @@ include '../includes/header.php';
         <form method="POST">
     <input type="hidden" name="csrf_token" value="<?= csrf_token() ?>">
             <div class="form-group" style="margin-bottom:20px;">
-                <label class="form-label" for="tipe_laptop">Merek & Tipe Laptop <span style="color:#d92b2b;">*</span></label>
+                <label class="form-label" for="tipe_laptop">Merek &amp; Tipe Laptop <span style="color:var(--color-danger);">*</span></label>
                 <input class="form-control" id="tipe_laptop" name="tipe_laptop" type="text" required placeholder="Contoh: ASUS ROG Strix G513, Lenovo ThinkPad T480">
             </div>
             
             <div class="form-group" style="margin-bottom:24px;">
-                <label class="form-label" for="keluhan">Deskripsi Keluhan <span style="color:#d92b2b;">*</span></label>
+                <label class="form-label" for="keluhan">Deskripsi Keluhan <span style="color:var(--color-danger);">*</span></label>
                 <textarea class="form-control form-control--textarea" id="keluhan" name="keluhan" rows="5" required placeholder="Jelaskan masalah yang dialami sedetail mungkin. Contoh: Layar bergaris saat dinyalakan, keyboard beberapa tombol tidak berfungsi, atau laptop sering mati tiba-tiba."></textarea>
             </div>
 
-            <div style="background:rgba(62,106,225,0.05);border:1px solid rgba(62,106,225,0.2);border-radius:8px;padding:16px;margin-bottom:24px;">
-                <div style="font-weight:600;font-size:14px;color:var(--color-blue);margin-bottom:8px;">Informasi Penting:</div>
+            <div style="background:var(--color-cream);border:1px solid var(--color-cream-border);border-left:4px solid var(--color-navy);border-radius:8px;padding:16px;margin-bottom:24px;">
+                <div style="font-weight:600;font-size:14px;color:var(--color-navy);margin-bottom:8px;">&#9432; Informasi Penting:</div>
                 <ul style="list-style-type:disc;padding-left:20px;font-size:13px;color:var(--color-graphite);display:flex;flex-direction:column;gap:4px;">
                     <li>Teknisi kami akan memeriksa laptop Anda terlebih dahulu.</li>
                     <li>Estimasi biaya servis akan dikonfirmasi setelah pemeriksaan selesai.</li>
@@ -64,7 +64,7 @@ include '../includes/header.php';
                 </ul>
             </div>
 
-            <button type="submit" class="btn btn--primary btn--lg" style="width:100%;">Ajukan Permintaan Servis</button>
+            <button type="submit" class="btn btn--primary btn--lg btn--full" id="btnAjukanServis">Ajukan Permintaan Servis</button>
         </form>
     </div>
 
