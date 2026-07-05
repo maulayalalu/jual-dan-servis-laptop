@@ -1,11 +1,12 @@
 <?php
 session_start();
 require_once '../config/koneksi.php';
-requireAdmin();
+requireStaff('admin', 'owner'); // kasir tidak bisa akses halaman user
 $basePath = '../'; $pageTitle = 'Kelola User — A-LINKS';
+$isAdmin = hasRole('admin');
 
-// Handle hapus/toggle role
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+// Handle hapus/toggle role (hanya admin)
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && $isAdmin) {
     verify_csrf();
     $action  = $_POST['action']  ?? '';
     $id_user = (int)($_POST['id_user'] ?? 0);
@@ -16,10 +17,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
     if ($action === 'toggle_role') {
         $newRole = $_POST['new_role'] ?? 'user';
-        $stmt = $koneksi->prepare("UPDATE users SET role=? WHERE id_user=?");
-        $stmt->bind_param('si', $newRole, $id_user); $stmt->execute(); $stmt->close();
-        setFlash('success', 'Role user berhasil diubah.');
+        $allowed = ['admin','owner','kasir','user'];
+        if (in_array($newRole, $allowed)) {
+            $stmt = $koneksi->prepare("UPDATE users SET role=? WHERE id_user=?");
+            $stmt->bind_param('si', $newRole, $id_user); $stmt->execute(); $stmt->close();
+            setFlash('success', 'Role user berhasil diubah.');
+        }
     }
+    redirect('kelola_user.php');
+} elseif ($_SERVER['REQUEST_METHOD'] === 'POST' && !$isAdmin) {
+    setFlash('warning', 'Anda tidak memiliki izin untuk mengubah data user.');
     redirect('kelola_user.php');
 }
 
@@ -59,7 +66,10 @@ $totalPages = ceil($totalData / $limit);
 <main class="main-content">
   <div class="page-header">
     <div><h1 class="page-header__title">Kelola User</h1>
-    <div class="page-header__sub">Daftar seluruh akun pelanggan dan administrator</div></div>
+    <div class="page-header__sub">Daftar seluruh akun pelanggan dan staf</div></div>
+    <?php if (!$isAdmin): ?>
+    <span class="badge badge--amber" style="font-size:13px;padding:8px 14px;">Mode Read-Only (Owner)</span>
+    <?php endif; ?>
   </div>
   <?php renderFlash(); ?>
 
@@ -86,7 +96,14 @@ $totalPages = ceil($totalData / $limit);
           <td style="color:var(--color-silver-fog);"><?= $no++ ?></td>
           <td>
             <div style="display:flex;align-items:center;gap:10px;">
-              <div style="width:32px;height:32px;border-radius:50%;background:<?= $u['role']==='admin' ? 'var(--color-blue)' : 'var(--color-light-ash)' ?>;color:<?= $u['role']==='admin' ? 'white' : 'var(--color-pewter)' ?>;display:grid;place-items:center;font-size:13px;font-weight:600;flex-shrink:0;"><?= strtoupper(substr($u['nama'],0,1)) ?></div>
+              <div style="width:32px;height:32px;border-radius:50%;background:<?php
+                echo match($u['role']) {
+                    'admin'  => 'var(--color-blue)',
+                    'owner'  => 'var(--color-blue-light)',
+                    'kasir'  => 'var(--color-taupe)',
+                    default  => 'var(--color-light-ash)',
+                };
+              ?>;color:<?= in_array($u['role'],['admin','owner','kasir']) ? 'white' : 'var(--color-pewter)' ?>;display:grid;place-items:center;font-size:13px;font-weight:600;flex-shrink:0;"><?= strtoupper(substr($u['nama'],0,1)) ?></div>
               <div>
                 <div style="font-weight:500;color:var(--color-carbon);"><?= htmlspecialchars($u['nama']) ?><?= $isSelf ? ' <span class="badge badge--blue" style="font-size:10px;">Saya</span>' : '' ?></div>
                 <?php if (!empty($u['alamat'])): ?><div style="font-size:11px;color:var(--color-silver-fog);max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;"><?= htmlspecialchars($u['alamat']) ?></div><?php endif; ?>
@@ -95,29 +112,48 @@ $totalPages = ceil($totalData / $limit);
           </td>
           <td style="font-size:13px;"><?= htmlspecialchars($u['email']) ?></td>
           <td style="font-size:13px;color:var(--color-pewter);"><?= htmlspecialchars($u['no_telp'] ?? '—') ?></td>
-          <td><span class="badge <?= $u['role']==='admin' ? 'badge--blue' : 'badge--gray' ?>"><?= ucfirst($u['role']) ?></span></td>
+          <td><span class="badge <?php
+            echo match($u['role']) {
+                'admin'  => 'badge--blue',
+                'owner'  => 'badge--purple',
+                'kasir'  => 'badge--amber',
+                default  => 'badge--gray',
+            };
+          ?>"
+          ><?= ucfirst($u['role']) ?></span></td>
           <td>
-            <?php if (!$isSelf): ?>
+          <?php if (!$isSelf && $isAdmin): ?>
             <div style="display:flex;gap:4px;">
               <form method="POST" style="display:inline;">
-      <input type="hidden" name="csrf_token" value="<?= csrf_token() ?>">
+    <input type="hidden" name="csrf_token" value="<?= csrf_token() ?>">
                 <input type="hidden" name="action" value="toggle_role">
                 <input type="hidden" name="id_user" value="<?= $u['id_user'] ?>">
-                <input type="hidden" name="new_role" value="<?= $u['role']==='admin'?'user':'admin' ?>">
-                <button type="submit" class="btn btn--secondary btn--sm" id="btnToggleRole-<?= $u['id_user'] ?>"
-                        data-confirm="Ubah role <?= htmlspecialchars($u['nama'],ENT_QUOTES) ?> menjadi <?= $u['role']==='admin'?'user':'admin' ?>?">
-                  → <?= $u['role']==='admin'?'Jadikan User':'Jadikan Admin' ?>
-                </button>
+                <select name="new_role" class="form-control form-select" style="height:auto;padding:4px 8px;font-size:12px;width:auto;"
+                        onchange="this.form.submit()"
+                        title="Ubah role">
+                  <?php
+                  $roleOptions = [
+                      'admin' => 'Administrator',
+                      'owner' => 'Owner',
+                      'kasir' => 'Kasir',
+                      'user'  => 'Pelanggan',
+                  ];
+                  foreach ($roleOptions as $rv => $rl): ?>
+                  <option value="<?= $rv ?>" <?= $u['role']===$rv ? 'selected' : '' ?>><?= $rl ?></option>
+                  <?php endforeach; ?>
+                </select>
               </form>
               <form method="POST" style="display:inline;">
-      <input type="hidden" name="csrf_token" value="<?= csrf_token() ?>">
+    <input type="hidden" name="csrf_token" value="<?= csrf_token() ?>">
                 <input type="hidden" name="action" value="hapus">
                 <input type="hidden" name="id_user" value="<?= $u['id_user'] ?>">
                 <button type="submit" class="btn btn--danger btn--sm" id="btnHapusUser-<?= $u['id_user'] ?>"
                         data-confirm="Hapus akun <?= htmlspecialchars($u['nama'],ENT_QUOTES) ?>? Data tidak bisa dipulihkan.">Hapus</button>
               </form>
             </div>
-            <?php else: ?><span style="font-size:12px;color:var(--color-silver-fog);">Akun aktif</span><?php endif; ?>
+          <?php elseif ($isSelf): ?><span style="font-size:12px;color:var(--color-silver-fog);">Akun aktif</span>
+          <?php else: ?><span style="font-size:12px;color:var(--color-silver-fog);">—</span>
+          <?php endif; ?>
           </td>
         </tr>
         <?php endwhile; else: ?>

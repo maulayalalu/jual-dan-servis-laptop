@@ -102,10 +102,47 @@ function requireLogin(string $redirect = '../login.php'): void {
 }
 
 /**
+ * Cek apakah user memiliki salah satu dari role yang diberikan
+ */
+function hasRole(string ...$roles): bool {
+    return in_array($_SESSION['role'] ?? '', $roles, true);
+}
+
+/**
  * Paksa role admin
  */
 function requireAdmin(): void {
-    if (!isLoggedIn() || ($_SESSION['role'] ?? '') !== 'admin') {
+    if (!isLoggedIn() || !hasRole('admin')) {
+        redirect('../login.php');
+    }
+}
+
+/**
+ * Paksa role owner (atau admin)
+ */
+function requireOwner(): void {
+    if (!isLoggedIn() || !hasRole('admin', 'owner')) {
+        redirect('../login.php');
+    }
+}
+
+/**
+ * Paksa role kasir (atau admin)
+ */
+function requireKasir(): void {
+    if (!isLoggedIn() || !hasRole('admin', 'kasir')) {
+        redirect('../login.php');
+    }
+}
+
+/**
+ * Paksa staff (admin, owner, atau kasir)
+ * Opsional: batasi ke role tertentu saja
+ * Contoh: requireStaff('admin','owner') hanya izinkan admin & owner
+ */
+function requireStaff(string ...$roles): void {
+    $allowed = empty($roles) ? ['admin', 'owner', 'kasir'] : $roles;
+    if (!isLoggedIn() || !hasRole(...$allowed)) {
         redirect('../login.php');
     }
 }
@@ -114,9 +151,22 @@ function requireAdmin(): void {
  * Paksa role user
  */
 function requireUser(): void {
-    if (!isLoggedIn() || ($_SESSION['role'] ?? '') !== 'user') {
+    if (!isLoggedIn() || !hasRole('user')) {
         redirect('../login.php');
     }
+}
+
+/**
+ * Ambil label role yang ramah
+ */
+function getRoleLabel(string $role): string {
+    return match($role) {
+        'admin'  => 'Administrator',
+        'owner'  => 'Owner',
+        'kasir'  => 'Kasir',
+        'user'   => 'Pelanggan',
+        default  => ucfirst($role),
+    };
 }
 
 /**

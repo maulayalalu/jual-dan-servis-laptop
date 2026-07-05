@@ -1,7 +1,7 @@
 <?php
 session_start();
 require_once '../config/koneksi.php';
-requireAdmin();
+requireStaff('admin', 'owner'); // kasir tidak bisa akses laporan
 $basePath = '../';
 $pageTitle = 'Laporan Penjualan — A-LINKS';
 
@@ -139,8 +139,8 @@ new Chart(ctx1, {
     datasets: [{
       label: 'Pendapatan (Rp)',
       data: <?= $chartData ?>.slice(1),
-      backgroundColor: 'rgba(28, 100, 242, 0.15)',
-      borderColor: '#1c64f2',
+      backgroundColor: 'rgba(62, 92, 118, 0.15)',
+      borderColor: '#3E5C76',
       borderWidth: 2,
       borderRadius: 6,
     }]
@@ -163,7 +163,7 @@ new Chart(ctx2, {
     labels: ['Pending', 'Diproses', 'Selesai', 'Diambil'],
     datasets: [{
       data: [<?= $servisStats['pending'] ?>, <?= $servisStats['proses'] ?>, <?= $servisStats['selesai'] ?>, <?= $servisStats['diambil'] ?>],
-      backgroundColor: ['#9ca3af','#f59e0b','#10b981','#1c64f2'],
+      backgroundColor: ['#A8B7C2','#D8CFC2','#3E5C76','#2B4158'],
       borderWidth: 0,
       hoverOffset: 8
     }]

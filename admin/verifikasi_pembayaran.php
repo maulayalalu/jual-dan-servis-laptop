@@ -1,7 +1,7 @@
 <?php
 session_start();
 require_once '../config/koneksi.php';
-requireAdmin();
+requireStaff(); // admin, owner, kasir
 $basePath = '../'; $pageTitle = 'Verifikasi Pembayaran — A-LINKS';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -42,7 +42,7 @@ $total = $list->num_rows;
   <?php renderFlash(); ?>
 
   <?php if ($total > 0): while($t = $list->fetch_assoc()): ?>
-  <div class="card" style="padding:24px;margin-bottom:20px;border-left:4px solid #f59e0b;">
+  <div class="card" style="padding:24px;margin-bottom:20px;border-left:4px solid var(--color-taupe);">
     <div style="display:grid;grid-template-columns:1fr 280px;gap:24px;align-items:start;">
       <div>
         <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">

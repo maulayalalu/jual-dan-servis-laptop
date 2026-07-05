@@ -1,7 +1,7 @@
 <?php
 session_start();
 require_once '../config/koneksi.php';
-requireAdmin();
+requireStaff(); // admin, owner, kasir
 $basePath = '../'; $pageTitle = 'Kelola Servis — A-LINKS';
 
 // Handle update status & biaya

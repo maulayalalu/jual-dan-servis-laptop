@@ -4,7 +4,8 @@ require_once 'config/koneksi.php';
 
 // Kalau sudah login, redirect ke halaman yang sesuai
 if (isLoggedIn()) {
-    redirect($_SESSION['role'] === 'admin' ? 'admin/dashboard.php' : 'user/dashboard.php');
+    $role = $_SESSION['role'] ?? 'user';
+    redirect($role === 'user' ? 'user/dashboard.php' : 'admin/dashboard.php');
 }
 
 $error = '';
@@ -36,7 +37,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             setFlash('success', 'Selamat datang kembali, ' . $user['nama'] . '!');
 
-            redirect($user['role'] === 'admin' ? 'admin/dashboard.php' : 'user/dashboard.php');
+            redirect($user['role'] === 'user' ? 'user/dashboard.php' : 'admin/dashboard.php');
         } else {
             $error = 'Email atau password tidak sesuai.';
         }
@@ -63,9 +64,9 @@ $basePath  = '';
 <div class="auth-page">
   <!-- Visual Side -->
   <div class="auth-visual">
-    <img src="https://images.unsplash.com/photo-1593642632632-9b7a7e2e3c7e?w=1200&q=85"
+    <img src="https://images.unsplash.com/photo-1453928582365-b6ad33cbcf64?w=1200&q=85"
          alt="Laptop showcase"
-         onerror="this.parentElement.style.background='linear-gradient(135deg,#0f2027,#203a43,#2c5364)'">
+         onerror="this.parentElement.style.background='var(--color-blue)'">
     <div class="auth-visual__overlay">
       <div>
         <div style="font-size:22px;font-weight:600;letter-spacing:4px;color:white;text-transform:uppercase;margin-bottom:24px;">A-LINKS</div>
@@ -147,6 +148,8 @@ $basePath  = '';
       <div style="background:var(--color-light-ash);border-radius:8px;padding:12px 16px;font-size:12px;color:var(--color-pewter);">
         <div style="font-weight:500;color:var(--color-graphite);margin-bottom:6px;">Demo Login:</div>
         <div>Admin: <code style="background:white;padding:1px 6px;border-radius:3px;">admin@alinks.id</code> / <code style="background:white;padding:1px 6px;border-radius:3px;">admin123</code></div>
+        <div style="margin-top:4px;">Owner: <code style="background:white;padding:1px 6px;border-radius:3px;">owner@alinks.id</code> / <code style="background:white;padding:1px 6px;border-radius:3px;">owner123</code></div>
+        <div style="margin-top:4px;">Kasir: <code style="background:white;padding:1px 6px;border-radius:3px;">kasir@alinks.id</code> / <code style="background:white;padding:1px 6px;border-radius:3px;">kasir123</code></div>
         <div style="margin-top:4px;">User: <code style="background:white;padding:1px 6px;border-radius:3px;">user@alinks.id</code> / <code style="background:white;padding:1px 6px;border-radius:3px;">user123</code></div>
       </div>
 

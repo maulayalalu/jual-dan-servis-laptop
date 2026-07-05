@@ -76,7 +76,7 @@ $pageTitle = 'Daftar Akun — A-LINKS';
   <div class="auth-visual">
     <img src="https://images.unsplash.com/photo-1588702547923-7093a6c3ba33?w=1200&q=85"
          alt="Laptop workspace"
-         onerror="this.parentElement.style.background='linear-gradient(135deg,#1a1a2e,#16213e,#0f3460)'">
+         onerror="this.parentElement.style.background='var(--color-blue)'">
     <div class="auth-visual__overlay">
       <div>
         <div style="font-size:22px;font-weight:600;letter-spacing:4px;color:white;text-transform:uppercase;margin-bottom:24px;">A-LINKS</div>
@@ -246,7 +246,7 @@ $pageTitle = 'Daftar Akun — A-LINKS';
   // Password strength
   const strengthFill  = document.getElementById('strengthFill');
   const strengthLabel = document.getElementById('strengthLabel');
-  const strengthColors = ['#d92b2b','#f59e0b','#3E6AE1','#16a34a'];
+  const strengthColors = ['#d92b2b','var(--color-taupe)','#3E5C76','#16a34a'];
   const strengthLabels = ['Sangat Lemah','Lemah','Sedang','Kuat'];
 
   regPwd?.addEventListener('input', () => {

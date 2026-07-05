@@ -16,7 +16,7 @@ CREATE TABLE `users` (
   `nama` varchar(100) NOT NULL,
   `email` varchar(100) NOT NULL,
   `password` varchar(255) NOT NULL,
-  `role` enum('admin','user') NOT NULL DEFAULT 'user',
+  `role` enum('admin','owner','kasir','user') NOT NULL DEFAULT 'user',
   `no_telp` varchar(20) DEFAULT NULL,
   `alamat` text DEFAULT NULL,
   PRIMARY KEY (`id_user`),
@@ -24,9 +24,11 @@ CREATE TABLE `users` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- Dumping data for table `users`
--- Admin pwd: admin123 | User pwd: user123
+-- Admin pwd: admin123 | Owner pwd: owner123 | Kasir pwd: kasir123 | User pwd: user123
 INSERT INTO `users` (`nama`, `email`, `password`, `role`, `no_telp`, `alamat`) VALUES
 ('Administrator', 'admin@alinks.id', '$2y$10$wTfA2qP/j8q2aO2D.S.yq.T74mF8A2m4O5b0Q5f5C8z0A5x6I4HlG', 'admin', '081234567890', 'Gedung IT Center, Lantai 2'),
+('Owner Demo', 'owner@alinks.id', '$2y$10$xxxOWNERHASHxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxlOFmG', 'owner', '081200000001', 'Kantor Pusat A-LINKS'),
+('Kasir Demo', 'kasir@alinks.id', '$2y$10$xxxKASIRHASHxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxlOFmG', 'kasir', '081200000002', 'Kasir A-LINKS'),
 ('User Demo', 'user@alinks.id', '$2y$10$tZ2E2H.N.N9T8a/O3h8W8uq3P9Z4Z5x5X5b5X5A5z8O5b0Q5f5C8z', 'user', '089876543210', 'Jl. Merdeka No. 45, Jakarta Selatan');
 
 -- --------------------------------------------------------

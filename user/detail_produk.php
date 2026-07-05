@@ -101,7 +101,7 @@ include '../includes/header.php';
         <!-- Rating Stars -->
         <div style="display:flex;align-items:center;gap:8px;">
           <?php $rating = round($produk['rata_rating']); for($i=1;$i<=5;$i++): ?>
-          <span style="font-size:20px;color:<?= $i<=$rating ? '#f59e0b' : '#d1d5db' ?>;">★</span>
+          <span style="font-size:20px;color:<?= $i<=$rating ? '#8C7B75' : '#D8CFC2' ?>;">★</span>
           <?php endfor; ?>
           <span style="font-size:13px;color:var(--color-pewter);">(<?= $ulasanList->num_rows ?> ulasan)</span>
         </div>
@@ -117,7 +117,7 @@ include '../includes/header.php';
         <!-- Stock -->
         <div style="display:flex;align-items:center;gap:8px;">
           <span style="font-size:14px;color:var(--color-pewter);">Stok:</span>
-          <span style="font-weight:600;color:<?= $produk['stok'] > 5 ? 'var(--color-blue)' : ($produk['stok'] > 0 ? '#f59e0b' : '#d92b2b') ?>;">
+          <span style="font-weight:600;color:<?= $produk['stok'] > 5 ? 'var(--color-blue)' : ($produk['stok'] > 0 ? 'var(--color-taupe)' : '#d92b2b') ?>;">
             <?= $produk['stok'] > 0 ? $produk['stok'] . ' unit tersedia' : 'Habis' ?>
           </span>
         </div>
@@ -160,7 +160,7 @@ include '../includes/header.php';
             <div style="font-size:14px;color:var(--color-pewter);margin-bottom:8px;">Penilaian:</div>
             <div class="star-rating" style="display:flex;gap:4px;font-size:32px;cursor:pointer;" id="starRating">
               <?php for($i=1;$i<=5;$i++): ?>
-              <span data-v="<?= $i ?>" style="color:#d1d5db;transition:color 0.15s;">★</span>
+              <span data-v="<?= $i ?>" style="color:#D8CFC2;transition:color 0.15s;">★</span>
               <?php endfor; ?>
             </div>
             <input type="hidden" name="rating" id="ratingInput" value="5">
@@ -191,7 +191,7 @@ include '../includes/header.php';
               <div style="font-size:12px;color:var(--color-silver-fog);"><?= date('d M Y', strtotime($u['created_at'])) ?></div>
             </div>
           </div>
-          <div><?php for($i=1;$i<=5;$i++) echo '<span style="color:'.($i<=$u['rating']?'#f59e0b':'#d1d5db').';">★</span>'; ?></div>
+          <div><?php for($i=1;$i<=5;$i++) echo '<span style="color:'.($i<=$u['rating']?'#8C7B75':'#D8CFC2').';">★</span>'; ?></div>
         </div>
         <?php if ($u['komentar']): ?>
         <p style="font-size:14px;color:var(--color-pewter);line-height:1.6;margin:0 0 0 46px;"><?= htmlspecialchars($u['komentar']) ?></p>
@@ -212,12 +212,12 @@ const input = document.getElementById('ratingInput');
 if (stars.length) {
   let currentRating = 5;
   stars.forEach((s, i) => {
-    s.addEventListener('mouseover', () => stars.forEach((x, j) => x.style.color = j <= i ? '#f59e0b' : '#d1d5db'));
+    s.addEventListener('mouseover', () => stars.forEach((x, j) => x.style.color = j <= i ? '#8C7B75' : '#D8CFC2'));
     s.addEventListener('click', () => { currentRating = i+1; input.value = currentRating; });
-    s.addEventListener('mouseleave', () => stars.forEach((x, j) => x.style.color = j < currentRating ? '#f59e0b' : '#d1d5db'));
+    s.addEventListener('mouseleave', () => stars.forEach((x, j) => x.style.color = j < currentRating ? '#8C7B75' : '#D8CFC2'));
   });
   // Init color
-  stars.forEach((s, j) => s.style.color = j < 5 ? '#f59e0b' : '#d1d5db');
+  stars.forEach((s, j) => s.style.color = j < 5 ? '#8C7B75' : '#D8CFC2');
 }
 </script>
 

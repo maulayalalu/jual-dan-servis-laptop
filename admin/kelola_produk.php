@@ -1,7 +1,7 @@
 <?php
 session_start();
 require_once '../config/koneksi.php';
-requireAdmin();
+requireStaff('admin', 'owner'); // kasir tidak bisa kelola produk
 $basePath  = '../';
 $pageTitle = 'Kelola Produk — A-LINKS';
 

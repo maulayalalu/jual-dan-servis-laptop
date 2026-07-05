@@ -94,10 +94,10 @@ body { background-color: var(--color-light-ash) !important; }
 }
 
 .profil-card {
-    background: #ffffff;
+    background: var(--color-white);
     border-radius: 16px;
     border: 1px solid var(--color-cloud);
-    box-shadow: 0 4px 20px rgba(0,0,0,0.02);
+    box-shadow: 0 4px 20px rgba(43,65,88,0.06);
     padding: 32px;
 }
 .profil-card-header {
@@ -158,7 +158,7 @@ body { background-color: var(--color-light-ash) !important; }
 .p-form-label span.req { color: #d92b2b; }
 .p-form-control {
     width: 100%;
-    background-color: #fafafa;
+    background-color: var(--color-light-ash);
     border: 1px solid var(--color-cloud);
     border-radius: 12px;
     padding: 12px 16px;
@@ -166,7 +166,7 @@ body { background-color: var(--color-light-ash) !important; }
     color: var(--color-carbon);
     transition: all 0.3s;
 }
-.p-form-control:focus { outline: none; border-color: var(--color-blue); background-color: #fff; }
+.p-form-control:focus { outline: none; border-color: var(--color-blue); background-color: var(--color-white); box-shadow: 0 0 0 3px rgba(62,92,118,0.15); }
 .p-form-control:read-only {
     background-color: var(--color-light-ash);
     color: var(--color-pewter);

@@ -34,25 +34,28 @@ if ($res_slides) {
 }
 ?>
 <!-- ── Hero Carousel ── -->
-<div class="hero-carousel" style="position:relative;width:100%;height:100vh;overflow:hidden;background:#0a0a0a;">
+<div class="hero-carousel" style="position:relative;width:100%;height:100vh;overflow:hidden;background:var(--color-light-ash);">
   <?php if (count($slides) > 0): ?>
     <?php foreach ($slides as $i => $s): 
       $imgSrc = strpos($s['gambar'], 'http') === 0 ? $s['gambar'] : $s['gambar'];
     ?>
-    <div class="hero-carousel__slide <?= $i === 0 ? 'active' : '' ?>" style="position:absolute;inset:0;opacity:0;transition:opacity 1s ease;">
-      <img src="<?= htmlspecialchars($imgSrc) ?>" 
-           alt="<?= htmlspecialchars($s['judul']) ?>" 
-           style="width:100%;height:100%;object-fit:cover;object-position:<?= htmlspecialchars($s['posisi_gambar'] ?? 'center') ?>;"
-           onerror="this.style.background='linear-gradient(135deg,#1a1a2e,#16213e)'">
-      <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(0,0,0,<?= ($s['overlay'] ?? 55) / 100 ?>) 0%,transparent 80%);"></div>
-      <div style="position:absolute;inset:0;background:rgba(0,0,0,<?= (($s['overlay'] ?? 55) / 100) * 0.4 ?>);"></div>
-      <div style="position:absolute;bottom:120px;left:50%;transform:translateX(-50%);text-align:center;width:100%;padding:0 24px;">
-        <?php if ($s['badge_text']): ?><p style="font-size:14px;color:var(--color-blue);margin-bottom:8px;font-weight:500;text-shadow: 0 2px 4px rgba(0,0,0,0.5);"><?= htmlspecialchars($s['badge_text']) ?></p><?php endif; ?>
-        <h1 style="font-size:40px;font-weight:500;color:#fff;margin-bottom:8px;line-height:1.2;text-shadow: 0 2px 4px rgba(0,0,0,0.5);"><?= htmlspecialchars($s['judul']) ?></h1>
-        <?php if ($s['deskripsi']): ?><p style="font-size:14px;color:rgba(255,255,255,0.85);margin-bottom:32px;text-shadow: 0 2px 4px rgba(0,0,0,0.5);"><?= htmlspecialchars($s['deskripsi']) ?></p><?php endif; ?>
-        <div style="display:flex;gap:16px;justify-content:center;flex-wrap:wrap;">
+    <div class="hero-carousel__slide <?= $i === 0 ? 'active' : '' ?>" style="position:absolute;inset:0;opacity:0;transition:opacity 1s ease;display:flex;align-items:center;">
+      
+      <div style="position:absolute;inset:0;z-index:1;">
+        <img src="<?= htmlspecialchars($imgSrc) ?>" 
+             alt="<?= htmlspecialchars($s['judul']) ?>" 
+             style="width:100%;height:100%;object-fit:cover;object-position:<?= htmlspecialchars($s['posisi_gambar'] ?? 'center') ?>;"
+             onerror="this.style.background='var(--color-light-ash)'">
+        <div style="position:absolute;inset:0;background:linear-gradient(to right, var(--color-light-ash) 40%, transparent 100%);"></div>
+      </div>
+      
+      <div style="position:relative;z-index:2;width:100%;max-width:1200px;margin:0 auto;padding:0 var(--sp-4);text-align:left;transform:translateY(-10%);">
+        <?php if ($s['badge_text']): ?><p style="font-size:14px;color:var(--color-taupe);margin-bottom:8px;font-weight:600;letter-spacing:1px;text-transform:uppercase;"><?= htmlspecialchars($s['badge_text']) ?></p><?php endif; ?>
+        <h1 style="font-size:48px;font-weight:700;color:var(--color-blue);margin-bottom:16px;line-height:1.2;max-width:600px;"><?= htmlspecialchars($s['judul']) ?></h1>
+        <?php if ($s['deskripsi']): ?><p style="font-size:16px;color:var(--color-carbon);margin-bottom:32px;max-width:500px;line-height:1.6;"><?= htmlspecialchars($s['deskripsi']) ?></p><?php endif; ?>
+        <div style="display:flex;gap:16px;flex-wrap:wrap;">
           <?php if ($s['btn1_text']): ?><a href="<?= htmlspecialchars($s['btn1_url']) ?>" class="btn btn--primary"><?= htmlspecialchars($s['btn1_text']) ?></a><?php endif; ?>
-          <?php if ($s['btn2_text']): ?><a href="<?= htmlspecialchars($s['btn2_url']) ?>" class="btn btn--secondary"><?= htmlspecialchars($s['btn2_text']) ?></a><?php endif; ?>
+          <?php if ($s['btn2_text']): ?><a href="<?= htmlspecialchars($s['btn2_url']) ?>" class="btn btn--secondary" style="background:transparent;border:2px solid var(--color-taupe);color:var(--color-taupe);"><?= htmlspecialchars($s['btn2_text']) ?></a><?php endif; ?>
         </div>
       </div>
     </div>
@@ -64,18 +67,18 @@ if ($res_slides) {
   <!-- Carousel controls -->
   <?php if (count($slides) > 1): ?>
   <button class="carousel-prev" id="carouselPrev" aria-label="Sebelumnya"
-          style="position:absolute;left:20px;top:50%;transform:translateY(-50%);z-index:10;width:44px;height:44px;border-radius:50%;border:none;background:rgba(255,255,255,0.2);backdrop-filter:blur(6px);cursor:pointer;display:grid;place-items:center;color:white;transition:background 0.3s;">
+          style="position:absolute;left:20px;top:50%;transform:translateY(-50%);z-index:10;width:44px;height:44px;border-radius:50%;border:none;background:rgba(62,92,118,0.1);backdrop-filter:blur(6px);cursor:pointer;display:grid;place-items:center;color:var(--color-blue);transition:background 0.3s;">
     <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/></svg>
   </button>
   <button class="carousel-next" id="carouselNext" aria-label="Selanjutnya"
-          style="position:absolute;right:20px;top:50%;transform:translateY(-50%);z-index:10;width:44px;height:44px;border-radius:50%;border:none;background:rgba(255,255,255,0.2);backdrop-filter:blur(6px);cursor:pointer;display:grid;place-items:center;color:white;transition:background 0.3s;">
+          style="position:absolute;right:20px;top:50%;transform:translateY(-50%);z-index:10;width:44px;height:44px;border-radius:50%;border:none;background:rgba(62,92,118,0.1);backdrop-filter:blur(6px);cursor:pointer;display:grid;place-items:center;color:var(--color-blue);transition:background 0.3s;">
     <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/></svg>
   </button>
 
   <!-- Dot indicators -->
-  <div style="position:absolute;bottom:72px;left:50%;transform:translateX(-50%);display:flex;gap:8px;z-index:10;">
+  <div style="position:absolute;bottom:40px;left:50%;transform:translateX(-50%);display:flex;gap:8px;z-index:10;">
     <?php foreach ($slides as $i => $s): ?>
-    <button class="carousel-dot <?= $i === 0 ? 'active' : '' ?>" style="width:8px;height:8px;border-radius:50%;border:none;background:white;opacity:<?= $i===0?'1':'0.4' ?>;cursor:pointer;transition:all 0.3s;padding:0;"></button>
+    <button class="carousel-dot <?= $i === 0 ? 'active' : '' ?>" style="width:10px;height:10px;border-radius:50%;border:none;background:var(--color-blue);opacity:<?= $i===0?'1':'0.3' ?>;cursor:pointer;transition:all 0.3s;padding:0;"></button>
     <?php endforeach; ?>
   </div>
   <?php endif; ?>
@@ -119,19 +122,19 @@ if ($res_slides) {
     <div class="grid-2" style="gap:12px;">
       <a href="user/katalog.php?tipe=gaming" class="card card--category" id="catGaming" style="aspect-ratio:16/8;">
         <img src="https://images.unsplash.com/photo-1593642702821-c8da6771f0c6?w=800&q=80" alt="Gaming Laptop"
-             onerror="this.parentElement.style.background='#1a1a2e'">
+             onerror="this.parentElement.style.background='var(--color-blue)'">
         <div class="card__label" style="font-size:20px;font-weight:600;">Gaming</div>
       </a>
       <div style="display:grid;gap:12px;">
         <a href="user/katalog.php?tipe=bisnis" class="card card--category" id="catBisnis" style="aspect-ratio:16/5;">
           <img src="https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=800&q=80" alt="Bisnis Laptop"
-               onerror="this.parentElement.style.background='#203a43'">
+               onerror="this.parentElement.style.background='var(--color-taupe)'">
           <div class="card__label" style="font-size:17px;font-weight:600;">Bisnis & Profesional</div>
         </a>
         <a href="user/katalog.php?tipe=pelajar" class="card card--category" id="catPelajar" style="aspect-ratio:16/5;">
           <img src="https://images.unsplash.com/photo-1588702547923-7093a6c3ba33?w=800&q=80" alt="Laptop Pelajar"
-               onerror="this.parentElement.style.background='#0f2027'">
-          <div class="card__label" style="font-size:17px;font-weight:600;">Pelajar & Mahasiswa</div>
+               onerror="this.parentElement.style.background='var(--color-cloud)'">
+          <div class="card__label" style="font-size:17px;font-weight:600;color:var(--color-carbon);">Pelajar & Mahasiswa</div>
         </a>
       </div>
     </div>
@@ -146,7 +149,7 @@ if ($res_slides) {
     <div class="grid-3" style="text-align:center;gap:32px;">
 
       <div style="padding:24px 16px;">
-        <div style="width:56px;height:56px;border-radius:50%;background:rgba(62,106,225,0.1);display:grid;place-items:center;margin:0 auto 16px;color:var(--color-blue);">
+        <div style="width:56px;height:56px;border-radius:50%;background:rgba(62,92,118,0.1);display:grid;place-items:center;margin:0 auto 16px;color:var(--color-blue);">
           <svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M11.42 15.17L17.25 21A2.652 2.652 0 0021 17.25l-5.877-5.877M11.42 15.17l2.496-3.03c.317-.384.74-.626 1.208-.766M11.42 15.17l-4.655 5.653a2.548 2.548 0 11-3.586-3.586l6.837-5.63m5.108-.233c.55-.164 1.163-.188 1.743-.14a4.5 4.5 0 004.486-6.336l-3.276 3.277a3.004 3.004 0 01-2.25-2.25l3.276-3.276a4.5 4.5 0 00-6.336 4.486c.091 1.076-.071 2.264-.904 2.95l-.102.085m-1.745 1.437L5.909 7.5H4.5L2.25 3.75l1.5-1.5L7.5 4.5v1.409l4.26 4.26m-1.745 1.437l1.745-1.437m6.615 8.206L15.75 15.75M4.867 19.125h.008v.008h-.008v-.008z"/></svg>
         </div>
         <h3 style="font-size:17px;font-weight:500;color:var(--color-carbon);margin-bottom:8px;"><?= htmlspecialchars(getSetHome('servis_fitur1_judul', 'Perbaikan Hardware')) ?></h3>
@@ -154,7 +157,7 @@ if ($res_slides) {
       </div>
 
       <div style="padding:24px 16px;">
-        <div style="width:56px;height:56px;border-radius:50%;background:rgba(62,106,225,0.1);display:grid;place-items:center;margin:0 auto 16px;color:var(--color-blue);">
+        <div style="width:56px;height:56px;border-radius:50%;background:rgba(62,92,118,0.1);display:grid;place-items:center;margin:0 auto 16px;color:var(--color-blue);">
           <svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M9 17.25v1.007a3 3 0 01-.879 2.122L7.5 21h9l-.621-.621A3 3 0 0115 18.257V17.25m6-12V15a2.25 2.25 0 01-2.25 2.25H5.25A2.25 2.25 0 013 15V5.25m18 0A2.25 2.25 0 0018.75 3H5.25A2.25 2.25 0 003 5.25m18 0H3"/></svg>
         </div>
         <h3 style="font-size:17px;font-weight:500;color:var(--color-carbon);margin-bottom:8px;"><?= htmlspecialchars(getSetHome('servis_fitur2_judul', 'Instal & Optimasi OS')) ?></h3>
@@ -162,7 +165,7 @@ if ($res_slides) {
       </div>
 
       <div style="padding:24px 16px;">
-        <div style="width:56px;height:56px;border-radius:50%;background:rgba(62,106,225,0.1);display:grid;place-items:center;margin:0 auto 16px;color:var(--color-blue);">
+        <div style="width:56px;height:56px;border-radius:50%;background:rgba(62,92,118,0.1);display:grid;place-items:center;margin:0 auto 16px;color:var(--color-blue);">
           <svg width="24" height="24" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z"/></svg>
         </div>
         <h3 style="font-size:17px;font-weight:500;color:var(--color-carbon);margin-bottom:8px;"><?= htmlspecialchars(getSetHome('servis_fitur3_judul', 'Garansi 30 Hari')) ?></h3>

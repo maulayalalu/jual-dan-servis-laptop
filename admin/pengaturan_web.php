@@ -72,8 +72,8 @@ function getSet($key, $default) {
   <link rel="stylesheet" href="../assets/css/style.css"/>
   <style>
     .settings-section {
-      background: white;
-      border: 1px solid var(--color-light-ash);
+      background: var(--color-white);
+      border: 1px solid var(--color-cloud);
       border-radius: 8px;
       padding: 24px;
       margin-bottom: 24px;
@@ -84,7 +84,7 @@ function getSet($key, $default) {
       color: var(--color-carbon);
       margin-bottom: 16px;
       padding-bottom: 8px;
-      border-bottom: 1px solid var(--color-light-ash);
+      border-bottom: 1px solid var(--color-cloud);
     }
     .grid-2-col {
       display: grid;

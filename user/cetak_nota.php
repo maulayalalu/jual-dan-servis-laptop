@@ -38,8 +38,8 @@ $stmtDet->close();
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --blue: #1c64f2;
-            --dark: #171a20;
+            --blue: #3E5C76;
+            --dark: #2B4158;
             --gray: #6b7280;
             --light-gray: #f3f4f6;
             --border: #e5e7eb;
@@ -49,7 +49,7 @@ $stmtDet->close();
             color: var(--dark);
             margin: 0;
             padding: 0;
-            background: #e5e7eb;
+            background: #F5F1E8;
             -webkit-font-smoothing: antialiased;
         }
         .invoice-box {

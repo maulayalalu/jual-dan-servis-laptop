@@ -1,11 +1,26 @@
 <?php
-// includes/sidebar_admin.php — Admin sidebar navigation
+// includes/sidebar_admin.php — Admin sidebar navigation (multi-role: admin, owner, kasir)
 $currentFile = basename($_SERVER['PHP_SELF']);
 $basePath ??= '../';
+$_role = $_SESSION['role'] ?? 'admin';
+
+// Helper: tampilkan menu hanya untuk role tertentu
+function sidebarAllow(array $allowed): bool {
+    global $_role;
+    return in_array($_role, $allowed, true);
+}
 ?>
 <aside class="sidebar" id="adminSidebar">
   <div class="sidebar__brand">
-    <a href="<?= $basePath ?>index.php" style="text-decoration:none;color:inherit;">A-LINKS</a>
+    <a href="<?= $basePath ?>index.php" style="display:flex;align-items:center;gap:12px;text-decoration:none;color:var(--color-white);">
+      <div style="background:var(--color-taupe);color:white;width:34px;height:34px;border-radius:10px;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 14px rgba(62,92,118,0.40);">
+        <!-- Vintage Laptop/Monitor Icon -->
+        <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+        </svg>
+      </div>
+      <span style="letter-spacing:1.5px;font-weight:700;font-size:18px;">A-LINKS</span>
+    </a>
   </div>
 
   <div class="sidebar__group-label">Menu Utama</div>
@@ -28,6 +43,7 @@ $basePath ??= '../';
 
   <div class="sidebar__group-label">Kelola Toko</div>
 
+  <?php if (sidebarAllow(['admin', 'owner'])): ?>
   <a href="<?= $basePath ?>admin/kelola_produk.php"
      class="sidebar__link <?= $currentFile === 'kelola_produk.php' ? 'active' : '' ?>" id="sidebarProduk">
     <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
@@ -35,6 +51,7 @@ $basePath ??= '../';
     </svg>
     Kelola Produk
   </a>
+  <?php endif; ?>
 
   <a href="<?= $basePath ?>admin/kelola_transaksi.php"
      class="sidebar__link <?= $currentFile === 'kelola_transaksi.php' ? 'active' : '' ?>" id="sidebarTransaksi">
@@ -53,10 +70,11 @@ $basePath ??= '../';
     <?php
     $pendingCount = $koneksi->query("SELECT COUNT(*) as c FROM transaksi WHERE status_pembayaran='pending_verify'")->fetch_assoc()['c'] ?? 0;
     if ($pendingCount > 0): ?>
-    <span style="margin-left:auto;background:#f59e0b;color:white;font-size:11px;font-weight:700;border-radius:10px;padding:1px 7px;"><?= $pendingCount ?></span>
+    <span style="margin-left:auto;background:var(--color-taupe);color:white;font-size:11px;font-weight:700;border-radius:10px;padding:1px 7px;"><?= $pendingCount ?></span>
     <?php endif; ?>
   </a>
 
+  <?php if (sidebarAllow(['admin', 'owner'])): ?>
   <a href="<?= $basePath ?>admin/laporan.php"
      class="sidebar__link <?= $currentFile === 'laporan.php' ? 'active' : '' ?>" id="sidebarLaporan">
     <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
@@ -64,6 +82,7 @@ $basePath ??= '../';
     </svg>
     Laporan
   </a>
+  <?php endif; ?>
 
   <div class="sidebar__group-label">Layanan</div>
 
@@ -75,6 +94,7 @@ $basePath ??= '../';
     Kelola Servis
   </a>
 
+  <?php if (sidebarAllow(['admin', 'owner'])): ?>
   <div class="sidebar__group-label">Pengguna</div>
 
   <a href="<?= $basePath ?>admin/kelola_user.php"
@@ -84,7 +104,9 @@ $basePath ??= '../';
     </svg>
     Kelola User
   </a>
+  <?php endif; ?>
 
+  <?php if (sidebarAllow(['admin'])): ?>
   <div class="sidebar__group-label">Pengaturan</div>
 
   <a href="<?= $basePath ?>admin/kelola_kategori.php"
@@ -112,18 +134,26 @@ $basePath ??= '../';
     </svg>
     Pengaturan Web
   </a>
+  <?php endif; ?>
 
 
   <!-- Sidebar footer / user info -->
   <div class="sidebar__footer">
-    <div class="sidebar__avatar" id="adminAvatar">
+    <div class="sidebar__avatar" id="adminAvatar"
+         style="background:<?php
+           echo match($_role) {
+               'owner' => 'var(--color-blue-light)',
+               'kasir' => 'var(--color-taupe)',
+               default => 'var(--color-blue)',
+           };
+         ?>;">
       <?= strtoupper(substr($_SESSION['nama'] ?? 'A', 0, 1)) ?>
     </div>
     <div style="flex:1;min-width:0;">
       <div class="sidebar__user-name" style="overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">
         <?= htmlspecialchars($_SESSION['nama'] ?? 'Admin') ?>
       </div>
-      <div class="sidebar__user-role">Administrator</div>
+      <div class="sidebar__user-role"><?= getRoleLabel($_role) ?></div>
     </div>
     <a href="<?= $basePath ?>logout.php" id="sidebarLogout"
        style="color:var(--color-silver-fog);transition:color 0.33s;"

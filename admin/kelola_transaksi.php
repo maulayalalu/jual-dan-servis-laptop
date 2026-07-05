@@ -1,7 +1,7 @@
 <?php
 session_start();
 require_once '../config/koneksi.php';
-requireAdmin();
+requireStaff(); // admin, owner, kasir
 $basePath = '../'; $pageTitle = 'Kelola Transaksi — A-LINKS';
 
 $page = (int)($_GET['page'] ?? 1);
