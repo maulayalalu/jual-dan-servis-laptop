@@ -15,6 +15,32 @@ $pageTitle = 'Pengaturan Situs — A-LINKS';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     verify_csrf();
     
+    // Handle Logo Upload
+    if (isset($_FILES['logo_situs']) && $_FILES['logo_situs']['error'] !== UPLOAD_ERR_NO_FILE) {
+        if ($_FILES['logo_situs']['error'] === UPLOAD_ERR_OK) {
+            $finfo = finfo_open(FILEINFO_MIME_TYPE);
+            $mime = finfo_file($finfo, $_FILES['logo_situs']['tmp_name']);
+            finfo_close($finfo);
+            if (in_array($mime, ['image/jpeg', 'image/png', 'image/webp', 'image/svg+xml', 'image/gif'])) {
+                $ext = pathinfo($_FILES['logo_situs']['name'], PATHINFO_EXTENSION);
+                $filename = 'logo_' . time() . '.' . $ext;
+                $uploadDir = '../assets/images/';
+                if (!is_dir($uploadDir)) mkdir($uploadDir, 0755, true);
+                if (move_uploaded_file($_FILES['logo_situs']['tmp_name'], $uploadDir . $filename)) {
+                    $_POST['logo_situs'] = 'assets/images/' . $filename;
+                }
+            } else {
+                setFlash('error', 'Format logo tidak valid (JPG/PNG/WEBP/SVG).');
+                redirect('pengaturan_situs.php');
+                exit;
+            }
+        } else {
+            setFlash('error', 'Gagal mengupload logo.');
+            redirect('pengaturan_situs.php');
+            exit;
+        }
+    }
+
     // Sesuaikan dengan yang ada di sistem A-LINKS (sama dengan pengaturan_web.php)
     $settingsToUpdate = [
         'nama_toko', 'tagline', 'alamat', 'no_wa', 'pesan_wa',
@@ -23,7 +49,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         'tentang_judul', 'tentang_deskripsi', 'tentang_poin1', 'tentang_poin2', 'tentang_poin3', 'tentang_poin4', 'tentang_gambar',
         'stat1_nilai', 'stat1_label', 'stat2_nilai', 'stat2_label',
         'stat3_nilai', 'stat3_label', 'stat4_nilai', 'stat4_label',
-        'sosmed_ig', 'sosmed_fb', 'sosmed_tiktok'
+        'sosmed_ig', 'sosmed_fb', 'sosmed_tiktok', 'logo_situs'
     ];
     
     $success = true;
@@ -221,7 +247,7 @@ function getSet($key, $default = '') {
 
     <?php renderFlash(); ?>
 
-    <form action="" method="POST" style="max-width: 900px;">
+    <form action="" method="POST" style="max-width: 900px;" enctype="multipart/form-data">
       <input type="hidden" name="csrf_token" value="<?= csrf_token() ?>">
 
       <div class="settings-tabs-wrapper">
@@ -236,6 +262,20 @@ function getSet($key, $default = '') {
       <div class="tab-content active" id="tab-umum">
         <div class="settings-card">
           <h3>Pengaturan Umum & Footer</h3>
+          <div class="form-group" style="margin-bottom: 24px;">
+            <label class="form-label">Logo Situs</label>
+            <?php 
+            $currLogo = getSet('logo_situs', ''); 
+            if ($currLogo): 
+              $logoPath = strpos($currLogo, 'http') === 0 ? $currLogo : '../' . $currLogo;
+            ?>
+              <div style="margin-bottom: 12px; padding: 12px; border: 1px dashed var(--color-cloud); border-radius: 8px; display: inline-block; background: var(--color-light-ash);">
+                <img src="<?= htmlspecialchars($logoPath) ?>" alt="Logo Situs" style="max-height: 60px; max-width: 200px; object-fit: contain;">
+              </div>
+            <?php endif; ?>
+            <input type="file" class="form-control" name="logo_situs" accept="image/*">
+            <span class="form-hint">Biarkan kosong jika tidak ingin mengubah logo saat ini. (Maks 2MB, JPG/PNG/WEBP/SVG)</span>
+          </div>
           <div class="form-group">
             <label class="form-label">Nama Toko</label>
             <input type="text" class="form-control" name="nama_toko" value="<?= htmlspecialchars(getSet('nama_toko', 'A-LINKS')) ?>" required>

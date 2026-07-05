@@ -12,17 +12,32 @@ function sidebarAllow(array $allowed): bool {
 
 $dashboardUrl = $basePath . ($_role === 'admin' ? 'admin' : ($_role === 'owner' ? 'owner' : 'kasir')) . '/dashboard.php';
 
+// Ambil logo dan nama toko
+$sbLogoSitus = '';
+$sbNamaToko = 'A-LINKS';
+if (isset($koneksi)) {
+    $q = $koneksi->query("SELECT kunci, nilai FROM pengaturan WHERE kunci IN ('logo_situs', 'nama_toko')");
+    if ($q) {
+        while ($row = $q->fetch_assoc()) {
+            if ($row['kunci'] === 'logo_situs') $sbLogoSitus = $row['nilai'];
+            if ($row['kunci'] === 'nama_toko') $sbNamaToko = $row['nilai'];
+        }
+    }
+}
 ?>
 <aside class="sidebar" id="adminSidebar">
   <div class="sidebar__brand">
-    <a href="<?= $basePath ?>index.php">
-      <div class="sidebar__logo-box">
-        <!-- Vintage Laptop/Monitor Icon -->
-        <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2">
-          <path stroke-linecap="round" stroke-linejoin="round" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
-        </svg>
-      </div>
-      <span class="sidebar__logo-text">A-LINKS</span>
+    <a href="<?= $basePath ?>index.php" style="display:flex;align-items:center;gap:12px;text-decoration:none;">
+      <?php if ($sbLogoSitus): ?>
+        <img src="<?= $basePath . htmlspecialchars($sbLogoSitus) ?>" alt="Logo" style="height: 32px; width: auto; object-fit: contain;">
+      <?php else: ?>
+        <div class="sidebar__logo-box">
+          <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+          </svg>
+        </div>
+      <?php endif; ?>
+      <span class="sidebar__logo-text"><?= htmlspecialchars($sbNamaToko) ?></span>
     </a>
   </div>
 
