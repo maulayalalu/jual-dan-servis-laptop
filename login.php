@@ -60,23 +60,30 @@ $basePath  = '';
   <link rel="stylesheet" href="assets/css/style.css"/>
 </head>
 <body>
-
 <div class="auth-page">
   <!-- Visual Side -->
   <div class="auth-visual">
     <img src="https://images.unsplash.com/photo-1453928582365-b6ad33cbcf64?w=1200&q=85"
          alt="Laptop showcase"
-         onerror="this.parentElement.style.background='var(--color-blue)'">
+         onerror="this.parentElement.style.background='var(--color-navy)'">
     <div class="auth-visual__overlay">
+      <div class="auth-visual__logo">
+        <div class="auth-visual__logo-box">
+          <svg width="22" height="22" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+          </svg>
+        </div>
+        <span class="auth-visual__logo-text">A-LINKS</span>
+      </div>
       <div>
-        <div style="font-size:22px;font-weight:600;letter-spacing:4px;color:white;text-transform:uppercase;margin-bottom:24px;">A-LINKS</div>
         <div class="auth-visual__title">Selamat Datang<br>Kembali</div>
-        <div class="auth-visual__subtitle">Masuk untuk lanjutkan belanja & cek servis</div>
+        <div class="auth-visual__subtitle">Masuk untuk lanjutkan belanja &amp; cek servis</div>
         <!-- Quick stats -->
-        <div style="display:flex;gap:32px;margin-top:40px;">
-          <?php foreach (['500+ Produk','1000+ Pelanggan','4.9★ Rating'] as $stat): ?>
-          <div style="text-align:center;">
-            <div style="font-size:13px;font-weight:500;color:white;"><?= $stat ?></div>
+        <div class="auth-visual__stats">
+          <?php foreach (['500+ Produk', '1000+ Pelanggan', '4.9★ Rating'] as $stat): ?>
+          <div class="auth-visual__stat">
+            <div class="auth-visual__stat-val"><?= explode(' ', $stat)[0] ?></div>
+            <div class="auth-visual__stat-lbl"><?= implode(' ', array_slice(explode(' ', $stat), 1)) ?></div>
           </div>
           <?php endforeach; ?>
         </div>
@@ -90,71 +97,69 @@ $basePath  = '';
       <div>
         <a href="index.php" class="auth-form-box__brand">A-LINKS</a>
         <h1 class="auth-form-box__title" style="margin-top:8px;">Masuk</h1>
-        <p class="auth-form-box__sub" style="margin-top:4px;color:var(--color-pewter);font-size:14px;">Belum punya akun? <a href="register.php" style="color:var(--color-blue);font-weight:500;">Daftar gratis</a></p>
+        <p class="auth-form-box__sub" style="margin-top:4px;">Belum punya akun? <a href="register.php" style="color:var(--color-navy);font-weight:600;">Daftar gratis</a></p>
       </div>
 
       <?php if ($error): ?>
       <div class="alert alert--error" id="loginError"><?= htmlspecialchars($error) ?></div>
       <?php endif; ?>
 
-      <form method="POST" action="login.php" id="loginForm" novalidate>
-    <input type="hidden" name="csrf_token" value="<?= csrf_token() ?>">
-        <div style="display:flex;flex-direction:column;gap:16px;">
-          <div class="form-group">
-            <label class="form-label" for="loginEmail">Alamat Email</label>
-            <input class="form-control" id="loginEmail" name="email" type="email"
-                   placeholder="email@contoh.com"
-                   value="<?= htmlspecialchars($_POST['email'] ?? '') ?>"
-                   autocomplete="email" required />
-          </div>
-
-          <div class="form-group">
-            <div style="display:flex;justify-content:space-between;align-items:center;">
-              <label class="form-label" for="loginPassword">Password</label>
-              <a href="lupa_password.php" style="font-size:12px;color:var(--color-blue);">Lupa password?</a>
+      <div class="auth-form-card">
+        <form method="POST" action="login.php" id="loginForm" novalidate>
+          <input type="hidden" name="csrf_token" value="<?= csrf_token() ?>">
+          <div style="display:flex;flex-direction:column;gap:16px;">
+            <div class="form-group">
+              <label class="form-label" for="loginEmail">Alamat Email</label>
+              <input class="form-control" id="loginEmail" name="email" type="email"
+                     placeholder="email@contoh.com"
+                     value="<?= htmlspecialchars($_POST['email'] ?? '') ?>"
+                     autocomplete="email" required />
             </div>
-            <div style="position:relative;">
-              <input class="form-control" id="loginPassword" name="password" type="password"
-                     placeholder="••••••••" autocomplete="current-password" required
-                     style="padding-right:44px;" />
-              <button type="button" id="togglePassword"
-                      style="position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:var(--color-silver-fog);"
-                      aria-label="Tampilkan password">
-                <svg id="eyeIcon" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z"/>
-                  <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
-                </svg>
-              </button>
+
+            <div class="form-group">
+              <div style="display:flex;justify-content:space-between;align-items:center;">
+                <label class="form-label" for="loginPassword">Password</label>
+                <a href="lupa_password.php" style="font-size:12px;color:var(--color-navy);">Lupa password?</a>
+              </div>
+              <div style="position:relative;">
+                <input class="form-control" id="loginPassword" name="password" type="password"
+                       placeholder="••••••••" autocomplete="current-password" required
+                       style="padding-right:44px;" />
+                <button type="button" id="togglePassword"
+                        style="position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:var(--color-taupe-light);"
+                        aria-label="Tampilkan password">
+                  <svg id="eyeIcon" width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z"/>
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                  </svg>
+                </button>
+              </div>
             </div>
+
+            <div style="display:flex;align-items:center;gap:8px;">
+              <input type="checkbox" id="rememberMe" name="remember" style="width:16px;height:16px;accent-color:var(--color-navy);cursor:pointer;">
+              <label for="rememberMe" style="font-size:13px;color:var(--color-graphite);cursor:pointer;">Ingat saya selama 30 hari</label>
+            </div>
+
+            <button type="submit" class="btn btn--primary btn--full" id="btnMasuk">Masuk ke Akun</button>
           </div>
-
-          <div style="display:flex;align-items:center;gap:8px;">
-            <input type="checkbox" id="rememberMe" name="remember" style="width:16px;height:16px;cursor:pointer;">
-            <label for="rememberMe" style="font-size:13px;color:var(--color-graphite);cursor:pointer;">Ingat saya selama 30 hari</label>
-          </div>
-
-          <button type="submit" class="btn btn--primary btn--full" id="btnMasuk">Masuk</button>
-        </div>
-      </form>
-
-      <!-- Divider -->
-      <div style="display:flex;align-items:center;gap:12px;color:var(--color-pale-silver);">
-        <div style="flex:1;height:1px;background:var(--color-cloud);"></div>
-        <span style="font-size:12px;color:var(--color-silver-fog);">atau masuk sebagai</span>
-        <div style="flex:1;height:1px;background:var(--color-cloud);"></div>
+        </form>
       </div>
 
+      <!-- Divider -->
+      <div class="divider">atau masuk sebagai</div>
+
       <!-- Demo login hints -->
-      <div style="background:var(--color-light-ash);border-radius:8px;padding:12px 16px;font-size:12px;color:var(--color-pewter);">
-        <div style="font-weight:500;color:var(--color-graphite);margin-bottom:6px;">Demo Login:</div>
-        <div>Admin: <code style="background:white;padding:1px 6px;border-radius:3px;">admin@alinks.id</code> / <code style="background:white;padding:1px 6px;border-radius:3px;">admin123</code></div>
-        <div style="margin-top:4px;">Owner: <code style="background:white;padding:1px 6px;border-radius:3px;">owner@alinks.id</code> / <code style="background:white;padding:1px 6px;border-radius:3px;">owner123</code></div>
-        <div style="margin-top:4px;">Kasir: <code style="background:white;padding:1px 6px;border-radius:3px;">kasir@alinks.id</code> / <code style="background:white;padding:1px 6px;border-radius:3px;">kasir123</code></div>
-        <div style="margin-top:4px;">User: <code style="background:white;padding:1px 6px;border-radius:3px;">user@alinks.id</code> / <code style="background:white;padding:1px 6px;border-radius:3px;">user123</code></div>
+      <div class="auth-demo-box">
+        <strong>Demo Login:</strong>
+        <div>Admin: <code>admin@alinks.id</code> / <code>admin123</code></div>
+        <div style="margin-top:4px;">Owner: <code>owner@alinks.id</code> / <code>owner123</code></div>
+        <div style="margin-top:4px;">Kasir: <code>kasir@alinks.id</code> / <code>kasir123</code></div>
+        <div style="margin-top:4px;">User: <code>user@alinks.id</code> / <code>user123</code></div>
       </div>
 
       <p style="font-size:12px;color:var(--color-silver-fog);text-align:center;">
-        Dengan masuk, Anda menyetujui <a href="#" style="color:var(--color-blue);">Syarat & Ketentuan</a> dan <a href="#" style="color:var(--color-blue);">Kebijakan Privasi</a> A-LINKS.
+        Dengan masuk, Anda menyetujui <a href="#" style="color:var(--color-navy);">Syarat &amp; Ketentuan</a> dan <a href="#" style="color:var(--color-navy);">Kebijakan Privasi</a> A-LINKS.
       </p>
     </div>
   </div>

@@ -12,14 +12,14 @@ function sidebarAllow(array $allowed): bool {
 ?>
 <aside class="sidebar" id="adminSidebar">
   <div class="sidebar__brand">
-    <a href="<?= $basePath ?>index.php" style="display:flex;align-items:center;gap:12px;text-decoration:none;color:var(--color-white);">
-      <div style="background:var(--color-taupe);color:white;width:34px;height:34px;border-radius:10px;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 14px rgba(62,92,118,0.40);">
+    <a href="<?= $basePath ?>index.php">
+      <div class="sidebar__logo-box">
         <!-- Vintage Laptop/Monitor Icon -->
         <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.2">
           <path stroke-linecap="round" stroke-linejoin="round" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
         </svg>
       </div>
-      <span style="letter-spacing:1.5px;font-weight:700;font-size:18px;">A-LINKS</span>
+      <span class="sidebar__logo-text">A-LINKS</span>
     </a>
   </div>
 
