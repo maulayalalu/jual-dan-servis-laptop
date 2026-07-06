@@ -3,7 +3,7 @@ session_start();
 require_once '../config/koneksi.php';
 requireUser();
 $basePath = '../';
-$pageTitle = 'Checkout â€” A-LINKS';
+$pageTitle = 'Checkout — A-LINKS';
 
 $id_user = $_SESSION['id_user'];
 $rProf = $koneksi->prepare("SELECT * FROM users WHERE id_user=?");

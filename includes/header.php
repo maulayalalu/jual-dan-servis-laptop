@@ -1,8 +1,8 @@
 <?php
-// includes/header.php â€” Site-wide navigation header
+// includes/header.php — Site-wide navigation header
 // Usage: include '../includes/header.php';
 //        Set $pageTitle and $navActive before including.
-$pageTitle = $pageTitle ?? 'A-LINKS â€” Jual & Servis Laptop';
+$pageTitle = $pageTitle ?? 'A-LINKS — Jual & Servis Laptop';
 $navActive = $navActive ?? '';
 $isAdmin   = isset($_SESSION['role']) && $_SESSION['role'] === 'admin';
 $isUser    = isset($_SESSION['role']) && $_SESSION['role'] === 'user';
@@ -28,7 +28,7 @@ if (isset($koneksi)) {
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title><?= htmlspecialchars($pageTitle) ?></title>
-  <meta name="description" content="A-LINKS â€” Toko laptop terpercaya & layanan servis profesional. Temukan laptop terbaik dengan harga kompetitif." />
+  <meta name="description" content="A-LINKS — Toko laptop terpercaya & layanan servis profesional. Temukan laptop terbaik dengan harga kompetitif." />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet" />

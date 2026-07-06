@@ -4,7 +4,7 @@ require_once '../config/koneksi.php';
 requireStaff(); // admin, owner, kasir
 
 $basePath = '../';
-$pageTitle = 'Dashboard Admin â€” A-LINKS';
+$pageTitle = 'Dashboard Admin — A-LINKS';
 
 // â”€â”€ Statistik â”€â”€
 $stats = [];
@@ -51,7 +51,7 @@ $servis_terbaru = $koneksi->query("
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title><?= $pageTitle ?></title>
-  <meta name="description" content="Dashboard admin A-LINKS â€” kelola produk, servis, dan transaksi."/>
+  <meta name="description" content="Dashboard admin A-LINKS — kelola produk, servis, dan transaksi."/>
   <link rel="preconnect" href="https://fonts.googleapis.com"/>
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
@@ -131,7 +131,7 @@ $servis_terbaru = $koneksi->query("
       <div class="table-wrap" style="grid-column:1/-1;">
         <div class="table-toolbar">
           <div class="table-toolbar__title">Transaksi Terbaru</div>
-          <a href="kelola_transaksi.php" class="btn btn--ghost btn--sm" id="btnAllTransaksi">Lihat Semua â†’</a>
+          <a href="kelola_transaksi.php" class="btn btn--ghost btn--sm" id="btnAllTransaksi">Lihat Semua →</a>
         </div>
         <table>
           <thead>
@@ -173,7 +173,7 @@ $servis_terbaru = $koneksi->query("
     <div class="table-wrap">
       <div class="table-toolbar">
         <div class="table-toolbar__title">Servis Masuk Terbaru</div>
-        <a href="kelola_servis.php" class="btn btn--ghost btn--sm" id="btnAllServis">Kelola Servis â†’</a>
+        <a href="kelola_servis.php" class="btn btn--ghost btn--sm" id="btnAllServis">Kelola Servis →</a>
       </div>
       <table>
         <thead>

@@ -2,7 +2,7 @@
 session_start();
 require_once '../config/koneksi.php';
 requireStaff('admin', 'owner'); // kasir tidak bisa akses halaman user
-$basePath = '../'; $pageTitle = 'Kelola User â€” A-LINKS';
+$basePath = '../'; $pageTitle = 'Kelola User — A-LINKS';
 $isAdmin = hasRole('admin');
 
 // Handle hapus/toggle role (hanya admin)
@@ -111,7 +111,7 @@ $totalPages = ceil($totalData / $limit);
             </div>
           </td>
           <td style="font-size:13px;"><?= htmlspecialchars($u['email']) ?></td>
-          <td style="font-size:13px;color:var(--color-pewter);"><?= htmlspecialchars($u['no_telp'] ?? 'â€”') ?></td>
+          <td style="font-size:13px;color:var(--color-pewter);"><?= htmlspecialchars($u['no_telp'] ?? '—') ?></td>
           <td><span class="badge <?php
             echo match($u['role']) {
                 'admin'  => 'badge--blue',
@@ -152,7 +152,7 @@ $totalPages = ceil($totalData / $limit);
               </form>
             </div>
           <?php elseif ($isSelf): ?><span style="font-size:12px;color:var(--color-silver-fog);">Akun aktif</span>
-          <?php else: ?><span style="font-size:12px;color:var(--color-silver-fog);">â€”</span>
+          <?php else: ?><span style="font-size:12px;color:var(--color-silver-fog);">—</span>
           <?php endif; ?>
           </td>
         </tr>

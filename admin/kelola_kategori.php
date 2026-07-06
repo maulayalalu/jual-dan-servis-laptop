@@ -2,7 +2,7 @@
 session_start();
 require_once '../config/koneksi.php';
 requireAdmin();
-$basePath = '../'; $pageTitle = 'Kelola Kategori â€” A-LINKS';
+$basePath = '../'; $pageTitle = 'Kelola Kategori — A-LINKS';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     verify_csrf();

@@ -4,7 +4,7 @@ require_once '../config/koneksi.php';
 requireAdmin();
 
 $basePath = '../';
-$pageTitle = 'Pengaturan Web â€” A-LINKS';
+$pageTitle = 'Pengaturan Web — A-LINKS';
 
 // â”€â”€ Handle Update â”€â”€
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {

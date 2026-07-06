@@ -3,7 +3,7 @@ session_start();
 require_once '../config/koneksi.php';
 requireLogin();
 $basePath = '../';
-$pageTitle = 'Profil Saya â€” A-LINKS';
+$pageTitle = 'Profil Saya — A-LINKS';
 $id_user = (int)$_SESSION['id_user'];
 
 $rProf = $koneksi->prepare("SELECT * FROM users WHERE id_user=?");
@@ -67,7 +67,7 @@ $joinDate = $months[date('n', $createdAt) - 1] . ' ' . date('Y', $createdAt);
 ?>
 
 <style>
-/* Profil Page â€” NEXOTECH */
+/* Profil Page — NEXOTECH */
 body { background-color: var(--color-cream) !important; }
 .profil-wrapper { background: var(--color-cream); min-height: calc(100vh - 64px); padding: 100px 20px 60px; }
 .profil-container { max-width: 960px; margin: 0 auto; }

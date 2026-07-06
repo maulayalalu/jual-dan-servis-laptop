@@ -1,6 +1,6 @@
 <?php
 /**
- * db_add_roles.php â€” Migration: tambah role owner & kasir
+ * db_add_roles.php — Migration: tambah role owner & kasir
  * âš ï¸  Jalankan SEKALI, lalu hapus file ini demi keamanan.
  */
 session_start();
@@ -12,7 +12,7 @@ $errors   = [];
 // â”€â”€ 1. Ubah enum kolom role â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 $alterSQL = "ALTER TABLE `users` MODIFY `role` ENUM('admin','owner','kasir','user') NOT NULL DEFAULT 'user'";
 if ($koneksi->query($alterSQL)) {
-    $messages[] = 'âœ… Kolom <code>role</code> berhasil diubah menjadi 4 nilai: admin, owner, kasir, user';
+    $messages[] = '✅ Kolom <code>role</code> berhasil diubah menjadi 4 nilai: admin, owner, kasir, user';
 } else {
     $errors[] = 'âŒ Gagal alter tabel users: ' . $koneksi->error;
 }
@@ -31,7 +31,7 @@ if ($chk->num_rows === 0) {
     $alamat  = 'Kantor Pusat A-LINKS';
     $ins->bind_param('sssss', $nama, $ownerEmail, $ownerHash, $telp, $alamat);
     if ($ins->execute()) {
-        $messages[] = 'âœ… Demo user <strong>Owner</strong> ditambahkan â€” <code>owner@alinks.id</code> / <code>owner123</code>';
+        $messages[] = '✅ Demo user <strong>Owner</strong> ditambahkan — <code>owner@alinks.id</code> / <code>owner123</code>';
     } else {
         $errors[] = 'âŒ Gagal insert user owner: ' . $ins->error;
     }
@@ -55,7 +55,7 @@ if ($chk2->num_rows === 0) {
     $alamat2 = 'Kasir A-LINKS';
     $ins2->bind_param('sssss', $nama2, $kasirEmail, $kasirHash, $telp2, $alamat2);
     if ($ins2->execute()) {
-        $messages[] = 'âœ… Demo user <strong>Kasir</strong> ditambahkan â€” <code>kasir@alinks.id</code> / <code>kasir123</code>';
+        $messages[] = '✅ Demo user <strong>Kasir</strong> ditambahkan — <code>kasir@alinks.id</code> / <code>kasir123</code>';
     } else {
         $errors[] = 'âŒ Gagal insert user kasir: ' . $ins2->error;
     }
@@ -72,7 +72,7 @@ $koneksi->close();
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
-  <title>Migrasi Role â€” A-LINKS</title>
+  <title>Migrasi Role — A-LINKS</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet"/>
   <style>
     *{box-sizing:border-box;margin:0;padding:0}
@@ -89,7 +89,7 @@ $koneksi->close();
 </head>
 <body>
 <div class="card">
-  <h1>ðŸ”§ Migrasi Role â€” A-LINKS</h1>
+  <h1>🔧 Migrasi Role — A-LINKS</h1>
   <p class="sub">Script penambahan role <strong>owner</strong> dan <strong>kasir</strong> ke database.</p>
 
   <?php foreach ($messages as $m): ?>

@@ -55,7 +55,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-$pageTitle = 'Daftar Akun â€” A-LINKS';
+$pageTitle = 'Daftar Akun — A-LINKS';
 ?>
 <!DOCTYPE html>
 <html lang="id">
@@ -84,10 +84,10 @@ $pageTitle = 'Daftar Akun â€” A-LINKS';
         <div class="auth-visual__subtitle">Ribuan produk laptop & servis terpercaya menanti</div>
         <div style="margin-top:32px;display:flex;flex-direction:column;gap:12px;">
           <?php foreach ([
-            ['icon'=>'ðŸ›’','text'=>'Belanja laptop dengan cicilan 0%'],
-            ['icon'=>'ðŸ”§','text'=>'Tracking status servis real-time'],
-            ['icon'=>'ðŸŽ','text'=>'Promo & diskon eksklusif member'],
-            ['icon'=>'ðŸ“¦','text'=>'Pengiriman gratis seluruh Indonesia'],
+            ['icon'=>getSetting('reg_poin1_icon', '🛒'),'text'=>getSetting('reg_poin1_text', 'Belanja laptop dengan cicilan 0%')],
+            ['icon'=>getSetting('reg_poin2_icon', '🔧'),'text'=>getSetting('reg_poin2_text', 'Tracking status servis real-time')],
+            ['icon'=>getSetting('reg_poin3_icon', '🎁'),'text'=>getSetting('reg_poin3_text', 'Promo & diskon eksklusif member')],
+            ['icon'=>getSetting('reg_poin4_icon', '📦'),'text'=>getSetting('reg_poin4_text', 'Pengiriman gratis seluruh Indonesia')],
           ] as $b): ?>
           <div style="display:flex;align-items:center;gap:10px;">
             <span style="font-size:18px;"><?= $b['icon'] ?></span>

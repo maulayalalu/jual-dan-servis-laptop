@@ -2,7 +2,7 @@
 session_start();
 require_once '../config/koneksi.php';
 $basePath = '../';
-$pageTitle = 'Katalog Produk â€” A-LINKS';
+$pageTitle = 'Katalog Produk — A-LINKS';
 $navActive = 'katalog';
 
 // Handle Add to Cart & Buy Now
@@ -150,7 +150,7 @@ include '../includes/header.php';
           <!-- Rating Stars -->
           <?php if ($p['rata_rating'] > 0): ?>
           <div style="display:flex;gap:2px;margin-top:8px;">
-            <?php $r = round($p['rata_rating']); for($i=1;$i<=5;$i++) echo '<span style="font-size:12px;color:'.($i<=$r?'#8C7B75':'#D8CFC2').'">â˜…</span>'; ?>
+            <?php $r = round($p['rata_rating']); for($i=1;$i<=5;$i++) echo '<span style="font-size:12px;color:'.($i<=$r?'#8C7B75':'#D8CFC2').'">★</span>'; ?>
             <span style="font-size:11px;color:var(--color-pewter);margin-left:4px;"><?= number_format($p['rata_rating'],1) ?></span>
           </div>
           <?php endif; ?>

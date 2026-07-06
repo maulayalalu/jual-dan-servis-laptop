@@ -3,7 +3,7 @@ session_start();
 require_once '../config/koneksi.php';
 requireUser();
 $basePath = '../';
-$pageTitle = 'Riwayat Transaksi & Servis â€” A-LINKS';
+$pageTitle = 'Riwayat Transaksi & Servis — A-LINKS';
 $id_user = $_SESSION['id_user'];
 $activeTab = $_GET['tab'] ?? 'transaksi';
 
@@ -43,10 +43,10 @@ include '../includes/header.php';
     <!-- Tabs -->
     <div style="display:flex;gap:0;border-bottom:2px solid var(--color-cream-border);margin-bottom:24px;">
       <a href="?tab=transaksi" style="padding:12px 20px;font-weight:500;font-size:14px;color:<?= $activeTab==='transaksi' ? 'var(--color-navy)' : 'var(--color-pewter)' ?>;border-bottom:2px solid <?= $activeTab==='transaksi' ? 'var(--color-navy)' : 'transparent' ?>;margin-bottom:-2px;transition:all 0.3s;">
-        ðŸ›’ Pesanan Produk
+        🛒 Pesanan Produk
       </a>
       <a href="?tab=servis" style="padding:12px 20px;font-weight:500;font-size:14px;color:<?= $activeTab==='servis' ? 'var(--color-navy)' : 'var(--color-pewter)' ?>;border-bottom:2px solid <?= $activeTab==='servis' ? 'var(--color-navy)' : 'transparent' ?>;margin-bottom:-2px;transition:all 0.3s;">
-        ðŸ”§ Layanan Servis
+        🔧 Layanan Servis
       </a>
     </div>
 

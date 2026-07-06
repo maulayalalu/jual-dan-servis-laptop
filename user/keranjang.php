@@ -2,7 +2,7 @@
 session_start();
 require_once '../config/koneksi.php';
 $basePath = '../';
-$pageTitle = 'Keranjang Belanja â€” A-LINKS';
+$pageTitle = 'Keranjang Belanja — A-LINKS';
 
 requireUser(); // Enforce login for DB cart
 $id_user = $_SESSION['id_user'];

@@ -2,7 +2,7 @@
 session_start();
 require_once 'config/koneksi.php';
 $basePath = '';
-$pageTitle = 'Halaman Tidak Ditemukan â€” A-LINKS';
+$pageTitle = 'Halaman Tidak Ditemukan — A-LINKS';
 http_response_code(404);
 include 'includes/header.php';
 ?>

@@ -24,7 +24,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (empty($email) || empty($password)) {
         $error = 'Email dan password wajib diisi.';
     } else {
-        // Prepared statement â€” aman dari SQL Injection
+        // Prepared statement — aman dari SQL Injection
         $stmt = $koneksi->prepare("SELECT id_user, nama, password, role FROM users WHERE email = ? LIMIT 1");
         $stmt->bind_param('s', $email);
         $stmt->execute();
@@ -50,7 +50,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
-$pageTitle = 'Masuk â€” A-LINKS';
+$pageTitle = 'Masuk — A-LINKS';
 $basePath  = '';
 ?>
 <!DOCTYPE html>
@@ -86,7 +86,11 @@ $basePath  = '';
         <div class="auth-visual__subtitle">Masuk untuk lanjutkan belanja &amp; cek servis</div>
         <!-- Quick stats -->
         <div class="auth-visual__stats">
-          <?php foreach (['500+ Produk', '1000+ Pelanggan', '4.9â˜… Rating'] as $stat): ?>
+          <?php foreach ([
+            getSetting('stat1_nilai', '500+') . ' ' . getSetting('stat1_label', 'Produk'),
+            getSetting('stat2_nilai', '1000+') . ' ' . getSetting('stat2_label', 'Pelanggan'),
+            getSetting('stat_rating_nilai', '4.9★') . ' ' . getSetting('stat_rating_label', 'Rating')
+          ] as $stat): ?>
           <div class="auth-visual__stat">
             <div class="auth-visual__stat-val"><?= explode(' ', $stat)[0] ?></div>
             <div class="auth-visual__stat-lbl"><?= implode(' ', array_slice(explode(' ', $stat), 1)) ?></div>
@@ -129,7 +133,7 @@ $basePath  = '';
               </div>
               <div style="position:relative;">
                 <input class="form-control" id="loginPassword" name="password" type="password"
-                       placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢" autocomplete="current-password" required
+                       placeholder="••••••••" autocomplete="current-password" required
                        style="padding-right:44px;" />
                 <button type="button" id="togglePassword"
                         style="position:absolute;right:12px;top:50%;transform:translateY(-50%);background:none;border:none;cursor:pointer;color:var(--color-taupe-light);"

@@ -2,7 +2,7 @@
 session_start();
 require_once '../config/koneksi.php';
 requireUser();
-$basePath = '../'; $pageTitle = 'Dashboard Saya â€” A-LINKS';
+$basePath = '../'; $pageTitle = 'Dashboard Saya — A-LINKS';
 $id_user  = (int)$_SESSION['id_user'];
 
 // Stats user
@@ -37,17 +37,17 @@ include '../includes/header.php';
           <?= strtoupper(substr($_SESSION['nama'],0,1)) ?>
         </div>
         <div style="flex:1;">
-          <h1 style="font-size:22px;font-weight:600;color:white;margin-bottom:3px;">Halo, <?= htmlspecialchars($_SESSION['nama']) ?> ðŸ‘‹</h1>
+          <h1 style="font-size:22px;font-weight:600;color:white;margin-bottom:3px;">Halo, <?= htmlspecialchars($_SESSION['nama']) ?> 👋</h1>
           <div style="font-size:13px;color:rgba(255,255,255,0.65);">Selamat datang kembali di dashboard Anda</div>
         </div>
         <div style="display:flex;gap:8px;flex-wrap:wrap;">
           <a href="katalog.php" class="btn btn--sm" id="btnKeKatalog"
              style="background:white;color:var(--color-navy);border-color:white;font-weight:600;">
-            ðŸ›’ Belanja
+            🛒 Belanja
           </a>
           <a href="request_servis.php" class="btn btn--sm" id="btnKeServis"
              style="background:rgba(255,255,255,0.15);color:white;border-color:rgba(255,255,255,0.35);">
-            ðŸ”§ Ajukan Servis
+            🔧 Ajukan Servis
           </a>
         </div>
       </div>
@@ -101,7 +101,7 @@ include '../includes/header.php';
       <div class="table-wrap">
         <div class="table-toolbar">
           <div class="table-toolbar__title">Pesanan Terbaru</div>
-          <a href="riwayat.php" class="btn btn--ghost btn--sm" id="btnLihatRiwayat">Lihat Semua â†’</a>
+          <a href="riwayat.php" class="btn btn--ghost btn--sm" id="btnLihatRiwayat">Lihat Semua →</a>
         </div>
         <table>
           <thead><tr><th>Order ID</th><th>Total</th><th>Status</th><th>Tanggal</th></tr></thead>
@@ -110,7 +110,7 @@ include '../includes/header.php';
           <tr>
             <td><code style="font-size:11px;background:var(--color-cream);padding:2px 6px;border-radius:4px;"><?= htmlspecialchars(substr($t['order_id']??'-',0,14)) ?>...</code></td>
             <td style="color:var(--color-navy);font-weight:600;"><?= formatRupiah($t['total_harga']) ?></td>
-            <td><?php $m=['paid'=>['green','Lunas'],'unpaid'=>['amber','Menunggu'],'failed'=>['red','Gagal']]; [$c,$l]=$m[$t['status_pembayaran']]??['gray','â€”']; ?><span class="badge badge--<?= $c ?>"><?= $l ?></span></td>
+            <td><?php $m=['paid'=>['green','Lunas'],'unpaid'=>['amber','Menunggu'],'failed'=>['red','Gagal']]; [$c,$l]=$m[$t['status_pembayaran']]??['gray','—']; ?><span class="badge badge--<?= $c ?>"><?= $l ?></span></td>
             <td style="font-size:12px;color:var(--color-pewter);"><?= date('d M Y', strtotime($t['waktu_transaksi'])) ?></td>
           </tr>
           <?php endwhile; else: ?>
@@ -124,7 +124,7 @@ include '../includes/header.php';
       <div class="table-wrap">
         <div class="table-toolbar">
           <div class="table-toolbar__title">Status Servis</div>
-          <a href="riwayat.php?tab=servis" class="btn btn--ghost btn--sm" id="btnLihatServisRiwayat">Lihat Semua â†’</a>
+          <a href="riwayat.php?tab=servis" class="btn btn--ghost btn--sm" id="btnLihatServisRiwayat">Lihat Semua →</a>
         </div>
         <table>
           <thead><tr><th>Laptop</th><th>Status</th><th>Biaya</th><th>Masuk</th></tr></thead>
@@ -136,7 +136,7 @@ include '../includes/header.php';
               <div style="font-size:11px;color:var(--color-pewter);max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;"><?= htmlspecialchars($s['keluhan']) ?></div>
             </td>
             <td><?php $sm=['pending'=>['gray','Pending'],'proses'=>['amber','Diproses'],'selesai'=>['green','Selesai'],'diambil'=>['blue','Diambil']]; [$sc,$sl]=$sm[$s['status']]??['gray',$s['status']]; ?><span class="badge badge--<?= $sc ?>"><?= $sl ?></span></td>
-            <td style="font-size:13px;color:var(--color-navy);font-weight:600;"><?= $s['biaya'] ? formatRupiah($s['biaya']) : '<span style="color:var(--color-taupe-light)">â€”</span>' ?></td>
+            <td style="font-size:13px;color:var(--color-navy);font-weight:600;"><?= $s['biaya'] ? formatRupiah($s['biaya']) : '<span style="color:var(--color-taupe-light)">—</span>' ?></td>
             <td style="font-size:12px;color:var(--color-pewter);"><?= date('d M Y', strtotime($s['tgl_masuk'])) ?></td>
           </tr>
           <?php endwhile; else: ?>
@@ -161,7 +161,7 @@ include '../includes/header.php';
       </div>
       <div class="settings-panel__body">
         <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:16px;">
-          <?php foreach (['Nama Lengkap'=>$profil['nama'],'Email'=>$profil['email'],'No. Telepon'=>$profil['no_telp']??'â€”','Alamat'=>$profil['alamat']??'â€”'] as $lbl=>$val): ?>
+          <?php foreach (['Nama Lengkap'=>$profil['nama'],'Email'=>$profil['email'],'No. Telepon'=>$profil['no_telp']??'—','Alamat'=>$profil['alamat']??'—'] as $lbl=>$val): ?>
           <div class="profile-field">
             <div class="profile-field__label"><?= $lbl ?></div>
             <div class="profile-field__value"><?= htmlspecialchars($val) ?></div>

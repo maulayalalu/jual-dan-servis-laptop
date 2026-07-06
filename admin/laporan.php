@@ -3,7 +3,7 @@ session_start();
 require_once '../config/koneksi.php';
 requireStaff('admin', 'owner'); // kasir tidak bisa akses laporan
 $basePath = '../';
-$pageTitle = 'Laporan Penjualan â€” A-LINKS';
+$pageTitle = 'Laporan Penjualan — A-LINKS';
 
 // Date filter
 $bulan = $_GET['bulan'] ?? date('m');
@@ -107,7 +107,7 @@ while($r = $rServis->fetch_assoc()) $servisStats[$r['status']] = $r['total'];
   <!-- Top Products -->
   <div class="card">
     <div class="table-toolbar">
-      <div class="table-toolbar__title">Top 5 Produk Terlaris â€” <?= $namaBulan[(int)$bulan] ?> <?= $tahun ?></div>
+      <div class="table-toolbar__title">Top 5 Produk Terlaris — <?= $namaBulan[(int)$bulan] ?> <?= $tahun ?></div>
     </div>
     <div style="overflow-x: auto; width: 100%;">
       <table style="min-width: 600px;">

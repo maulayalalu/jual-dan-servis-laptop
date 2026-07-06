@@ -3,7 +3,7 @@ session_start();
 require_once '../config/koneksi.php';
 requireOwner();
 $basePath  = '../';
-$pageTitle = 'Owner Dashboard â€” A-LINKS';
+$pageTitle = 'Owner Dashboard — A-LINKS';
 
 // KPI Stats
 $bulanIni = date('Y-m');
@@ -32,7 +32,7 @@ for ($i=5;$i>=0;$i--) {
 <head>
 <meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
 <title><?= $pageTitle ?></title>
-<meta name="description" content="Dashboard Owner A-LINKS â€” pantau KPI bisnis dan performa toko."/>
+<meta name="description" content="Dashboard Owner A-LINKS — pantau KPI bisnis dan performa toko."/>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
 <link rel="stylesheet" href="../assets/css/style.css?v=<?= time() ?>"/>
@@ -50,8 +50,8 @@ for ($i=5;$i>=0;$i--) {
       <div class="page-header__sub">Selamat datang, <?= htmlspecialchars($_SESSION['nama']) ?>. Ringkasan performa bisnis A-LINKS hari ini.</div>
     </div>
     <div style="display:flex;gap:8px;">
-      <a href="../admin/laporan.php" class="btn btn--secondary btn--sm" id="btnLaporan">ðŸ“Š Laporan</a>
-      <a href="../admin/pengaturan_web.php" class="btn btn--primary btn--sm" id="btnPengaturan">âš™ Pengaturan</a>
+      <a href="../admin/laporan.php" class="btn btn--secondary btn--sm" id="btnLaporan">📊 Laporan</a>
+      <a href="../owner/pengaturan_situs.php" class="btn btn--primary btn--sm" id="btnPengaturan">⚙️ Pengaturan</a>
     </div>
   </div>
 
@@ -112,13 +112,13 @@ for ($i=5;$i>=0;$i--) {
   <!-- Chart + Top Products -->
   <div style="display:grid;grid-template-columns:3fr 2fr;gap:20px;margin-bottom:24px;">
     <div class="card" style="padding:24px;">
-      <div style="font-size:15px;font-weight:600;color:var(--color-carbon);margin-bottom:20px;">ðŸ“ˆ Pendapatan 6 Bulan Terakhir</div>
+      <div style="font-size:15px;font-weight:600;color:var(--color-carbon);margin-bottom:20px;">📈 Pendapatan 6 Bulan Terakhir</div>
       <canvas id="chartRevenue" height="130"></canvas>
     </div>
     <div class="table-wrap">
       <div class="table-toolbar">
-        <div class="table-toolbar__title">ðŸ† Produk Terlaris</div>
-        <a href="../admin/laporan.php" class="btn btn--ghost btn--sm">Laporan â†’</a>
+        <div class="table-toolbar__title">🏆 Produk Terlaris</div>
+        <a href="../admin/laporan.php" class="btn btn--ghost btn--sm">Laporan →</a>
       </div>
       <table>
         <thead><tr><th>#</th><th>Produk</th><th>Unit</th></tr></thead>
@@ -141,17 +141,17 @@ for ($i=5;$i>=0;$i--) {
   <div class="table-wrap">
     <div class="table-toolbar">
       <div class="table-toolbar__title">Transaksi Terbaru</div>
-      <a href="../admin/kelola_transaksi.php" class="btn btn--ghost btn--sm" id="btnSemuaTrx">Lihat Semua â†’</a>
+      <a href="../admin/kelola_transaksi.php" class="btn btn--ghost btn--sm" id="btnSemuaTrx">Lihat Semua →</a>
     </div>
     <table>
       <thead><tr><th>Order ID</th><th>Pelanggan</th><th>Total</th><th>Status</th><th>Waktu</th></tr></thead>
       <tbody>
       <?php if ($rTrx && $rTrx->num_rows > 0): while ($t=$rTrx->fetch_assoc()): ?>
       <tr>
-        <td><code style="font-size:11px;background:var(--color-cream);padding:2px 5px;border-radius:3px;border:1px solid var(--color-cream-border);"><?= htmlspecialchars(substr($t['order_id']??'-',0,14)) ?>â€¦</code></td>
+        <td><code style="font-size:11px;background:var(--color-cream);padding:2px 5px;border-radius:3px;border:1px solid var(--color-cream-border);"><?= htmlspecialchars(substr($t['order_id']??'-',0,14)) ?>…</code></td>
         <td style="font-weight:600;color:var(--color-carbon);"><?= htmlspecialchars($t['nama_user']) ?></td>
         <td style="color:var(--color-navy);font-weight:700;"><?= formatRupiah($t['total_harga']) ?></td>
-        <td><?php $bm=['paid'=>['green','Lunas'],'unpaid'=>['amber','Menunggu'],'failed'=>['red','Gagal'],'pending_verify'=>['taupe','Verifikasi']]; [$bc,$bl]=$bm[$t['status_pembayaran']]??['gray','â€”']; ?><span class="badge badge--<?= $bc ?>"><?= $bl ?></span></td>
+        <td><?php $bm=['paid'=>['green','Lunas'],'unpaid'=>['amber','Menunggu'],'failed'=>['red','Gagal'],'pending_verify'=>['taupe','Verifikasi']]; [$bc,$bl]=$bm[$t['status_pembayaran']]??['gray','—']; ?><span class="badge badge--<?= $bc ?>"><?= $bl ?></span></td>
         <td style="font-size:12px;color:var(--color-pewter);"><?= date('d M Y', strtotime($t['waktu_transaksi'])) ?></td>
       </tr>
       <?php endwhile; else: ?>

@@ -86,4 +86,4 @@ foreach ($queries as $q) {
     }
 }
 
-echo "\nâœ… Database schema update selesai!\n";
+echo "\n✅ Database schema update selesai!\n";

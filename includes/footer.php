@@ -1,5 +1,5 @@
 <?php
-// includes/footer.php â€” Site-wide footer
+// includes/footer.php — Site-wide footer
 // Usage: include '../includes/footer.php';
 global $koneksi;
 global $basePath;

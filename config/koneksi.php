@@ -1,5 +1,5 @@
 <?php
-// config/koneksi.php â€” Database connection (MySQLi + PDO)
+// config/koneksi.php — Database connection (MySQLi + PDO)
 // Gunakan $koneksi untuk MySQLi, $pdo untuk PDO
 
 define('DB_HOST', 'localhost');
@@ -93,7 +93,7 @@ function isLoggedIn(): bool {
 }
 
 /**
- * Paksa login â€” redirect ke login jika belum
+ * Paksa login — redirect ke login jika belum
  */
 function requireLogin(string $redirect = '../login.php'): void {
     if (!isLoggedIn()) {
@@ -189,3 +189,26 @@ function verify_csrf(): void {
         }
     }
 }
+
+/**
+ * Mengambil nilai pengaturan website dari database.
+ * Di-cache dalam variabel static agar tidak query berulang.
+ */
+function getSetting(string $key, string $default = ''): string {
+    global $koneksi;
+    static $settings = null;
+
+    if ($settings === null) {
+        $settings = [];
+        // Memuat semua setting di awal (hanya 1 query per halaman)
+        $q = $koneksi->query("SELECT kunci, nilai FROM pengaturan");
+        if ($q) {
+            while ($row = $q->fetch_assoc()) {
+                $settings[$row['kunci']] = $row['nilai'];
+            }
+        }
+    }
+
+    return $settings[$key] ?? $default;
+}
+

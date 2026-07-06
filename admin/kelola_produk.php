@@ -3,7 +3,7 @@ session_start();
 require_once '../config/koneksi.php';
 requireStaff('admin', 'owner'); // kasir tidak bisa kelola produk
 $basePath  = '../';
-$pageTitle = 'Kelola Produk â€” A-LINKS';
+$pageTitle = 'Kelola Produk — A-LINKS';
 
 // â”€â”€ Handle POST actions â”€â”€
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {

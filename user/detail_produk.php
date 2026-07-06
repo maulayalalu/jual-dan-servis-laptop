@@ -2,7 +2,7 @@
 session_start();
 require_once '../config/koneksi.php';
 $basePath = '../';
-$pageTitle = 'Detail Produk â€” A-LINKS';
+$pageTitle = 'Detail Produk — A-LINKS';
 $navActive = 'katalog';
 
 $id = (int)($_GET['id'] ?? 0);
@@ -13,7 +13,7 @@ $stmt->bind_param('i', $id); $stmt->execute();
 $produk = $stmt->get_result()->fetch_assoc(); $stmt->close();
 if (!$produk) { header('Location: katalog.php'); exit; }
 
-$pageTitle = htmlspecialchars($produk['nama_laptop']) . ' â€” A-LINKS';
+$pageTitle = htmlspecialchars($produk['nama_laptop']) . ' — A-LINKS';
 
 // Handle Add to Cart (DB-based)
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_to_cart'])) {
@@ -74,9 +74,9 @@ include '../includes/header.php';
     <!-- Breadcrumb -->
     <div style="display:flex;gap:8px;align-items:center;margin-bottom:32px;font-size:13px;color:var(--color-pewter);">
       <a href="../index.php" style="color:var(--color-pewter);text-decoration:none;">Beranda</a>
-      <span>â€º</span>
+      <span>›</span>
       <a href="katalog.php" style="color:var(--color-pewter);text-decoration:none;">Katalog</a>
-      <span>â€º</span>
+      <span>›</span>
       <span style="color:var(--color-carbon);"><?= htmlspecialchars($produk['nama_laptop']) ?></span>
     </div>
 
@@ -101,7 +101,7 @@ include '../includes/header.php';
         <!-- Rating Stars -->
         <div style="display:flex;align-items:center;gap:8px;">
           <?php $rating = round($produk['rata_rating']); for($i=1;$i<=5;$i++): ?>
-          <span style="font-size:20px;color:<?= $i<=$rating ? '#8C7B75' : '#D8CFC2' ?>;">â˜…</span>
+          <span style="font-size:20px;color:<?= $i<=$rating ? '#8C7B75' : '#D8CFC2' ?>;">★</span>
           <?php endfor; ?>
           <span style="font-size:13px;color:var(--color-pewter);">(<?= $ulasanList->num_rows ?> ulasan)</span>
         </div>
@@ -133,11 +133,11 @@ include '../includes/header.php';
         <form method="POST" style="display:flex;gap:12px;align-items:center;">
           <input type="hidden" name="csrf_token" value="<?= csrf_token() ?>">
           <div style="display:flex;align-items:center;border:1.5px solid var(--color-cloud);border-radius:8px;overflow:hidden;">
-            <button type="button" onclick="const q=document.getElementById('qtyInput');q.value=Math.max(1,+q.value-1);" style="width:40px;height:44px;border:none;background:var(--color-light-ash);cursor:pointer;font-size:18px;color:var(--color-carbon);">âˆ’</button>
+            <button type="button" onclick="const q=document.getElementById('qtyInput');q.value=Math.max(1,+q.value-1);" style="width:40px;height:44px;border:none;background:var(--color-light-ash);cursor:pointer;font-size:18px;color:var(--color-carbon);">−</button>
             <input type="number" name="qty" id="qtyInput" value="1" min="1" max="<?= $produk['stok'] ?>" style="width:60px;height:44px;border:none;text-align:center;font-size:15px;font-weight:500;">
             <button type="button" onclick="const q=document.getElementById('qtyInput');q.value=Math.min(<?= $produk['stok'] ?>,+q.value+1);" style="width:40px;height:44px;border:none;background:var(--color-light-ash);cursor:pointer;font-size:18px;color:var(--color-carbon);">+</button>
           </div>
-          <button type="submit" name="add_to_cart" class="btn btn--primary" style="flex:1;">ðŸ›’ Tambah ke Keranjang</button>
+          <button type="submit" name="add_to_cart" class="btn btn--primary" style="flex:1;">🛒 Tambah ke Keranjang</button>
         </form>
         <a href="keranjang.php" class="btn btn--secondary btn--full">Lihat Keranjang <?= $cartCount > 0 ? "($cartCount)" : '' ?></a>
         <?php else: ?>
@@ -160,7 +160,7 @@ include '../includes/header.php';
             <div style="font-size:14px;color:var(--color-pewter);margin-bottom:8px;">Penilaian:</div>
             <div class="star-rating" style="display:flex;gap:4px;font-size:32px;cursor:pointer;" id="starRating">
               <?php for($i=1;$i<=5;$i++): ?>
-              <span data-v="<?= $i ?>" style="color:#D8CFC2;transition:color 0.15s;">â˜…</span>
+              <span data-v="<?= $i ?>" style="color:#D8CFC2;transition:color 0.15s;">★</span>
               <?php endfor; ?>
             </div>
             <input type="hidden" name="rating" id="ratingInput" value="5">
@@ -191,7 +191,7 @@ include '../includes/header.php';
               <div style="font-size:12px;color:var(--color-silver-fog);"><?= date('d M Y', strtotime($u['created_at'])) ?></div>
             </div>
           </div>
-          <div><?php for($i=1;$i<=5;$i++) echo '<span style="color:'.($i<=$u['rating']?'#8C7B75':'#D8CFC2').';">â˜…</span>'; ?></div>
+          <div><?php for($i=1;$i<=5;$i++) echo '<span style="color:'.($i<=$u['rating']?'#8C7B75':'#D8CFC2').';">★</span>'; ?></div>
         </div>
         <?php if ($u['komentar']): ?>
         <p style="font-size:14px;color:var(--color-pewter);line-height:1.6;margin:0 0 0 46px;"><?= htmlspecialchars($u['komentar']) ?></p>

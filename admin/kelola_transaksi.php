@@ -2,7 +2,7 @@
 session_start();
 require_once '../config/koneksi.php';
 requireStaff(); // admin, owner, kasir
-$basePath = '../'; $pageTitle = 'Kelola Transaksi â€” A-LINKS';
+$basePath = '../'; $pageTitle = 'Kelola Transaksi — A-LINKS';
 
 $page = (int)($_GET['page'] ?? 1);
 if ($page < 1) $page = 1;
@@ -146,7 +146,7 @@ $totalPages = ceil($totalData / $limit);
           <td><code style="font-size:11px;background:var(--color-cream);padding:2px 6px;border-radius:3px;border:1px solid var(--color-cream-border);"><?= htmlspecialchars($t['order_id'] ?? '-') ?></code></td>
           <td style="font-weight:500;color:var(--color-carbon);"><?= htmlspecialchars($t['nama_user']) ?></td>
           <td style="color:var(--color-navy);font-weight:700;"><?= formatRupiah($t['total_harga']) ?></td>
-          <td style="font-size:13px;color:var(--color-pewter);"><?= htmlspecialchars($t['tipe_pembayaran'] ?? 'â€”') ?></td>
+          <td style="font-size:13px;color:var(--color-pewter);"><?= htmlspecialchars($t['tipe_pembayaran'] ?? '—') ?></td>
           <td><?php $m=['paid'=>['green','Lunas'],'unpaid'=>['amber','Menunggu'],'failed'=>['red','Gagal']]; [$c,$l]=$m[$t['status_pembayaran']]??['gray',$t['status_pembayaran']]; ?><span class="badge badge--<?= $c ?>"><?= $l ?></span></td>
           <td style="font-size:12px;color:var(--color-pewter);"><?= date('d M Y H:i', strtotime($t['waktu_transaksi'])) ?></td>
           <td><a href="?detail=<?= $t['id_transaksi'] ?>" class="btn btn--secondary btn--sm" id="btnDetailTrx-<?= $t['id_transaksi'] ?>">Lihat</a></td>

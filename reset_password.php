@@ -2,7 +2,7 @@
 session_start();
 require_once 'config/koneksi.php';
 $basePath = '';
-$pageTitle = 'Reset Password â€” A-LINKS';
+$pageTitle = 'Reset Password — A-LINKS';
 
 if (isLoggedIn()) redirect('index.php');
 
@@ -44,7 +44,7 @@ include 'includes/header.php';
 
     <?php if ($resetDone): ?>
     <div class="card" style="padding:40px;text-align:center;">
-      <div style="font-size:48px;margin-bottom:16px;">âœ…</div>
+      <div style="font-size:48px;margin-bottom:16px;">✅</div>
       <h1 style="font-size:22px;font-weight:600;margin-bottom:12px;">Password Berhasil Direset!</h1>
       <p style="color:var(--color-pewter);font-size:14px;margin-bottom:24px;">Silakan login menggunakan password baru Anda.</p>
       <a href="login.php" class="btn btn--primary btn--full">Login Sekarang</a>

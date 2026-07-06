@@ -49,7 +49,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         'tentang_judul', 'tentang_deskripsi', 'tentang_poin1', 'tentang_poin2', 'tentang_poin3', 'tentang_poin4', 'tentang_gambar',
         'stat1_nilai', 'stat1_label', 'stat2_nilai', 'stat2_label',
         'stat3_nilai', 'stat3_label', 'stat4_nilai', 'stat4_label',
-        'sosmed_ig', 'sosmed_fb', 'sosmed_tiktok', 'logo_situs'
+        'stat_rating_nilai', 'stat_rating_label',
+        'reg_poin1_icon', 'reg_poin1_text', 'reg_poin2_icon', 'reg_poin2_text',
+        'reg_poin3_icon', 'reg_poin3_text', 'reg_poin4_icon', 'reg_poin4_text',
+        'sosmed_ig', 'sosmed_fb', 'sosmed_tiktok', 'logo_situs', 'hero_title', 'hero_subtitle'
     ];
     
     $success = true;
@@ -256,6 +259,8 @@ function getSet($key, $default = '') {
         <div class="settings-tab" data-target="#tab-tentang">ℹ️ Tentang Kami</div>
         <div class="settings-tab" data-target="#tab-servis">🛠️ Layanan Servis</div>
         <div class="settings-tab" data-target="#tab-statistik">📊 Statistik</div>
+        <div class="settings-tab" data-target="#tab-member">✨ Keunggulan Member</div>
+        <div class="settings-tab" data-target="#tab-hero">🖼️ Hero Banner</div>
       </div>
 
       <!-- Tab 1: Umum & Footer -->
@@ -451,6 +456,48 @@ function getSet($key, $default = '') {
               </div>
             </div>
           </div>
+        </div>
+      </div>
+
+      <!-- Tab 6: Keunggulan Member -->
+      <div class="tab-content" id="tab-member">
+        <div class="settings-card">
+          <h3>Poin Keunggulan Pendaftaran & Statistik Login</h3>
+          
+          <div class="form-group">
+            <label class="form-label">Statistik 3 (Khusus Login)</label>
+            <div style="display:flex;gap:8px;">
+              <input type="text" class="form-control" name="stat_rating_nilai" value="<?= htmlspecialchars(getSet('stat_rating_nilai', '4.9★')) ?>" style="width:80px;flex-shrink:0;" required>
+              <input type="text" class="form-control" name="stat_rating_label" value="<?= htmlspecialchars(getSet('stat_rating_label', 'Rating')) ?>" style="flex:1;" required>
+            </div>
+            <span class="form-hint">Statistik 1 dan 2 mengambil dari tab Statistik utama.</span>
+          </div>
+
+          <hr style="border-top:1px dashed var(--color-cloud); margin:24px 0;">
+          <h4>Keuntungan Register (4 Poin)</h4>
+
+          <?php for($i=1; $i<=4; $i++): 
+             $defIcon = ['1'=>'🛒', '2'=>'🔧', '3'=>'🎁', '4'=>'📦'][$i];
+             $defText = ['1'=>'Belanja laptop dengan cicilan 0%', '2'=>'Tracking status servis real-time', '3'=>'Promo & diskon eksklusif member', '4'=>'Pengiriman gratis seluruh Indonesia'][$i];
+          ?>
+          <div class="form-group" style="margin-bottom:16px;">
+            <label class="form-label">Poin <?= $i ?></label>
+            <div style="display:flex;gap:8px;">
+              <input type="text" class="form-control" name="reg_poin<?= $i ?>_icon" value="<?= htmlspecialchars(getSet("reg_poin{$i}_icon", $defIcon)) ?>" style="width:60px;text-align:center;" required>
+              <input type="text" class="form-control" name="reg_poin<?= $i ?>_text" value="<?= htmlspecialchars(getSet("reg_poin{$i}_text", $defText)) ?>" style="flex:1;" required>
+            </div>
+          </div>
+          <?php endfor; ?>
+        </div>
+      </div>
+
+      <!-- Tab 7: Hero Banner -->
+      <div class="tab-content" id="tab-hero">
+        <div class="settings-card" style="padding:0; overflow:hidden;">
+          <iframe src="kelola_hero.php?embed=1" style="width:100%; height:800px; border:none; display:block;"></iframe>
+        </div>
+        <div style="margin-top:16px; color:var(--color-pewter); font-size:13px;">
+          <i style="color:var(--color-navy);">Info:</i> Perubahan di tab Hero Banner langsung tersimpan secara mandiri. Anda tidak perlu klik "Simpan Pengaturan" di bawah.
         </div>
       </div>
 

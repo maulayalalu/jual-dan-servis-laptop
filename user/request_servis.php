@@ -3,7 +3,7 @@ session_start();
 require_once '../config/koneksi.php';
 requireUser();
 $basePath = '../';
-$pageTitle = 'Request Servis â€” A-LINKS';
+$pageTitle = 'Request Servis — A-LINKS';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     verify_csrf();

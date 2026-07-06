@@ -1,5 +1,5 @@
 <?php
-// includes/sidebar_admin.php â€” Admin sidebar navigation (multi-role: admin, owner, kasir)
+// includes/sidebar_admin.php — Admin sidebar navigation (multi-role: admin, owner, kasir)
 $currentFile = basename($_SERVER['PHP_SELF']);
 $basePath ??= '../';
 $_role = $_SESSION['role'] ?? 'admin';
@@ -136,13 +136,6 @@ if (isset($koneksi)) {
     Kelola Kategori
   </a>
 
-  <a href="<?= $basePath ?>admin/kelola_hero.php"
-     class="sidebar__link <?= $currentFile === 'kelola_hero.php' ? 'active' : '' ?>" id="sidebarHero">
-    <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
-      <path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
-    </svg>
-    Kelola Hero
-  </a>
 
   <a href="<?= $basePath ?>admin/pengaturan_web.php"
      class="sidebar__link <?= $currentFile === 'pengaturan_web.php' ? 'active' : '' ?>" id="sidebarPengaturanWeb">
@@ -164,6 +157,14 @@ if (isset($koneksi)) {
       <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
     </svg>
     Pengaturan Situs
+  </a>
+
+  <a href="<?= $basePath ?>owner/kelola_hero.php"
+     class="sidebar__link <?= $currentFile === 'kelola_hero.php' ? 'active' : '' ?>" id="sidebarHero">
+    <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+      <path stroke-linecap="round" stroke-linejoin="round" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"/>
+    </svg>
+    Kelola Hero
   </a>
   <?php endif; ?>
 
