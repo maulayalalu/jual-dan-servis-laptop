@@ -1,12 +1,7 @@
 <?php
 session_start();
 require_once '../config/koneksi.php';
-// Hanya bisa diakses oleh owner
-if (!isLoggedIn() || $_SESSION['role'] !== 'owner') {
-    setFlash('error', 'Akses ditolak. Halaman ini hanya untuk Owner.');
-    redirect('../login.php');
-    exit;
-}
+requireAdmin();
 $basePath = '../';
 $pageTitle = 'Visual Builder Hero — A-LINKS';
 
@@ -26,6 +21,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $b2t = trim($_POST['btn2_text'] ?? '');
         $b2u = trim($_POST['btn2_url'] ?? '');
         $urutan = (int)($_POST['urutan'] ?? 1);
+        $warna_teks = trim($_POST['warna_teks'] ?? '#ffffff');
         
         $gambar = $_POST['gambar_old'] ?? '';
         
@@ -47,7 +43,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     if (!is_dir($uploadDir)) mkdir($uploadDir, 0755, true);
                     if (move_uploaded_file($_FILES['gambar_baru']['tmp_name'], $uploadDir . $filename)) {
                         $gambar = 'assets/images/hero/' . $filename;
+                    } else {
+                        setFlash('error', 'Gagal memindahkan file gambar yang diupload.');
+                        $qEmbed = isset($_POST['embed']) ? "&embed=1" : "";
+                        redirect('kelola_hero.php' . ($id ? "?edit=$id$qEmbed" : "?edit=new$qEmbed"));
+                        exit;
                     }
+                } else {
                     setFlash('error', 'Format gambar hero harus JPG, PNG, atau WEBP.');
                     $qEmbed = isset($_POST['embed']) ? "&embed=1" : "";
                     redirect('kelola_hero.php' . ($id ? "?edit=$id$qEmbed" : "?edit=new$qEmbed"));
@@ -64,8 +66,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $qEmbed = isset($_POST['embed']) ? "&embed=1" : "";
 
         if ($id === 0) {
-            $stmt = $koneksi->prepare("INSERT INTO hero_slides (gambar, posisi_gambar, overlay, badge_text, judul, deskripsi, btn1_text, btn1_url, btn2_text, btn2_url, urutan) VALUES (?,?,?,?,?,?,?,?,?,?,?)");
-            $stmt->bind_param('ssisssssssi', $gambar, $posisi, $overlay, $badge, $judul, $deskripsi, $b1t, $b1u, $b2t, $b2u, $urutan);
+            $stmt = $koneksi->prepare("INSERT INTO hero_slides (gambar, posisi_gambar, overlay, badge_text, judul, deskripsi, btn1_text, btn1_url, btn2_text, btn2_url, urutan, warna_teks) VALUES (?,?,?,?,?,?,?,?,?,?,?,?)");
+            $stmt->bind_param('ssisssssssis', $gambar, $posisi, $overlay, $badge, $judul, $deskripsi, $b1t, $b1u, $b2t, $b2u, $urutan, $warna_teks);
             $stmt->execute(); 
             $newId = $stmt->insert_id;
             $stmt->close();
@@ -73,8 +75,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             redirect('kelola_hero.php?edit=' . $newId . $qEmbed);
             exit;
         } else {
-            $stmt = $koneksi->prepare("UPDATE hero_slides SET gambar=?, posisi_gambar=?, overlay=?, badge_text=?, judul=?, deskripsi=?, btn1_text=?, btn1_url=?, btn2_text=?, btn2_url=?, urutan=? WHERE id_slide=?");
-            $stmt->bind_param('ssisssssssii', $gambar, $posisi, $overlay, $badge, $judul, $deskripsi, $b1t, $b1u, $b2t, $b2u, $urutan, $id);
+            $stmt = $koneksi->prepare("UPDATE hero_slides SET gambar=?, posisi_gambar=?, overlay=?, badge_text=?, judul=?, deskripsi=?, btn1_text=?, btn1_url=?, btn2_text=?, btn2_url=?, urutan=?, warna_teks=? WHERE id_slide=?");
+            $stmt->bind_param('ssisssssssisi', $gambar, $posisi, $overlay, $badge, $judul, $deskripsi, $b1t, $b1u, $b2t, $b2u, $urutan, $warna_teks, $id);
             $stmt->execute(); $stmt->close();
             setFlash('success', 'Pengaturan slide berhasil diperbarui!');
             redirect('kelola_hero.php?edit=' . $id . $qEmbed);
@@ -293,13 +295,13 @@ if (preg_match('/(\d+)%\s+(\d+)%/', $posisi_val, $matches)) {
             <div class="preview-box" id="previewBox" style="background-image: url('<?= htmlspecialchars($imgSrc) ?>'); background-position: <?= htmlspecialchars($posisi_val) ?>;">
               
               <!-- Gradient Overlays based on index.php -->
-              <div class="preview-overlay" id="previewOverlayGrad" style="background:linear-gradient(to top, rgba(0,0,0,<?= $overlay_val/100 ?>) 0%, transparent 80%);"></div>
-              <div class="preview-overlay" id="previewOverlaySolid" style="background:rgba(0,0,0,<?= ($overlay_val/100)*0.4 ?>);"></div>
+              <div class="preview-overlay" id="previewOverlaySolid" style="background:rgba(62,92,118,<?= ($overlay_val/100)*0.4 ?>);"></div>
+              <div class="preview-overlay" id="previewOverlayGrad" style="background:linear-gradient(to top, rgba(62,92,118,<?= $overlay_val/100 ?>) 30%, transparent 100%);"></div>
               
               <div class="preview-content">
                 <p id="prevBadge" style="font-size:12px; color:var(--color-blue); margin-bottom:6px; font-weight:500; text-shadow: 0 2px 4px rgba(0,0,0,0.5);"><?= htmlspecialchars($activeSlide['badge_text'] ?? 'Badge Spesial') ?></p>
-                <h1 id="prevJudul" style="font-size:28px; font-weight:600; color:#fff; margin-bottom:6px; line-height:1.2; text-shadow: 0 2px 4px rgba(0,0,0,0.5);"><?= htmlspecialchars($activeSlide['judul'] ?? 'Judul Hero Utama') ?></h1>
-                <p id="prevDesc" style="font-size:12px; color:rgba(255,255,255,0.85); margin-bottom:16px; text-shadow: 0 2px 4px rgba(0,0,0,0.5);"><?= htmlspecialchars($activeSlide['deskripsi'] ?? 'Deskripsi singkat yang menarik untuk pelanggan.') ?></p>
+                <h1 id="prevJudul" style="font-size:28px; font-weight:600; color:<?= htmlspecialchars($activeSlide['warna_teks'] ?? '#ffffff') ?>; margin-bottom:6px; line-height:1.2; text-shadow: 0 2px 4px rgba(0,0,0,0.5);"><?= htmlspecialchars($activeSlide['judul'] ?? 'Judul Hero Utama') ?></h1>
+                <p id="prevDesc" style="font-size:12px; color:<?= htmlspecialchars($activeSlide['warna_teks'] ?? '#ffffff') ?>; margin-bottom:16px; text-shadow: 0 2px 4px rgba(0,0,0,0.5);"><?= htmlspecialchars($activeSlide['deskripsi'] ?? 'Deskripsi singkat yang menarik untuk pelanggan.') ?></p>
                 <div style="display:flex; gap:12px; justify-content:center;">
                   <div class="btn btn--primary btn--sm" id="prevBtn1" style="<?= empty($activeSlide['btn1_text']) && !$activeSlide ? '' : (empty($activeSlide['btn1_text'])?'display:none;':'') ?>"><?= htmlspecialchars($activeSlide['btn1_text'] ?? 'Tombol 1') ?></div>
                   <div class="btn btn--secondary btn--sm" id="prevBtn2" style="<?= empty($activeSlide['btn2_text']) ? 'display:none;' : '' ?>"><?= htmlspecialchars($activeSlide['btn2_text'] ?? 'Tombol 2') ?></div>
@@ -325,6 +327,10 @@ if (preg_match('/(\d+)%\s+(\d+)%/', $posisi_val, $matches)) {
             <div>
               <label class="form-label">Urutan Tampil (1, 2, 3..)</label>
               <input class="form-control" type="number" name="urutan" value="<?= htmlspecialchars($activeSlide['urutan'] ?? count($slides)+1) ?>" required>
+            </div>
+            <div style="grid-column:1/-1;">
+              <label class="form-label">Warna Teks</label>
+              <input class="form-control" style="height:40px; padding:4px;" type="color" name="warna_teks" id="inpWarnaTeks" value="<?= htmlspecialchars($activeSlide['warna_teks'] ?? '#ffffff') ?>">
             </div>
             <div style="grid-column:1/-1;">
               <label class="form-label">Judul Besar</label>
@@ -485,8 +491,8 @@ if (preg_match('/(\d+)%\s+(\d+)%/', $posisi_val, $matches)) {
     devPosInfo.textContent = 'pos: ' + posStr;
 
     const op = ov / 100;
-    overlayGrad.style.background = `linear-gradient(to top, rgba(0,0,0,${op}) 0%, transparent 80%)`;
-    overlaySolid.style.background = `rgba(0,0,0,${op * 0.4})`;
+    overlaySolid.style.background = `rgba(62,92,118,${op * 0.4})`;
+    overlayGrad.style.background = `linear-gradient(to top, rgba(62,92,118,${op}) 30%, transparent 100%)`;
   }
 
   function resetVisuals() {
@@ -511,6 +517,14 @@ if (preg_match('/(\d+)%\s+(\d+)%/', $posisi_val, $matches)) {
     if (url.trim() !== '') {
       box.style.backgroundImage = `url('${url}')`;
     }
+  }
+
+  const inpWarnaTeks = document.getElementById('inpWarnaTeks');
+  if (inpWarnaTeks) {
+    inpWarnaTeks.addEventListener('input', function() {
+      document.getElementById('prevJudul').style.color = this.value;
+      document.getElementById('prevDesc').style.color = this.value;
+    });
   }
 
   // Bind Text Inputs to Live Preview

@@ -112,7 +112,7 @@ function hasRole(string ...$roles): bool {
  * Paksa role admin
  */
 function requireAdmin(): void {
-    if (!isLoggedIn() || !hasRole('admin')) {
+    if (!isLoggedIn() || !hasRole('admin', 'owner')) {
         redirect('../login.php');
     }
 }
@@ -121,7 +121,7 @@ function requireAdmin(): void {
  * Paksa role owner (atau admin)
  */
 function requireOwner(): void {
-    if (!isLoggedIn() || !hasRole('admin', 'owner')) {
+    if (!isLoggedIn() || !hasRole('owner')) {
         redirect('../login.php');
     }
 }

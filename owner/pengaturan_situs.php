@@ -44,6 +44,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Sesuaikan dengan yang ada di sistem A-LINKS (sama dengan pengaturan_web.php)
     $settingsToUpdate = [
         'nama_toko', 'tagline', 'alamat', 'no_wa', 'pesan_wa',
+        'jelajah_judul', 'jelajah_deskripsi', 'jelajah_img_1', 'jelajah_label_1', 'jelajah_img_2', 'jelajah_label_2', 'jelajah_img_3', 'jelajah_label_3',
         'servis_judul', 'servis_deskripsi', 'servis_fitur1_judul', 'servis_fitur1_desc',
         'servis_fitur2_judul', 'servis_fitur2_desc', 'servis_fitur3_judul', 'servis_fitur3_desc',
         'tentang_judul', 'tentang_deskripsi', 'tentang_poin1', 'tentang_poin2', 'tentang_poin3', 'tentang_poin4', 'tentang_gambar',
@@ -52,7 +53,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         'stat_rating_nilai', 'stat_rating_label',
         'reg_poin1_icon', 'reg_poin1_text', 'reg_poin2_icon', 'reg_poin2_text',
         'reg_poin3_icon', 'reg_poin3_text', 'reg_poin4_icon', 'reg_poin4_text',
-        'sosmed_ig', 'sosmed_fb', 'sosmed_tiktok', 'logo_situs', 'hero_title', 'hero_subtitle'
+        'sosmed_ig', 'sosmed_fb', 'sosmed_tiktok', 'logo_situs'
     ];
     
     $success = true;
@@ -100,7 +101,7 @@ if ($res) {
 }
 
 // Fungsi bantu untuk nilai default
-function getSet($key, $default = '') {
+function getSet(string $key, string $default = '') {
     global $pengaturan;
     return $pengaturan[$key] ?? $default;
 }
@@ -130,12 +131,8 @@ function getSet($key, $default = '') {
       padding: 12px;
       margin-bottom: 24px;
       display: flex;
+      flex-wrap: wrap;
       gap: 8px;
-      overflow-x: auto;
-      scrollbar-width: none;
-    }
-    .settings-tabs-wrapper::-webkit-scrollbar {
-      display: none;
     }
     .settings-tab {
       display: inline-flex;
@@ -257,10 +254,10 @@ function getSet($key, $default = '') {
         <div class="settings-tab active" data-target="#tab-umum">🏢 Umum & Footer</div>
         <div class="settings-tab" data-target="#tab-sosmed">📱 Media Sosial</div>
         <div class="settings-tab" data-target="#tab-tentang">ℹ️ Tentang Kami</div>
+        <div class="settings-tab" data-target="#tab-jelajah">🔍 Jelajahi Kategori</div>
         <div class="settings-tab" data-target="#tab-servis">🛠️ Layanan Servis</div>
         <div class="settings-tab" data-target="#tab-statistik">📊 Statistik</div>
         <div class="settings-tab" data-target="#tab-member">✨ Keunggulan Member</div>
-        <div class="settings-tab" data-target="#tab-hero">🖼️ Hero Banner</div>
       </div>
 
       <!-- Tab 1: Umum & Footer -->
@@ -358,6 +355,65 @@ function getSet($key, $default = '') {
             <div class="form-group">
               <label class="form-label">Poin Keunggulan 4</label>
               <input type="text" class="form-control" name="tentang_poin4" value="<?= htmlspecialchars(getSet('tentang_poin4', 'Layanan 7 Hari Seminggu')) ?>" required>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tab 2.5: Jelajahi Kategori -->
+      <div class="tab-content" id="tab-jelajah">
+        <div class="settings-card">
+          <h3>Bagian "Jelajahi Kategori" (Beranda)</h3>
+          <div class="form-group">
+            <label class="form-label">Judul Bagian</label>
+            <input type="text" class="form-control" name="jelajah_judul" value="<?= htmlspecialchars(getSet('jelajah_judul', 'Jelajahi Kategori')) ?>" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Deskripsi Singkat</label>
+            <input type="text" class="form-control" name="jelajah_deskripsi" value="<?= htmlspecialchars(getSet('jelajah_deskripsi', 'Temukan laptop yang tepat sesuai kebutuhan kamu')) ?>" required>
+          </div>
+          
+          <hr style="border-top:1px dashed var(--color-cloud); margin:24px 0;">
+          
+          <div class="settings-fitur-row">
+            <div style="font-size:12px;font-weight:600;color:var(--color-taupe);text-transform:uppercase;letter-spacing:1px;margin-bottom:12px;">Kategori 1 (Gaming)</div>
+            <div class="grid-2-col">
+              <div class="form-group">
+                <label class="form-label">Label Kategori</label>
+                <input type="text" class="form-control" name="jelajah_label_1" value="<?= htmlspecialchars(getSet('jelajah_label_1', 'Gaming')) ?>" required>
+              </div>
+              <div class="form-group">
+                <label class="form-label">URL Gambar</label>
+                <input type="text" class="form-control" name="jelajah_img_1" value="<?= htmlspecialchars(getSet('jelajah_img_1', 'https://images.unsplash.com/photo-1593642702821-c8da6771f0c6?w=800&q=80')) ?>" required>
+              </div>
+            </div>
+          </div>
+
+          <div class="settings-fitur-row">
+            <div style="font-size:12px;font-weight:600;color:var(--color-taupe);text-transform:uppercase;letter-spacing:1px;margin-bottom:12px;">Kategori 2 (Bisnis)</div>
+            <div class="grid-2-col">
+              <div class="form-group">
+                <label class="form-label">Label Kategori</label>
+                <input type="text" class="form-control" name="jelajah_label_2" value="<?= htmlspecialchars(getSet('jelajah_label_2', 'Bisnis & Profesional')) ?>" required>
+              </div>
+              <div class="form-group">
+                <label class="form-label">URL Gambar</label>
+                <input type="text" class="form-control" name="jelajah_img_2" value="<?= htmlspecialchars(getSet('jelajah_img_2', 'https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=800&q=80')) ?>" required>
+              </div>
+            </div>
+          </div>
+
+          <div class="settings-fitur-row">
+            <div style="font-size:12px;font-weight:600;color:var(--color-taupe);text-transform:uppercase;letter-spacing:1px;margin-bottom:12px;">Kategori 3 (Pelajar)</div>
+            <div class="grid-2-col">
+              <div class="form-group">
+                <label class="form-label">Label Kategori</label>
+                <input type="text" class="form-control" name="jelajah_label_3" value="<?= htmlspecialchars(getSet('jelajah_label_3', 'Pelajar & Mahasiswa')) ?>" required>
+              </div>
+              <div class="form-group">
+                <label class="form-label">URL Gambar</label>
+                <input type="text" class="form-control" name="jelajah_img_3" value="<?= htmlspecialchars(getSet('jelajah_img_3', 'https://images.unsplash.com/photo-1588702547923-7093a6c3ba33?w=800&q=80')) ?>" required>
+              </div>
             </div>
           </div>
         </div>
@@ -491,15 +547,7 @@ function getSet($key, $default = '') {
         </div>
       </div>
 
-      <!-- Tab 7: Hero Banner -->
-      <div class="tab-content" id="tab-hero">
-        <div class="settings-card" style="padding:0; overflow:hidden;">
-          <iframe src="kelola_hero.php?embed=1" style="width:100%; height:800px; border:none; display:block;"></iframe>
-        </div>
-        <div style="margin-top:16px; color:var(--color-pewter); font-size:13px;">
-          <i style="color:var(--color-navy);">Info:</i> Perubahan di tab Hero Banner langsung tersimpan secara mandiri. Anda tidak perlu klik "Simpan Pengaturan" di bawah.
-        </div>
-      </div>
+      <!-- Tab Hero Banner telah dipindah menjadi menu terpisah -->
 
       <div style="margin-top:24px;margin-bottom:48px;">
         <button type="submit" class="btn btn--primary btn--lg btn--full">Simpan Semua Perubahan</button>

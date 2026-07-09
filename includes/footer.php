@@ -67,6 +67,6 @@ $ft_wa_link = "https://wa.me/" . preg_replace('/[^0-9]/', '', $ft_no_wa) . "?tex
   <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp" width="60" height="60" style="width: 60px; height: 60px; object-fit: contain;">
 </a>
 
-<script src="<?= $basePath ?>assets/js/main.js"></script>
+<script src="<?= $basePath ?>assets/js/main.js?v=<?= time() ?>"></script>
 </body>
 </html>

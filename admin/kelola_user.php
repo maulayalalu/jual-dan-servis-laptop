@@ -3,13 +3,32 @@ session_start();
 require_once '../config/koneksi.php';
 requireStaff('admin', 'owner'); // kasir tidak bisa akses halaman user
 $basePath = '../'; $pageTitle = 'Kelola User — A-LINKS';
+$isOwner = hasRole('owner');
 $isAdmin = hasRole('admin');
+$hasPower = $isOwner || $isAdmin;
 
-// Handle hapus/toggle role (hanya admin)
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && $isAdmin) {
+// Handle hapus/toggle role
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && $hasPower) {
     verify_csrf();
     $action  = $_POST['action']  ?? '';
     $id_user = (int)($_POST['id_user'] ?? 0);
+
+    // Ambil role target
+    $stmtTarget = $koneksi->prepare("SELECT role FROM users WHERE id_user=?");
+    $stmtTarget->bind_param('i', $id_user);
+    $stmtTarget->execute();
+    $targetRes = $stmtTarget->get_result()->fetch_assoc();
+    $stmtTarget->close();
+    
+    if (!$targetRes) redirect('kelola_user.php');
+    $targetRole = $targetRes['role'];
+
+    // Validasi wewenang: Admin tidak bisa mengubah/menghapus Owner
+    if ($isAdmin && !$isOwner && $targetRole === 'owner') {
+        setFlash('error', 'Admin tidak memiliki hak untuk mengubah atau menghapus akun Owner.');
+        redirect('kelola_user.php');
+    }
+
     if ($action === 'hapus' && $id_user !== (int)$_SESSION['id_user']) {
         $stmt = $koneksi->prepare("UPDATE users SET is_deleted=1 WHERE id_user=?");
         $stmt->bind_param('i', $id_user); $stmt->execute(); $stmt->close();
@@ -17,6 +36,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $isAdmin) {
     }
     if ($action === 'toggle_role') {
         $newRole = $_POST['new_role'] ?? 'user';
+        
+        // Admin tidak bisa memberikan role owner
+        if ($isAdmin && !$isOwner && $newRole === 'owner') {
+            setFlash('error', 'Hanya Owner yang dapat memberikan hak akses Owner kepada pengguna lain.');
+            redirect('kelola_user.php');
+        }
+
         $allowed = ['admin','owner','kasir','user'];
         if (in_array($newRole, $allowed)) {
             $stmt = $koneksi->prepare("UPDATE users SET role=? WHERE id_user=?");
@@ -25,7 +51,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && $isAdmin) {
         }
     }
     redirect('kelola_user.php');
-} elseif ($_SERVER['REQUEST_METHOD'] === 'POST' && !$isAdmin) {
+} elseif ($_SERVER['REQUEST_METHOD'] === 'POST') {
     setFlash('warning', 'Anda tidak memiliki izin untuk mengubah data user.');
     redirect('kelola_user.php');
 }
@@ -122,15 +148,17 @@ $totalPages = ceil($totalData / $limit);
           ?>"
           ><?= ucfirst($u['role']) ?></span></td>
           <td>
-          <?php if (!$isSelf && $isAdmin): ?>
-            <div style="display:flex;gap:4px;">
+          <?php if (!$isSelf && $hasPower): 
+             $canEdit = $isOwner || ($isAdmin && $u['role'] !== 'owner');
+          ?>
+            <div style="display:flex;gap:4px;align-items:center;">
               <form method="POST" style="display:inline;">
-    <input type="hidden" name="csrf_token" value="<?= csrf_token() ?>">
+                <input type="hidden" name="csrf_token" value="<?= csrf_token() ?>">
                 <input type="hidden" name="action" value="toggle_role">
                 <input type="hidden" name="id_user" value="<?= $u['id_user'] ?>">
                 <select name="new_role" class="form-control form-select" style="height:auto;padding:4px 8px;font-size:12px;width:auto;"
                         onchange="this.form.submit()"
-                        title="Ubah role">
+                        title="Ubah role" <?= !$canEdit ? 'disabled' : '' ?>>
                   <?php
                   $roleOptions = [
                       'admin' => 'Administrator',
@@ -138,18 +166,28 @@ $totalPages = ceil($totalData / $limit);
                       'kasir' => 'Kasir',
                       'user'  => 'Pelanggan',
                   ];
+                  if (!$isOwner) {
+                      unset($roleOptions['owner']); // Sembunyikan opsi owner untuk admin
+                      if ($u['role'] === 'owner') {
+                          $roleOptions['owner'] = 'Owner'; // Tetap tampilkan jika dia adalah owner (tapi select didisable)
+                      }
+                  }
                   foreach ($roleOptions as $rv => $rl): ?>
                   <option value="<?= $rv ?>" <?= $u['role']===$rv ? 'selected' : '' ?>><?= $rl ?></option>
                   <?php endforeach; ?>
                 </select>
               </form>
+              <?php if ($canEdit): ?>
               <form method="POST" style="display:inline;">
-    <input type="hidden" name="csrf_token" value="<?= csrf_token() ?>">
+                <input type="hidden" name="csrf_token" value="<?= csrf_token() ?>">
                 <input type="hidden" name="action" value="hapus">
                 <input type="hidden" name="id_user" value="<?= $u['id_user'] ?>">
                 <button type="submit" class="btn btn--danger btn--sm" id="btnHapusUser-<?= $u['id_user'] ?>"
                         data-confirm="Hapus akun <?= htmlspecialchars($u['nama'],ENT_QUOTES) ?>? Data tidak bisa dipulihkan.">Hapus</button>
               </form>
+              <?php else: ?>
+                 <span style="font-size:12px;color:var(--color-silver-fog);margin-left:4px;">(Owner Only)</span>
+              <?php endif; ?>
             </div>
           <?php elseif ($isSelf): ?><span style="font-size:12px;color:var(--color-silver-fog);">Akun aktif</span>
           <?php else: ?><span style="font-size:12px;color:var(--color-silver-fog);">—</span>

@@ -1,50 +1,94 @@
 <?php
 session_start();
 require_once '../config/koneksi.php';
+
+// Hanya bisa diakses oleh owner
 requireAdmin();
 
 $basePath = '../';
 $pageTitle = 'Pengaturan Web — A-LINKS';
 
-// â”€â”€ Handle Update â”€â”€
+// Handle Update
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     verify_csrf();
     
+    // Handle Logo Upload
+    if (isset($_FILES['logo_situs']) && $_FILES['logo_situs']['error'] !== UPLOAD_ERR_NO_FILE) {
+        if ($_FILES['logo_situs']['error'] === UPLOAD_ERR_OK) {
+            $finfo = finfo_open(FILEINFO_MIME_TYPE);
+            $mime = finfo_file($finfo, $_FILES['logo_situs']['tmp_name']);
+            finfo_close($finfo);
+            if (in_array($mime, ['image/jpeg', 'image/png', 'image/webp', 'image/svg+xml', 'image/gif'])) {
+                $ext = pathinfo($_FILES['logo_situs']['name'], PATHINFO_EXTENSION);
+                $filename = 'logo_' . time() . '.' . $ext;
+                $uploadDir = '../assets/images/';
+                if (!is_dir($uploadDir)) mkdir($uploadDir, 0755, true);
+                if (move_uploaded_file($_FILES['logo_situs']['tmp_name'], $uploadDir . $filename)) {
+                    $_POST['logo_situs'] = 'assets/images/' . $filename;
+                }
+            } else {
+                setFlash('error', 'Format logo tidak valid (JPG/PNG/WEBP/SVG).');
+                redirect('pengaturan_web.php');
+                exit;
+            }
+        } else {
+            setFlash('error', 'Gagal mengupload logo.');
+            redirect('pengaturan_web.php');
+            exit;
+        }
+    }
+
+    // Sesuaikan dengan yang ada di sistem A-LINKS (sama dengan pengaturan_web.php)
     $settingsToUpdate = [
         'nama_toko', 'tagline', 'alamat', 'no_wa', 'pesan_wa',
+        'jelajah_judul', 'jelajah_deskripsi', 'jelajah_img_1', 'jelajah_label_1', 'jelajah_img_2', 'jelajah_label_2', 'jelajah_img_3', 'jelajah_label_3',
         'servis_judul', 'servis_deskripsi', 'servis_fitur1_judul', 'servis_fitur1_desc',
         'servis_fitur2_judul', 'servis_fitur2_desc', 'servis_fitur3_judul', 'servis_fitur3_desc',
         'tentang_judul', 'tentang_deskripsi', 'tentang_poin1', 'tentang_poin2', 'tentang_poin3', 'tentang_poin4', 'tentang_gambar',
         'stat1_nilai', 'stat1_label', 'stat2_nilai', 'stat2_label',
-        'stat3_nilai', 'stat3_label', 'stat4_nilai', 'stat4_label'
+        'stat3_nilai', 'stat3_label', 'stat4_nilai', 'stat4_label',
+        'stat_rating_nilai', 'stat_rating_label',
+        'reg_poin1_icon', 'reg_poin1_text', 'reg_poin2_icon', 'reg_poin2_text',
+        'reg_poin3_icon', 'reg_poin3_text', 'reg_poin4_icon', 'reg_poin4_text',
+        'sosmed_ig', 'sosmed_fb', 'sosmed_tiktok', 'logo_situs'
     ];
     
     $success = true;
     foreach ($settingsToUpdate as $kunci) {
         if (isset($_POST[$kunci])) {
-            $nilai = $_POST[$kunci];
-            $stmt = $koneksi->prepare("UPDATE pengaturan SET nilai = ? WHERE kunci = ?");
-            if ($stmt) {
+            $nilai = trim($_POST[$kunci]);
+            
+            // Cek apakah key ada
+            $stmtCek = $koneksi->prepare("SELECT 1 FROM pengaturan WHERE kunci = ?");
+            $stmtCek->bind_param('s', $kunci);
+            $stmtCek->execute();
+            $exists = $stmtCek->get_result()->num_rows > 0;
+            $stmtCek->close();
+            
+            if ($exists) {
+                $stmt = $koneksi->prepare("UPDATE pengaturan SET nilai = ? WHERE kunci = ?");
                 $stmt->bind_param('ss', $nilai, $kunci);
-                if (!$stmt->execute()) {
-                    $success = false;
-                }
-                $stmt->close();
             } else {
+                $stmt = $koneksi->prepare("INSERT INTO pengaturan (kunci, nilai) VALUES (?, ?)");
+                $stmt->bind_param('ss', $kunci, $nilai);
+            }
+            
+            if (!$stmt->execute()) {
                 $success = false;
             }
+            $stmt->close();
         }
     }
     
     if ($success) {
-        setFlash('success', 'Pengaturan web berhasil diperbarui.');
+        setFlash('success', 'Pengaturan situs berhasil diperbarui.');
     } else {
-        setFlash('error', 'Gagal memperbarui pengaturan web.');
+        setFlash('error', 'Gagal memperbarui beberapa pengaturan.');
     }
     redirect('pengaturan_web.php');
 }
 
-// â”€â”€ Ambil Data Saat Ini â”€â”€
+// Ambil Data Saat Ini
 $res = $koneksi->query("SELECT kunci, nilai FROM pengaturan");
 $pengaturan = [];
 if ($res) {
@@ -54,7 +98,7 @@ if ($res) {
 }
 
 // Fungsi bantu untuk nilai default
-function getSet($key, $default) {
+function getSet(string $key, string $default = '') {
     global $pengaturan;
     return $pengaturan[$key] ?? $default;
 }
@@ -71,39 +115,103 @@ function getSet($key, $default) {
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
   <link rel="stylesheet" href="../assets/css/style.css?v=<?= time() ?>"/>
   <style>
-    .settings-section {
-      background: var(--color-white);
-      border: 1px solid var(--color-cream-border);
-      border-radius: var(--radius-card);
-      overflow: hidden;
-      margin-bottom: var(--sp-3);
-      box-shadow: var(--shadow-sm);
+    .page-header-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 24px;
     }
-    .settings-section__header {
+    .settings-tabs-wrapper {
       background: var(--color-cream);
-      padding: 14px 24px;
-      border-bottom: 1px solid var(--color-cream-border);
+      border: 1px solid var(--color-cream-border);
+      border-radius: 12px;
+      padding: 12px;
+      margin-bottom: 24px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
     }
-    .settings-section__title {
-      font-size: 15px;
+    .settings-tab {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 16px;
+      border-radius: 20px;
+      background: transparent;
+      color: var(--color-pewter);
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      border: 1px solid transparent;
+      white-space: nowrap;
+      transition: all 0.2s ease;
+    }
+    .settings-tab:hover {
+      background: rgba(0,0,0,0.03);
+    }
+    .settings-tab.active {
+      background: #fff;
+      color: #d4a373;
+      border: 1px solid var(--color-cloud);
+      box-shadow: 0 2px 4px rgba(0,0,0,0.04);
+    }
+    
+    .tab-content {
+      display: none;
+      animation: fadeIn 0.3s ease;
+    }
+    .tab-content.active {
+      display: block;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(5px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Content styling */
+    .settings-card {
+      background: #fff;
+      border: 1px solid var(--color-cloud);
+      border-radius: 12px;
+      padding: 24px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.02);
+    }
+    .settings-card h3 {
+      font-size: 16px;
       font-weight: 600;
       color: var(--color-carbon);
-      margin: 0;
+      margin-bottom: 20px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--color-cloud);
     }
-    .settings-section__body {
-      padding: 24px;
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
+    
+    .btn-lihat-situs {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 16px;
+      background: #fff;
+      border: 1px solid var(--color-cloud);
+      border-radius: 20px;
+      color: var(--color-carbon);
+      font-size: 14px;
+      font-weight: 500;
+      text-decoration: none;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+      transition: all 0.2s;
     }
+    .btn-lihat-situs:hover {
+      background: var(--color-light-ash);
+      border-color: var(--color-pewter);
+    }
+
     .settings-fitur-row {
       background: var(--color-cream);
       border: 1px solid var(--color-cream-border);
       border-radius: var(--radius-md);
       padding: 16px;
-      margin-bottom: 8px;
+      margin-bottom: 12px;
     }
-    .settings-fitur-row:last-child { margin-bottom: 0; }
     .grid-2-col {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -118,24 +226,55 @@ function getSet($key, $default) {
   <?php include '../includes/sidebar_admin.php'; ?>
 
   <main class="main-content">
-    <div class="page-header">
+    
+    <div class="page-header-container">
       <div>
         <h1 class="page-header__title">Pengaturan Web</h1>
-        <div class="page-header__sub">Ubah konten footer, halaman utama, dan pengaturan umum situs di sini.</div>
+        <div class="page-header__sub">Kelola teks, kontak, dan konten website secara dinamis tanpa ubah kode.</div>
+      </div>
+      <div>
+        <a href="<?= $basePath ?>index.php" target="_blank" class="btn-lihat-situs">
+          <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/>
+          </svg>
+          Lihat Situs
+        </a>
       </div>
     </div>
 
     <?php renderFlash(); ?>
 
-    <form action="pengaturan_web.php" method="POST" style="max-width:900px;">
+    <form action="" method="POST" style="max-width: 900px;" enctype="multipart/form-data">
       <input type="hidden" name="csrf_token" value="<?= csrf_token() ?>">
 
-      <!-- 1. UMUM & FOOTER -->
-      <div class="settings-section">
-        <div class="settings-section__header">
-          <h2 class="settings-section__title">1. Pengaturan Umum &amp; Footer</h2>
-        </div>
-        <div class="settings-section__body">
+      <div class="settings-tabs-wrapper">
+        <div class="settings-tab active" data-target="#tab-umum">🏢 Umum & Footer</div>
+        <div class="settings-tab" data-target="#tab-sosmed">📱 Media Sosial</div>
+        <div class="settings-tab" data-target="#tab-tentang">ℹ️ Tentang Kami</div>
+        <div class="settings-tab" data-target="#tab-jelajah">🔍 Jelajahi Kategori</div>
+        <div class="settings-tab" data-target="#tab-servis">🛠️ Layanan Servis</div>
+        <div class="settings-tab" data-target="#tab-statistik">📊 Statistik</div>
+        <div class="settings-tab" data-target="#tab-member">✨ Keunggulan Member</div>
+      </div>
+
+      <!-- Tab 1: Umum & Footer -->
+      <div class="tab-content active" id="tab-umum">
+        <div class="settings-card">
+          <h3>Pengaturan Umum & Footer</h3>
+          <div class="form-group" style="margin-bottom: 24px;">
+            <label class="form-label">Logo Situs</label>
+            <?php 
+            $currLogo = getSet('logo_situs', ''); 
+            if ($currLogo): 
+              $logoPath = strpos($currLogo, 'http') === 0 ? $currLogo : '../' . $currLogo;
+            ?>
+              <div style="margin-bottom: 12px; padding: 12px; border: 1px dashed var(--color-cloud); border-radius: 8px; display: inline-block; background: var(--color-light-ash);">
+                <img src="<?= htmlspecialchars($logoPath) ?>" alt="Logo Situs" style="max-height: 60px; max-width: 200px; object-fit: contain;">
+              </div>
+            <?php endif; ?>
+            <input type="file" class="form-control" name="logo_situs" accept="image/*">
+            <span class="form-hint">Biarkan kosong jika tidak ingin mengubah logo saat ini. (Maks 2MB, JPG/PNG/WEBP/SVG)</span>
+          </div>
           <div class="form-group">
             <label class="form-label">Nama Toko</label>
             <input type="text" class="form-control" name="nama_toko" value="<?= htmlspecialchars(getSet('nama_toko', 'A-LINKS')) ?>" required>
@@ -162,12 +301,29 @@ function getSet($key, $default) {
         </div>
       </div>
 
-      <!-- 2. TENTANG KAMI -->
-      <div class="settings-section">
-        <div class="settings-section__header">
-          <h2 class="settings-section__title">2. Bagian &quot;Tentang Kami&quot; (Beranda)</h2>
+      <!-- Tab 1.5: Media Sosial -->
+      <div class="tab-content" id="tab-sosmed">
+        <div class="settings-card">
+          <h3>Tautan Media Sosial</h3>
+          <div class="form-group">
+            <label class="form-label">Link Instagram</label>
+            <input type="text" class="form-control" name="sosmed_ig" value="<?= htmlspecialchars(getSet('sosmed_ig', 'https://instagram.com/')) ?>" placeholder="https://instagram.com/...">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Link Facebook</label>
+            <input type="text" class="form-control" name="sosmed_fb" value="<?= htmlspecialchars(getSet('sosmed_fb', 'https://facebook.com/')) ?>" placeholder="https://facebook.com/...">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Link TikTok</label>
+            <input type="text" class="form-control" name="sosmed_tiktok" value="<?= htmlspecialchars(getSet('sosmed_tiktok', 'https://tiktok.com/')) ?>" placeholder="https://tiktok.com/...">
+          </div>
         </div>
-        <div class="settings-section__body">
+      </div>
+
+      <!-- Tab 2: Tentang Kami -->
+      <div class="tab-content" id="tab-tentang">
+        <div class="settings-card">
+          <h3>Bagian "Tentang Kami" (Beranda)</h3>
           <div class="form-group">
             <label class="form-label">Judul Tentang Kami</label>
             <input type="text" class="form-control" name="tentang_judul" value="<?= htmlspecialchars(getSet('tentang_judul', 'Mengapa Memilih A-LINKS?')) ?>" required>
@@ -201,12 +357,69 @@ function getSet($key, $default) {
         </div>
       </div>
 
-      <!-- 3. LAYANAN SERVIS -->
-      <div class="settings-section">
-        <div class="settings-section__header">
-          <h2 class="settings-section__title">3. Bagian &quot;Layanan Servis&quot; (Beranda)</h2>
+      <!-- Tab 2.5: Jelajahi Kategori -->
+      <div class="tab-content" id="tab-jelajah">
+        <div class="settings-card">
+          <h3>Bagian "Jelajahi Kategori" (Beranda)</h3>
+          <div class="form-group">
+            <label class="form-label">Judul Bagian</label>
+            <input type="text" class="form-control" name="jelajah_judul" value="<?= htmlspecialchars(getSet('jelajah_judul', 'Jelajahi Kategori')) ?>" required>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Deskripsi Singkat</label>
+            <input type="text" class="form-control" name="jelajah_deskripsi" value="<?= htmlspecialchars(getSet('jelajah_deskripsi', 'Temukan laptop yang tepat sesuai kebutuhan kamu')) ?>" required>
+          </div>
+          
+          <hr style="border-top:1px dashed var(--color-cloud); margin:24px 0;">
+          
+          <div class="settings-fitur-row">
+            <div style="font-size:12px;font-weight:600;color:var(--color-taupe);text-transform:uppercase;letter-spacing:1px;margin-bottom:12px;">Kategori 1 (Gaming)</div>
+            <div class="grid-2-col">
+              <div class="form-group">
+                <label class="form-label">Label Kategori</label>
+                <input type="text" class="form-control" name="jelajah_label_1" value="<?= htmlspecialchars(getSet('jelajah_label_1', 'Gaming')) ?>" required>
+              </div>
+              <div class="form-group">
+                <label class="form-label">URL Gambar</label>
+                <input type="text" class="form-control" name="jelajah_img_1" value="<?= htmlspecialchars(getSet('jelajah_img_1', 'https://images.unsplash.com/photo-1593642702821-c8da6771f0c6?w=800&q=80')) ?>" required>
+              </div>
+            </div>
+          </div>
+
+          <div class="settings-fitur-row">
+            <div style="font-size:12px;font-weight:600;color:var(--color-taupe);text-transform:uppercase;letter-spacing:1px;margin-bottom:12px;">Kategori 2 (Bisnis)</div>
+            <div class="grid-2-col">
+              <div class="form-group">
+                <label class="form-label">Label Kategori</label>
+                <input type="text" class="form-control" name="jelajah_label_2" value="<?= htmlspecialchars(getSet('jelajah_label_2', 'Bisnis & Profesional')) ?>" required>
+              </div>
+              <div class="form-group">
+                <label class="form-label">URL Gambar</label>
+                <input type="text" class="form-control" name="jelajah_img_2" value="<?= htmlspecialchars(getSet('jelajah_img_2', 'https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=800&q=80')) ?>" required>
+              </div>
+            </div>
+          </div>
+
+          <div class="settings-fitur-row">
+            <div style="font-size:12px;font-weight:600;color:var(--color-taupe);text-transform:uppercase;letter-spacing:1px;margin-bottom:12px;">Kategori 3 (Pelajar)</div>
+            <div class="grid-2-col">
+              <div class="form-group">
+                <label class="form-label">Label Kategori</label>
+                <input type="text" class="form-control" name="jelajah_label_3" value="<?= htmlspecialchars(getSet('jelajah_label_3', 'Pelajar & Mahasiswa')) ?>" required>
+              </div>
+              <div class="form-group">
+                <label class="form-label">URL Gambar</label>
+                <input type="text" class="form-control" name="jelajah_img_3" value="<?= htmlspecialchars(getSet('jelajah_img_3', 'https://images.unsplash.com/photo-1588702547923-7093a6c3ba33?w=800&q=80')) ?>" required>
+              </div>
+            </div>
+          </div>
         </div>
-        <div class="settings-section__body">
+      </div>
+
+      <!-- Tab 3: Layanan Servis -->
+      <div class="tab-content" id="tab-servis">
+        <div class="settings-card">
+          <h3>Bagian "Layanan Servis" (Beranda)</h3>
           <div class="grid-2-col">
             <div class="form-group">
               <label class="form-label">Judul Layanan</label>
@@ -262,12 +475,10 @@ function getSet($key, $default) {
         </div>
       </div>
 
-      <!-- 4. STATISTIK -->
-      <div class="settings-section">
-        <div class="settings-section__header">
-          <h2 class="settings-section__title">4. Bagian &quot;Statistik&quot; (Beranda)</h2>
-        </div>
-        <div class="settings-section__body">
+      <!-- Tab 4: Statistik -->
+      <div class="tab-content" id="tab-statistik">
+        <div class="settings-card">
+          <h3>Bagian "Statistik" (Beranda)</h3>
           <div class="grid-2-col">
             <div class="form-group">
               <label class="form-label">Statistik 1 (Nilai &amp; Label)</label>
@@ -301,13 +512,67 @@ function getSet($key, $default) {
         </div>
       </div>
 
-      <div style="margin-top:24px;margin-bottom:48px;">
-        <button type="submit" class="btn btn--primary btn--lg btn--full" id="btnSimpanPengaturan">Simpan Semua Perubahan</button>
+      <!-- Tab 6: Keunggulan Member -->
+      <div class="tab-content" id="tab-member">
+        <div class="settings-card">
+          <h3>Poin Keunggulan Pendaftaran & Statistik Login</h3>
+          
+          <div class="form-group">
+            <label class="form-label">Statistik 3 (Khusus Login)</label>
+            <div style="display:flex;gap:8px;">
+              <input type="text" class="form-control" name="stat_rating_nilai" value="<?= htmlspecialchars(getSet('stat_rating_nilai', '4.9★')) ?>" style="width:80px;flex-shrink:0;" required>
+              <input type="text" class="form-control" name="stat_rating_label" value="<?= htmlspecialchars(getSet('stat_rating_label', 'Rating')) ?>" style="flex:1;" required>
+            </div>
+            <span class="form-hint">Statistik 1 dan 2 mengambil dari tab Statistik utama.</span>
+          </div>
+
+          <hr style="border-top:1px dashed var(--color-cloud); margin:24px 0;">
+          <h4>Keuntungan Register (4 Poin)</h4>
+
+          <?php for($i=1; $i<=4; $i++): 
+             $defIcon = ['1'=>'🛒', '2'=>'🔧', '3'=>'🎁', '4'=>'📦'][$i];
+             $defText = ['1'=>'Belanja laptop dengan cicilan 0%', '2'=>'Tracking status servis real-time', '3'=>'Promo & diskon eksklusif member', '4'=>'Pengiriman gratis seluruh Indonesia'][$i];
+          ?>
+          <div class="form-group" style="margin-bottom:16px;">
+            <label class="form-label">Poin <?= $i ?></label>
+            <div style="display:flex;gap:8px;">
+              <input type="text" class="form-control" name="reg_poin<?= $i ?>_icon" value="<?= htmlspecialchars(getSet("reg_poin{$i}_icon", $defIcon)) ?>" style="width:60px;text-align:center;" required>
+              <input type="text" class="form-control" name="reg_poin<?= $i ?>_text" value="<?= htmlspecialchars(getSet("reg_poin{$i}_text", $defText)) ?>" style="flex:1;" required>
+            </div>
+          </div>
+          <?php endfor; ?>
+        </div>
       </div>
+
+      <!-- Tab Hero Banner telah dipindah menjadi menu terpisah -->
+
+      <div style="margin-top:24px;margin-bottom:48px;">
+        <button type="submit" class="btn btn--primary btn--lg btn--full">Simpan Semua Perubahan</button>
+      </div>
+
     </form>
   </main>
 </div>
 
 <script src="../assets/js/main.js"></script>
+<script>
+  // Script untuk navigasi tab
+  document.querySelectorAll('.settings-tab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      // Hilangkan class active dari semua tab
+      document.querySelectorAll('.settings-tab').forEach(t => t.classList.remove('active'));
+      // Hilangkan class active dari semua konten tab
+      document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+      
+      // Tambahkan class active ke tab yang diklik
+      tab.classList.add('active');
+      // Tambahkan class active ke konten yang sesuai
+      const target = document.querySelector(tab.dataset.target);
+      if (target) {
+        target.classList.add('active');
+      }
+    });
+  });
+</script>
 </body>
 </html>

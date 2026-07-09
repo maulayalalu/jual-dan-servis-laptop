@@ -17,6 +17,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stok      = (int) ($_POST['stok']      ?? 0);
         $gambar    = trim($_POST['gambar']       ?? '');
         $garansi   = trim($_POST['garansi']      ?? 'Garansi Resmi 1 Tahun');
+        $id_kategori = !empty($_POST['id_kategori']) ? (int)$_POST['id_kategori'] : null;
         $id        = (int) ($_POST['id_produk']  ?? 0);
 
         // Upload gambar jika ada
@@ -50,13 +51,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         if ($action === 'tambah') {
-            $stmt = $koneksi->prepare("INSERT INTO produk (nama_laptop, deskripsi, harga, stok, gambar, garansi) VALUES (?,?,?,?,?,?)");
-            $stmt->bind_param('ssidss', $nama, $deskripsi, $harga, $stok, $gambar, $garansi);
+            $stmt = $koneksi->prepare("INSERT INTO produk (nama_laptop, deskripsi, harga, stok, gambar, garansi, id_kategori) VALUES (?,?,?,?,?,?,?)");
+            $stmt->bind_param('ssidssi', $nama, $deskripsi, $harga, $stok, $gambar, $garansi, $id_kategori);
             $stmt->execute(); $stmt->close();
             setFlash('success', 'Produk berhasil ditambahkan!');
         } else {
-            $stmt = $koneksi->prepare("UPDATE produk SET nama_laptop=?, deskripsi=?, harga=?, stok=?, gambar=?, garansi=? WHERE id_produk=?");
-            $stmt->bind_param('ssidssi', $nama, $deskripsi, $harga, $stok, $gambar, $garansi, $id);
+            $stmt = $koneksi->prepare("UPDATE produk SET nama_laptop=?, deskripsi=?, harga=?, stok=?, gambar=?, garansi=?, id_kategori=? WHERE id_produk=?");
+            $stmt->bind_param('ssidssii', $nama, $deskripsi, $harga, $stok, $gambar, $garansi, $id_kategori, $id);
             $stmt->execute(); $stmt->close();
             setFlash('success', 'Produk berhasil diperbarui!');
         }
@@ -84,7 +85,14 @@ if (isset($_GET['edit'])) {
     $stmt->close();
 }
 
-// â”€â”€ Search & list produk â”€â”€
+// ── Ambil data kategori ──
+$kategoriList = $koneksi->query("SELECT * FROM kategori ORDER BY nama_kategori ASC");
+$allKategori = [];
+if ($kategoriList) {
+    while($r = $kategoriList->fetch_assoc()) $allKategori[] = $r;
+}
+
+// ── Search & list produk ──
 $page = (int)($_GET['page'] ?? 1);
 if ($page < 1) $page = 1;
 $limit = 10;
@@ -93,20 +101,20 @@ $offset = ($page - 1) * $limit;
 $search = trim($_GET['q'] ?? '');
 if ($search) {
     $like = "%$search%";
-    $stmtC = $koneksi->prepare("SELECT COUNT(*) AS total FROM produk WHERE is_deleted=0 AND (nama_laptop LIKE ? OR deskripsi LIKE ?)");
+    $stmtC = $koneksi->prepare("SELECT COUNT(*) AS total FROM produk p WHERE p.is_deleted=0 AND (p.nama_laptop LIKE ? OR p.deskripsi LIKE ?)");
     $stmtC->bind_param('ss', $like, $like);
     $stmtC->execute();
     $totalData = $stmtC->get_result()->fetch_assoc()['total'];
     $stmtC->close();
 
-    $stmt = $koneksi->prepare("SELECT * FROM produk WHERE is_deleted=0 AND (nama_laptop LIKE ? OR deskripsi LIKE ?) ORDER BY created_at DESC LIMIT ? OFFSET ?");
+    $stmt = $koneksi->prepare("SELECT p.*, k.nama_kategori FROM produk p LEFT JOIN kategori k ON p.id_kategori = k.id_kategori WHERE p.is_deleted=0 AND (p.nama_laptop LIKE ? OR p.deskripsi LIKE ?) ORDER BY p.created_at DESC LIMIT ? OFFSET ?");
     $stmt->bind_param('ssii', $like, $like, $limit, $offset);
     $stmt->execute();
     $produkList = $stmt->get_result();
     $stmt->close();
 } else {
-    $totalData = $koneksi->query("SELECT COUNT(*) AS total FROM produk WHERE is_deleted=0")->fetch_assoc()['total'];
-    $stmt = $koneksi->prepare("SELECT * FROM produk WHERE is_deleted=0 ORDER BY created_at DESC LIMIT ? OFFSET ?");
+    $totalData = $koneksi->query("SELECT COUNT(*) AS total FROM produk p WHERE p.is_deleted=0")->fetch_assoc()['total'];
+    $stmt = $koneksi->prepare("SELECT p.*, k.nama_kategori FROM produk p LEFT JOIN kategori k ON p.id_kategori = k.id_kategori WHERE p.is_deleted=0 ORDER BY p.created_at DESC LIMIT ? OFFSET ?");
     $stmt->bind_param('ii', $limit, $offset);
     $stmt->execute();
     $produkList = $stmt->get_result();
@@ -162,6 +170,7 @@ $totalPages = ceil($totalData / $limit);
           <tr>
             <th>#</th>
             <th>Gambar</th>
+            <th>Kategori</th>
             <th>Nama Laptop</th>
             <th>Harga</th>
             <th>Stok</th>
@@ -180,6 +189,7 @@ $totalPages = ceil($totalData / $limit);
                    alt="<?= htmlspecialchars($p['nama_laptop']) ?>"
                    style="width:56px;height:40px;object-fit:cover;border-radius:4px;background:var(--color-cream);">
             </td>
+            <td><span class="badge badge--gray"><?= htmlspecialchars($p['nama_kategori'] ?? 'Tanpa Kategori') ?></span></td>
             <td>
               <div style="font-weight:500;color:var(--color-carbon);"><?= htmlspecialchars($p['nama_laptop']) ?></div>
               <div style="font-size:12px;color:var(--color-pewter);max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;"><?= htmlspecialchars($p['deskripsi']) ?></div>
@@ -200,6 +210,7 @@ $totalPages = ceil($totalData / $limit);
                         data-deskripsi="<?= htmlspecialchars($p['deskripsi'], ENT_QUOTES) ?>"
                         data-harga="<?= $p['harga'] ?>"
                         data-stok="<?= $p['stok'] ?>"
+                        data-kategori="<?= $p['id_kategori'] ?? '' ?>"
                         data-garansi="<?= htmlspecialchars($p['garansi'] ?? '', ENT_QUOTES) ?>"
                         data-gambar="<?= htmlspecialchars($p['gambar'] ?? '', ENT_QUOTES) ?>">
                   Edit
@@ -255,6 +266,15 @@ $totalPages = ceil($totalData / $limit);
           <label class="form-label" for="inputDesc">Deskripsi</label>
           <textarea class="form-control form-control--textarea" id="inputDesc" name="deskripsi" rows="3" placeholder="Spesifikasi singkat..."></textarea>
         </div>
+        <div class="form-group">
+          <label class="form-label" for="inputKategori">Kategori</label>
+          <select class="form-control" id="inputKategori" name="id_kategori">
+            <option value="">-- Tanpa Kategori --</option>
+            <?php foreach ($allKategori as $kat): ?>
+            <option value="<?= $kat['id_kategori'] ?>"><?= htmlspecialchars($kat['nama_kategori']) ?></option>
+            <?php endforeach; ?>
+          </select>
+        </div>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
           <div class="form-group">
             <label class="form-label" for="inputHarga">Harga (Rp) <span style="color:#d92b2b;">*</span></label>
@@ -300,6 +320,7 @@ $totalPages = ceil($totalData / $limit);
       document.getElementById('inputDesc').value          = btn.dataset.deskripsi;
       document.getElementById('inputHarga').value         = btn.dataset.harga;
       document.getElementById('inputStok').value          = btn.dataset.stok;
+      document.getElementById('inputKategori').value      = btn.dataset.kategori;
       document.getElementById('inputGaransi').value       = btn.dataset.garansi;
       document.getElementById('inputGambarUrl').value     = btn.dataset.gambar;
       document.getElementById('modalProduk').classList.add('open');

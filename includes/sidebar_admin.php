@@ -124,7 +124,7 @@ if (isset($koneksi)) {
   </a>
   <?php endif; ?>
 
-  <?php if (sidebarAllow(['admin'])): ?>
+  <?php if (sidebarAllow(['admin', 'owner'])): ?>
   <div class="sidebar__group-label">Pengaturan</div>
 
   <a href="<?= $basePath ?>admin/kelola_kategori.php"
@@ -158,7 +158,9 @@ if (isset($koneksi)) {
     </svg>
     Pengaturan Situs
   </a>
+  <?php endif; ?>
 
+  <?php if (sidebarAllow(['admin', 'owner'])): ?>
   <a href="<?= $basePath ?>owner/kelola_hero.php"
      class="sidebar__link <?= $currentFile === 'kelola_hero.php' ? 'active' : '' ?>" id="sidebarHero">
     <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">

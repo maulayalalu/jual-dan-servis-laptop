@@ -20,7 +20,7 @@ if ($res_pengaturan) {
         $pengaturan[$row['kunci']] = $row['nilai'];
     }
 }
-function getSetHome($key, $default) {
+function getSetHome(string $key, string $default) {
     global $pengaturan;
     return $pengaturan[$key] ?? $default;
 }
@@ -46,13 +46,16 @@ if ($res_slides) {
              alt="<?= htmlspecialchars($s['judul']) ?>" 
              style="width:100%;height:100%;object-fit:cover;object-position:<?= htmlspecialchars($s['posisi_gambar'] ?? 'center') ?>;"
              onerror="this.style.background='var(--color-light-ash)'">
-        <div style="position:absolute;inset:0;background:linear-gradient(to right, var(--color-light-ash) 40%, transparent 100%);"></div>
+        <?php $op = (isset($s['overlay']) ? $s['overlay'] : 55) / 100; ?>
+        <div style="position:absolute;inset:0;background:rgba(62,92,118,<?= $op * 0.4 ?>);"></div>
+        <div style="position:absolute;inset:0;background:linear-gradient(to top, rgba(62,92,118,<?= $op ?>) 30%, transparent 100%);"></div>
       </div>
       
       <div style="position:relative;z-index:2;width:100%;max-width:1200px;margin:0 auto;padding:0 var(--sp-4);text-align:left;transform:translateY(-10%);">
         <?php if ($s['badge_text']): ?><p style="font-size:14px;color:var(--color-taupe);margin-bottom:8px;font-weight:600;letter-spacing:1px;text-transform:uppercase;"><?= htmlspecialchars($s['badge_text']) ?></p><?php endif; ?>
-        <h1 style="font-size:48px;font-weight:700;color:var(--color-blue);margin-bottom:16px;line-height:1.2;max-width:600px;"><?= htmlspecialchars($s['judul']) ?></h1>
-        <?php if ($s['deskripsi']): ?><p style="font-size:16px;color:var(--color-carbon);margin-bottom:32px;max-width:500px;line-height:1.6;"><?= htmlspecialchars($s['deskripsi']) ?></p><?php endif; ?>
+        <?php $warna = htmlspecialchars($s['warna_teks'] ?? '#ffffff'); ?>
+        <h1 style="font-size:48px;font-weight:700;color:<?= $warna ?>;margin-bottom:16px;line-height:1.2;max-width:600px;"><?= htmlspecialchars($s['judul']) ?></h1>
+        <?php if ($s['deskripsi']): ?><p style="font-size:16px;color:<?= $warna ?>;margin-bottom:32px;max-width:500px;line-height:1.6;"><?= htmlspecialchars($s['deskripsi']) ?></p><?php endif; ?>
         <div style="display:flex;gap:16px;flex-wrap:wrap;">
           <?php if ($s['btn1_text']): ?><a href="<?= htmlspecialchars($s['btn1_url']) ?>" class="btn btn--primary"><?= htmlspecialchars($s['btn1_text']) ?></a><?php endif; ?>
           <?php if ($s['btn2_text']): ?><a href="<?= htmlspecialchars($s['btn2_url']) ?>" class="btn btn--secondary" style="background:transparent;border:2px solid var(--color-taupe);color:var(--color-taupe);"><?= htmlspecialchars($s['btn2_text']) ?></a><?php endif; ?>
@@ -115,26 +118,26 @@ if ($res_slides) {
 </section>
 
 <!-- â”€â”€ Kategori Cards â”€â”€ -->
-<section class="section section--ash">
+<section class="section section--navy">
   <div class="container">
-    <h2 class="section__title">Jelajahi Kategori</h2>
-    <p class="section__sub">Temukan laptop yang tepat sesuai kebutuhan kamu</p>
+    <h2 class="section__title section__title--white"><?= htmlspecialchars(getSetHome('jelajah_judul', 'Jelajahi Kategori')) ?></h2>
+    <p class="section__sub section__sub--white"><?= htmlspecialchars(getSetHome('jelajah_deskripsi', 'Temukan laptop yang tepat sesuai kebutuhan kamu')) ?></p>
     <div class="grid-2" style="gap:12px;">
       <a href="user/katalog.php?tipe=gaming" class="card card--category" id="catGaming" style="aspect-ratio:16/8;">
-        <img src="https://images.unsplash.com/photo-1593642702821-c8da6771f0c6?w=800&q=80" alt="Gaming Laptop"
+        <img src="<?= htmlspecialchars(getSetHome('jelajah_img_1', 'https://images.unsplash.com/photo-1593642702821-c8da6771f0c6?w=800&q=80')) ?>" alt="Gaming Laptop"
              onerror="this.parentElement.style.background='var(--color-blue)'">
-        <div class="card__label" style="font-size:20px;font-weight:600;">Gaming</div>
+        <div class="card__label" style="font-size:20px;font-weight:600;"><?= htmlspecialchars(getSetHome('jelajah_label_1', 'Gaming')) ?></div>
       </a>
       <div style="display:grid;gap:12px;">
         <a href="user/katalog.php?tipe=bisnis" class="card card--category" id="catBisnis" style="aspect-ratio:16/5;">
-          <img src="https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=800&q=80" alt="Bisnis Laptop"
+          <img src="<?= htmlspecialchars(getSetHome('jelajah_img_2', 'https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=800&q=80')) ?>" alt="Bisnis Laptop"
                onerror="this.parentElement.style.background='var(--color-taupe)'">
-          <div class="card__label" style="font-size:17px;font-weight:600;">Bisnis & Profesional</div>
+          <div class="card__label" style="font-size:17px;font-weight:600;"><?= htmlspecialchars(getSetHome('jelajah_label_2', 'Bisnis & Profesional')) ?></div>
         </a>
         <a href="user/katalog.php?tipe=pelajar" class="card card--category" id="catPelajar" style="aspect-ratio:16/5;">
-          <img src="https://images.unsplash.com/photo-1588702547923-7093a6c3ba33?w=800&q=80" alt="Laptop Pelajar"
+          <img src="<?= htmlspecialchars(getSetHome('jelajah_img_3', 'https://images.unsplash.com/photo-1588702547923-7093a6c3ba33?w=800&q=80')) ?>" alt="Laptop Pelajar"
                onerror="this.parentElement.style.background='var(--color-cloud)'">
-          <div class="card__label" style="font-size:17px;font-weight:600;color:var(--color-carbon);">Pelajar & Mahasiswa</div>
+          <div class="card__label" style="font-size:17px;font-weight:600;color:var(--color-carbon);"><?= htmlspecialchars(getSetHome('jelajah_label_3', 'Pelajar & Mahasiswa')) ?></div>
         </a>
       </div>
     </div>
@@ -180,12 +183,12 @@ if ($res_slides) {
 </section>
 
 <!-- â”€â”€ Tentang Kami â”€â”€ -->
-<section class="section section--ash" id="tentang">
+<section class="section section--navy" id="tentang">
   <div class="container">
     <div style="display:grid;grid-template-columns:1fr 1fr;gap:64px;align-items:center;">
       <div>
-        <h2 style="font-size:32px;font-weight:500;color:var(--color-carbon);margin-bottom:16px;"><?= htmlspecialchars(getSetHome('tentang_judul', 'Mengapa Memilih A-LINKS?')) ?></h2>
-        <p style="font-size:14px;color:var(--color-pewter);line-height:1.7;margin-bottom:24px;">
+        <h2 style="font-size:32px;font-weight:500;color:var(--color-white);margin-bottom:16px;"><?= htmlspecialchars(getSetHome('tentang_judul', 'Mengapa Memilih A-LINKS?')) ?></h2>
+        <p style="font-size:14px;color:rgba(255,255,255,0.7);line-height:1.7;margin-bottom:24px;">
           <?= nl2br(htmlspecialchars(getSetHome('tentang_deskripsi', 'A-LINKS hadir sebagai solusi lengkap untuk kebutuhan laptop Anda.'))) ?>
         </p>
         <div style="display:flex;flex-direction:column;gap:12px;">
@@ -198,15 +201,15 @@ if ($res_slides) {
           ];
           foreach (array_filter($poins) as $item): ?>
           <div style="display:flex;align-items:center;gap:10px;">
-            <div style="width:20px;height:20px;border-radius:50%;background:var(--color-blue);display:grid;place-items:center;flex-shrink:0;">
+            <div style="width:20px;height:20px;border-radius:50%;background:rgba(255,255,255,0.2);display:grid;place-items:center;flex-shrink:0;">
               <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 5l2 2 4-4" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
             </div>
-            <span style="font-size:14px;color:var(--color-graphite);"><?= htmlspecialchars($item) ?></span>
+            <span style="font-size:14px;color:rgba(255,255,255,0.9);"><?= htmlspecialchars($item) ?></span>
           </div>
           <?php endforeach; ?>
         </div>
         <div style="margin-top:32px;">
-          <a href="register.php" class="btn btn--primary" id="btnDaftarTentang">Mulai Sekarang</a>
+          <a href="register.php" class="btn btn--secondary" id="btnDaftarTentang">Mulai Sekarang</a>
         </div>
       </div>
       <div style="position:relative;">
@@ -315,5 +318,95 @@ if ($res_slides) {
 /* Chat bar space at bottom */
 body { padding-bottom: 64px; }
 </style>
+
+<!-- Script Carousel Anti-Gagal -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    var slides = document.querySelectorAll('.hero-carousel__slide');
+    var dots = document.querySelectorAll('.carousel-dot');
+    var btnPrev = document.getElementById('carouselPrev');
+    var btnNext = document.getElementById('carouselNext');
+    var current = 0;
+    var timer;
+
+    if (slides.length <= 1) return;
+
+    // Sembunyikan semua kecuali yang pertama
+    for (var i = 0; i < slides.length; i++) {
+        slides[i].style.opacity = (i === 0) ? '1' : '0';
+        slides[i].style.zIndex = (i === 0) ? '2' : '1';
+        slides[i].style.pointerEvents = (i === 0) ? 'auto' : 'none';
+        
+        if (dots[i]) {
+            dots[i].style.opacity = (i === 0) ? '1' : '0.3';
+            dots[i].style.width = (i === 0) ? '20px' : '10px';
+            dots[i].style.borderRadius = (i === 0) ? '4px' : '50%';
+        }
+    }
+
+    function goTo(idx) {
+        // Hilangkan yang sekarang
+        if (slides[current]) {
+            slides[current].style.opacity = '0';
+            slides[current].style.zIndex = '1';
+            slides[current].style.pointerEvents = 'none';
+        }
+        if (dots[current]) {
+            dots[current].style.opacity = '0.3';
+            dots[current].style.width = '10px';
+            dots[current].style.borderRadius = '50%';
+        }
+
+        current = (idx + slides.length) % slides.length;
+
+        // Tampilkan yang baru
+        if (slides[current]) {
+            slides[current].style.opacity = '1';
+            slides[current].style.zIndex = '2';
+            slides[current].style.pointerEvents = 'auto';
+        }
+        if (dots[current]) {
+            dots[current].style.opacity = '1';
+            dots[current].style.width = '20px';
+            dots[current].style.borderRadius = '4px';
+        }
+    }
+
+    function startTimer() {
+        clearInterval(timer);
+        timer = setInterval(function() { goTo(current + 1); }, 5000);
+    }
+
+    if (btnPrev) {
+        btnPrev.addEventListener('click', function(e) {
+            e.preventDefault();
+            goTo(current - 1);
+            startTimer();
+        });
+    }
+
+    if (btnNext) {
+        btnNext.addEventListener('click', function(e) {
+            e.preventDefault();
+            goTo(current + 1);
+            startTimer();
+        });
+    }
+
+    for (var j = 0; j < dots.length; j++) {
+        (function(idx) {
+            if (dots[idx]) {
+                dots[idx].addEventListener('click', function(e) {
+                    e.preventDefault();
+                    goTo(idx);
+                    startTimer();
+                });
+            }
+        })(j);
+    }
+
+    startTimer();
+});
+</script>
 
 <?php include 'includes/footer.php'; ?>
